@@ -8,6 +8,11 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import screen.GameScreen;
+import screen.AchievementScreen;
+import screen.ScoreScreen;
+import screen.Screen;
+import screen.TitleScreen;
 
 import entity.Wallet;
 import screen.*;
