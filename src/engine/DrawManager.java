@@ -447,17 +447,17 @@ public final class DrawManager {
 	}
 
 	/**
-	 * Draws high score screen title and instructions.
+	 * Draws achievement screen title and instructions.
 	 * 
 	 * @param screen
 	 *            Screen to draw on.
 	 */
-	public void drawHighScoreMenu(final Screen screen) {
-		String highScoreString = "High Scores";
-		String instructionsString = "Press Space to return";
+	public void drawAchievementMenu(final Screen screen) {
+		String achievementString = "ACHIEVEMENT";
+		String instructionsString = "PRESS SPACE TO RETURN";
 
 		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, highScoreString, screen.getHeight() / 8);
+		drawCenteredBigString(screen, achievementString, screen.getHeight() / 8);
 
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen, instructionsString,

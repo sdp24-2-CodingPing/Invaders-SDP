@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import screen.GameScreen;
-import screen.HighScoreScreen;
+import screen.AchievementScreen;
 import screen.ScoreScreen;
 import screen.Screen;
 import screen.TitleScreen;
@@ -165,12 +165,12 @@ public final class Core {
 				LOGGER.info("Closing score screen.");
 				break;
 			case 3:
-				// High scores.
-				currentScreen = new HighScoreScreen(width, height, FPS);
+				// Achievement
+				currentScreen = new AchievementScreen(width, height, FPS);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-						+ " high score screen at " + FPS + " fps.");
+						+ " achievement screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
-				LOGGER.info("Closing high score screen.");
+				LOGGER.info("Closing Achievement screen.");
 				break;
 			default:
 				break;
