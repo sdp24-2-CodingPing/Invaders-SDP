@@ -574,28 +574,28 @@ public final class DrawManager {
 	}
 
 	/**
-	 * Draws the game setting column.
+	 * Draws the game setting row.
 	 *
 	 * @param screen
 	 *            Screen to draw on.
-	 * @param selectedColumn
-	 *            Selected column.
+	 * @param selectedRow
+	 *            Selected row.
 	 *
 	 * @author <a href="mailto:dayeon.dev@gmail.com">Dayeon Oh</a>
 	 *
 	 */
-	public void drawGameSettingColumn(final Screen screen, final int selectedColumn) {
+	public void drawGameSettingRow(final Screen screen, final int selectedRow) {
 		int y = 0;
 		int height = 0;
 		int screenHeight = screen.getHeight();
 
-		if (selectedColumn == 0) {
+		if (selectedRow == 0) {
 			y = screenHeight / 100 * 35;
 			height = screen.getHeight() / 100 * 28;
-		} else if (selectedColumn == 1) {
+		} else if (selectedRow == 1) {
 			y = screenHeight / 100 * 63;
 			height = screen.getHeight() / 100 * 18;
-		} else if (selectedColumn == 2) {
+		} else if (selectedRow == 2) {
 			y = screenHeight / 100 * 92;
 			height = screen.getHeight() / 100 * 10;
 		}
@@ -609,8 +609,8 @@ public final class DrawManager {
 	 *
 	 * @param screen
 	 *            Screen to draw on.
-	 * @param selectedColumn
-	 *            Selected column.
+	 * @param selectedRow
+	 *            Selected row.
 	 * @param isMultiPlayer
 	 *            If the game is multiplayer.
 	 * @param name1
@@ -623,7 +623,7 @@ public final class DrawManager {
 	 * @author <a href="mailto:dayeon.dev@gmail.com">Dayeon Oh</a>
 	 *
 	 */
-	public void drawGameSettingElements(final Screen screen, final int selectedColumn,
+	public void drawGameSettingElements(final Screen screen, final int selectedRow,
 		final boolean isMultiPlayer, final String name1, final String name2, final int difficultyLevel) {
 		String spaceString = " ";
 		String player1String = "1 Player";
@@ -657,7 +657,7 @@ public final class DrawManager {
 		else backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, spaceString.repeat(60) + levelHardString, screen.getHeight() / 100 * 73);
 
-		if (selectedColumn == 2) backBufferGraphics.setColor(Color.GREEN);
+		if (selectedRow == 2) backBufferGraphics.setColor(Color.GREEN);
 		else backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, startString, screen.getHeight() / 100 * 98);
 	}

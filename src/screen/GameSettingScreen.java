@@ -28,13 +28,13 @@ public class GameSettingScreen extends Screen {
 	private boolean isMultiplayer;
 	/** Difficulty level. */
 	private int difficultyLevel;
-	/** Selected column. */
-	private int selectedColumn;
+	/** Selected row. */
+	private int selectedRow;
 	/** Time between changes in user selection. */
 	private final Cooldown selectionCooldown;
 
-	/** Total number of columns for selection. */
-	private static final int TOTAL_COLUMNS = 3; // Multiplayer, Difficulty, Start
+	/** Total number of rows for selection. */
+	private static final int TOTAL_ROWS = 3; // Multiplayer, Difficulty, Start
 
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -49,17 +49,17 @@ public class GameSettingScreen extends Screen {
 	public GameSettingScreen(final int width, final int height, final int fps) {
 		super(width, height, fps);
 
-		// column 0: multiplayer
+		// row 0: multiplayer
 		this.name1 = "P1";
 		this.name2 = "P2";
 		this.isMultiplayer = false;
 
-		// column 1: difficulty level
+		// row 1: difficulty level
 		this.difficultyLevel = 1; 	// 0: easy, 1: normal, 2: hard
 
-		// column 3: start
+		// row 3: start
 
-		this.selectedColumn = 0;
+		this.selectedRow = 0;
 
 		this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
 		this.selectionCooldown.reset();
@@ -85,14 +85,14 @@ public class GameSettingScreen extends Screen {
 		draw();
 		if (this.inputDelay.checkFinished() && this.selectionCooldown.checkFinished()) {
 			if (inputManager.isKeyDown(KeyEvent.VK_UP)){
-				this.selectedColumn = (this.selectedColumn - 1 + TOTAL_COLUMNS) % TOTAL_COLUMNS;
+				this.selectedRow = (this.selectedRow - 1 + TOTAL_ROWS) % TOTAL_ROWS;
 				this.selectionCooldown.reset();
 			} else if (inputManager.isKeyDown(KeyEvent.VK_DOWN)) {
-				this.selectedColumn = (this.selectedColumn + 1) % TOTAL_COLUMNS;
+				this.selectedRow = (this.selectedRow + 1) % TOTAL_ROWS;
 				this.selectionCooldown.reset();
 			}
 
-			if (this.selectedColumn == 0) {
+			if (this.selectedRow == 0) {
 				if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
 					this.isMultiplayer = false;
 					this.selectionCooldown.reset();
@@ -113,7 +113,7 @@ public class GameSettingScreen extends Screen {
 					}
 				}
 				handleNameInput(inputManager);
-			} else if (this.selectedColumn == 1) {
+			} else if (this.selectedRow == 1) {
 				if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
 					if (this.difficultyLevel != 0) {
 						this.difficultyLevel--;
@@ -125,7 +125,7 @@ public class GameSettingScreen extends Screen {
 						this.selectionCooldown.reset();
 					}
 				}
-			} else if (this.selectedColumn == 2) {
+			} else if (this.selectedRow == 2) {
 				if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
 					this.returnCode = 2;
 					this.isRunning = false;
@@ -172,9 +172,9 @@ public class GameSettingScreen extends Screen {
 
 		drawManager.drawGameSetting(this);
 
-		drawManager.drawGameSettingColumn(this, this.selectedColumn);
+		drawManager.drawGameSettingRow(this, this.selectedRow);
 
-		drawManager.drawGameSettingElements(this, this.selectedColumn, this.isMultiplayer, this.name1, this.name2,this.difficultyLevel);
+		drawManager.drawGameSettingElements(this, this.selectedRow, this.isMultiplayer, this.name1, this.name2,this.difficultyLevel);
 
 		drawManager.completeDrawing(this);
 	}
