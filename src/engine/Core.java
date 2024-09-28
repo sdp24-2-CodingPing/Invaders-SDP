@@ -8,11 +8,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import screen.GameScreen;
-import screen.HighScoreScreen;
-import screen.ScoreScreen;
-import screen.Screen;
-import screen.TitleScreen;
+import screen.*;
 
 /**
  * Implements core game logic.
@@ -164,7 +160,17 @@ public final class Core {
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing score screen.");
 				break;
+
 			case 3:
+				//Shop
+
+				/* Please fill in this case state as you finish your work on Shop Screen.*/
+
+				LOGGER.warning("Shop screen has to come out. Please implement shop screen.");
+				returnCode = 1;
+				break;
+
+			case 4:
 				// High scores.
 				currentScreen = new HighScoreScreen(width, height, FPS);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
@@ -172,6 +178,16 @@ public final class Core {
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing high score screen.");
 				break;
+
+			case 5:
+				//Setting
+
+				/* Please fill in this case state as you finish your work on Setting Screen.*/
+
+				LOGGER.warning("Setting screen has to come out. Please implement setting screen.");
+				returnCode = 1;
+				break;
+
 			default:
 				break;
 			}
