@@ -20,10 +20,16 @@ public class GameSettingScreen extends Screen {
 	/** Code of last mayus character. */
 	private static final int LAST_CHAR = 90;
 
-	/** Player name for record input. */
-	private char[] name;
-	/** Character of players name selected for change. */
-	private int nameCharSelected;
+	/** Player name1 for record input. */
+	private String name1;
+	/** Player name2 for record input. */
+	private String name2;
+	/** Difficulty level. */
+	private int difficultyLevel;
+	/** Multiplayer mode. */
+	private boolean isMultiplayer;
+	/** Selected column. */
+	private int selectedColumn;
 	/** Time between changes in user selection. */
 	private Cooldown selectionCooldown;
 
@@ -40,8 +46,12 @@ public class GameSettingScreen extends Screen {
 	public GameSettingScreen(final int width, final int height, final int fps) {
 		super(width, height, fps);
 
-		this.name = "AAA".toCharArray();
-		this.nameCharSelected = 0;
+		this.name1 = "P1";
+		this.name2 = "P2";
+		this.difficultyLevel = 1;
+		this.isMultiplayer = false;
+		this.selectedColumn = 0;
+
 		this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
 		this.selectionCooldown.reset();
 	}
@@ -74,33 +84,6 @@ public class GameSettingScreen extends Screen {
 				this.returnCode = 2;
 				this.isRunning = false;
 			}
-
-			if (this.selectionCooldown.checkFinished()) {
-				if (inputManager.isKeyDown(KeyEvent.VK_RIGHT)) {
-					this.nameCharSelected = this.nameCharSelected == 2 ? 0
-							: this.nameCharSelected + 1;
-					this.selectionCooldown.reset();
-				}
-				if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
-					this.nameCharSelected = this.nameCharSelected == 0 ? 2
-							: this.nameCharSelected - 1;
-					this.selectionCooldown.reset();
-				}
-				if (inputManager.isKeyDown(KeyEvent.VK_UP)) {
-					this.name[this.nameCharSelected] =
-							(char) (this.name[this.nameCharSelected]
-									== LAST_CHAR ? FIRST_CHAR
-							: this.name[this.nameCharSelected] + 1);
-					this.selectionCooldown.reset();
-				}
-				if (inputManager.isKeyDown(KeyEvent.VK_DOWN)) {
-					this.name[this.nameCharSelected] =
-							(char) (this.name[this.nameCharSelected]
-									== FIRST_CHAR ? LAST_CHAR
-							: this.name[this.nameCharSelected] - 1);
-					this.selectionCooldown.reset();
-				}
-			}
 		}
 
 	}
@@ -113,7 +96,9 @@ public class GameSettingScreen extends Screen {
 
 		drawManager.drawGameSetting(this);
 
-		drawManager.drawNameInput(this, this.name, this.nameCharSelected);
+		drawManager.drawGameSettingColumn(this, this.selectedColumn);
+
+		drawManager.drawGameSettingElements(this, 0, this.isMultiplayer, this.name1, this.name2,this.difficultyLevel);
 
 		drawManager.completeDrawing(this);
 	}
