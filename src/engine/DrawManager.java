@@ -559,4 +559,17 @@ public final class DrawManager {
 			drawCenteredBigString(screen, "GO!", screen.getHeight() / 2
 					+ fontBigMetrics.getHeight() / 3);
 	}
+
+	/**
+	 * Draws the game setting screen.
+	 *
+	 * @param screen
+	 *            Screen to draw on.
+	 */
+	public void drawGameSetting(final Screen screen) {
+		String titleString = "Game Setting";
+
+		backBufferGraphics.setColor(Color.GREEN);
+		drawCenteredBigString(screen, titleString, screen.getHeight() / 3);
+	}
 }
