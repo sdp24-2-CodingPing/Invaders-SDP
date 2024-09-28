@@ -38,6 +38,10 @@ public final class DrawManager {
 	private static Graphics backBufferGraphics;
 	/** Buffer image. */
 	private static BufferedImage backBuffer;
+	/** Small sized font. */
+	private static Font fontSmall;
+	/** Small sized font properties. */
+	private static FontMetrics fontSmallMetrics;
 	/** Normal sized font. */
 	private static Font fontRegular;
 	/** Normal sized font properties. */
@@ -106,6 +110,7 @@ public final class DrawManager {
 			logger.info("Finished loading the sprites.");
 
 			// Font loading.
+			fontSmall = fileManager.loadFont(10f);
 			fontRegular = fileManager.loadFont(14f);
 			fontBig = fileManager.loadFont(24f);
 			logger.info("Finished loading the fonts.");
@@ -156,11 +161,12 @@ public final class DrawManager {
 		backBufferGraphics
 				.fillRect(0, 0, screen.getWidth(), screen.getHeight());
 
+		fontSmallMetrics = backBufferGraphics.getFontMetrics(fontSmall);
 		fontRegularMetrics = backBufferGraphics.getFontMetrics(fontRegular);
 		fontBigMetrics = backBufferGraphics.getFontMetrics(fontBig);
 
 		// drawBorders(screen);
-		// drawGrid(screen);
+		//drawGrid(screen);
 	}
 
 	/**
@@ -288,10 +294,10 @@ public final class DrawManager {
 
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen, instructionsString,
-				screen.getHeight() / 2);
+				screen.getHeight() / 5 * 2);
 
 		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, titleString, screen.getHeight() / 3);
+		drawCenteredBigString(screen, titleString, screen.getHeight() / 5);
 	}
 
 	/**
@@ -304,28 +310,55 @@ public final class DrawManager {
 	 */
 	public void drawMenu(final Screen screen, final int option) {
 		String playString = "Play";
-		String highScoresString = "High scores";
-		String exitString = "exit";
+		String shopString = "SHOP";
+		String coinString = "YOUR COIN: 000"; /*fileManager.getcoin();*/
+		String achievementString = "ACHIEVEMENT";
+		String settingString = "SETTING";
+		String exitString = "EXIT";
 
-		if (option == 2)
+
+		if (option == 2) /*option2 => Play */
 			backBufferGraphics.setColor(Color.GREEN);
 		else
 			backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, playString,
-				screen.getHeight() / 3 * 2);
-		if (option == 3)
+				screen.getHeight() / 7 * 4);
+
+		if (option == 3) /*option3 => Shop */
 			backBufferGraphics.setColor(Color.GREEN);
 		else
 			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, highScoresString, screen.getHeight()
-				/ 3 * 2 + fontRegularMetrics.getHeight() * 2);
-		if (option == 0)
+		drawCenteredRegularString(screen, shopString, screen.getHeight()
+				/ 7 * 4 + fontRegularMetrics.getHeight() * 2);
+
+		backBufferGraphics.setColor(Color.ORANGE);
+		drawCenteredSmallString(screen, coinString, screen.getHeight()
+				/ 7 * 4 + fontRegularMetrics.getHeight() * 3);
+
+		if (option == 4) /*option4 => Achievement */
 			backBufferGraphics.setColor(Color.GREEN);
 		else
 			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, exitString, screen.getHeight() / 3
-				* 2 + fontRegularMetrics.getHeight() * 4);
+		drawCenteredRegularString(screen, achievementString, screen.getHeight()
+				/ 7 * 4 + fontRegularMetrics.getHeight() * 5);
+
+
+		if (option == 5) /*option5 => Setting */
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, settingString, screen.getHeight()
+				/ 7 * 4 + fontRegularMetrics.getHeight() * 7);
+
+		if (option == 0) /*option0 => exit */
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, exitString, screen.getHeight()
+				/ 7 * 4 + fontRegularMetrics.getHeight() * 9);
 	}
+
+
 
 	/**
 	 * Draws game results.
@@ -485,6 +518,22 @@ public final class DrawManager {
 					/ 4 + fontRegularMetrics.getHeight() * (i + 1) * 2);
 			i++;
 		}
+	}
+
+	/**
+	 * Draws a centered string on small font.
+	 *
+	 * @param screen
+	 *            Screen to draw on.
+	 * @param string
+	 *            String to draw.
+	 * @param height
+	 *            Height of the drawing.
+	 */
+	private void drawCenteredSmallString(final Screen screen, final String string, final int height) {
+		backBufferGraphics.setFont(fontSmall);
+		backBufferGraphics.drawString(string, screen.getWidth() / 2
+				- fontSmallMetrics.stringWidth(string) / 2, height);
 	}
 
 	/**
