@@ -33,7 +33,7 @@ public class TitleScreen extends Screen {
 		super(width, height, fps);
 
 		// Defaults to play.
-		this.returnCode = 2;
+		this.returnCode = 6;
 		this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
 		this.selectionCooldown.reset();
 	}
@@ -78,10 +78,15 @@ public class TitleScreen extends Screen {
 	 * Shifts the focus to the next menu item.
 	 */
 	private void nextMenuItem() {
+	/*
+	  TODO: Refactor returnCode & Core Logic
+	 */
 		if (this.returnCode == 5)
 			this.returnCode = 0;
 		else if (this.returnCode == 0)
-			this.returnCode = 2;
+			this.returnCode = 6;
+		else if (this.returnCode == 6)
+			this.returnCode = 3;
 		else
 			this.returnCode++;
 	}
@@ -90,10 +95,15 @@ public class TitleScreen extends Screen {
 	 * Shifts the focus to the previous menu item.
 	 */
 	private void previousMenuItem() {
+	/*
+	  TODO: Refactor returnCode & Core Logic
+	 */
 		if (this.returnCode == 0)
 			this.returnCode = 5;
-		else if (this.returnCode == 2)
+		else if (this.returnCode == 6)
 			this.returnCode = 0;
+		else if (this.returnCode == 3)
+			this.returnCode = 6;
 		else
 			this.returnCode--;
 	}

@@ -317,7 +317,7 @@ public final class DrawManager {
 		String exitString = "EXIT";
 
 
-		if (option == 2) /*option2 => Play */
+		if (option == 6) /*option2 => Game Settings */
 			backBufferGraphics.setColor(Color.GREEN);
 		else
 			backBufferGraphics.setColor(Color.WHITE);
