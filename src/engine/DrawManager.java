@@ -378,12 +378,13 @@ public final class DrawManager {
 	 */
 	public void drawResults(final Screen screen, final int score,
 			final int livesRemaining, final int shipsDestroyed,
-			final float accuracy, final boolean isNewRecord) {
+			final float accuracy, final boolean isNewRecord, final int coinsEarned) {
 		String scoreString = String.format("score %04d", score);
 		String livesRemainingString = "lives remaining " + livesRemaining;
 		String shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
 		String accuracyString = String
 				.format("accuracy %.2f%%", accuracy * 100);
+		String coinsEarnedString = "EARNED COIN " + coinsEarned;
 
 		int height = isNewRecord ? 4 : 2;
 
@@ -398,6 +399,9 @@ public final class DrawManager {
 						* 4);
 		drawCenteredRegularString(screen, accuracyString, screen.getHeight()
 				/ height + fontRegularMetrics.getHeight() * 6);
+		backBufferGraphics.setColor(Color.YELLOW);
+		drawCenteredRegularString(screen, coinsEarnedString, screen.getHeight()
+				/ height + fontRegularMetrics.getHeight() * 9);
 	}
 
 	/**
