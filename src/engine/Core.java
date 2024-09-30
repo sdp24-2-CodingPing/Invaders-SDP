@@ -8,7 +8,9 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 import screen.*;
+
 
 /**
  * Implements core game logic.
@@ -169,12 +171,12 @@ public final class Core {
 				break;
 
 			case 4:
-				// High scores.
-				currentScreen = new HighScoreScreen(width, height, FPS);
+				// Achievement
+				currentScreen = new AchievementScreen(width, height, FPS);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-						+ " high score screen at " + FPS + " fps.");
+						+ " achievement screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
-				LOGGER.info("Closing high score screen.");
+				LOGGER.info("Closing Achievement screen.");
 				break;
 
 			case 5:

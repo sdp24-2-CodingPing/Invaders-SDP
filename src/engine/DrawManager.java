@@ -144,7 +144,7 @@ public final class DrawManager {
 	}
 
 	/**
-	 * First part of the drawing process. Initialices buffers, draws the
+	 * First part of the drawing process. Initializes buffers, draws the
 	 * background and prepares the images.
 	 * 
 	 * @param screen
@@ -181,7 +181,7 @@ public final class DrawManager {
 	}
 
 	/**
-	 * Draws an entity, using the apropiate image.
+	 * Draws an entity, using the appropriate image.
 	 * 
 	 * @param entity
 	 *            Entity to be drawn.
@@ -203,7 +203,7 @@ public final class DrawManager {
 	}
 
 	/**
-	 * For debugging purpouses, draws the canvas borders.
+	 * For debugging purposes, draws the canvas borders.
 	 * 
 	 * @param screen
 	 *            Screen to draw in.
@@ -220,7 +220,7 @@ public final class DrawManager {
 	}
 
 	/**
-	 * For debugging purpouses, draws a grid over the canvas.
+	 * For debugging purposes, draws a grid over the canvas.
 	 * 
 	 * @param screen
 	 *            Screen to draw in.
@@ -484,17 +484,17 @@ public final class DrawManager {
 	}
 
 	/**
-	 * Draws high score screen title and instructions.
+	 * Draws achievement screen title and instructions.
 	 * 
 	 * @param screen
 	 *            Screen to draw on.
 	 */
-	public void drawHighScoreMenu(final Screen screen) {
-		String highScoreString = "High Scores";
-		String instructionsString = "Press Space to return";
+	public void drawAchievementMenu(final Screen screen) {
+		String achievementString = "ACHIEVEMENT";
+		String instructionsString = "PRESS SPACE TO RETURN";
 
 		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, highScoreString, screen.getHeight() / 8);
+		drawCenteredBigString(screen, achievementString, screen.getHeight() / 8);
 
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen, instructionsString,
