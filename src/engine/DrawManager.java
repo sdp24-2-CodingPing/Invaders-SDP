@@ -541,6 +541,36 @@ public final class DrawManager {
 	}
 
 	/**
+	 * Draws high credit screen.
+	 *
+	 * @param screen
+	 *            Screen to draw on.
+	 */
+//	public void drawEndingCredit(final Screen screen, List<String> creditlist)  {
+//		backBufferGraphics.setColor(Color.WHITE);
+//		int i = 0;
+//		String creditlist = "";
+//
+//		for (creditlist : list) {
+//			creditlist = String.format();
+//			drawCenteredRegularString(screen, creditlist,fontRegularMetrics.getHeight() * i + 10 );
+//			i++;
+//		}
+//
+//		while (true){
+//			drawCenteredRegularString(screen, /*뭐시깽이*/, screen.getHeight()-i*fontRegularMetrics.getHeight()*2);
+//			Core.getCooldown(10);
+//			i++;
+//		}
+//
+////		String instructionsString = "Press Space to return";
+////
+////		backBufferGraphics.setColor(Color.GRAY);
+////		drawCenteredRegularString(screen, instructionsString,
+////				screen.getHeight() / 5); //뒤로 가기 버튼 코드
+//	}
+
+	/**
 	 * Draws a centered string on regular font.
 	 * 
 	 * @param screen
