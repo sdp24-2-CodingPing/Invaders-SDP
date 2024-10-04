@@ -43,7 +43,7 @@ public class CreditScreen extends Screen{
         super.update();
         currentFrame++;
 
-        if (currentFrame > 50 * 60) {
+        if (currentFrame > 50 * 60) {//임시로 50초
             this.isRunning = false;
             this.returnCode = 1;
         }
