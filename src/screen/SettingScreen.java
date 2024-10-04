@@ -31,6 +31,12 @@ public class SettingScreen extends Screen {
     protected void update() {
         super.update();
 
+        if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
+            this.isRunning = false; // ESC 키를 누르면 화면 종료
+            this.returnCode = 1;    // 이전 화면으로 돌아가기 위한 반환 코드 설정
+            return; // ESC 키가 눌렸을 때 다른 업데이트 로직을 실행하지 않도록 리턴
+        }
+
         if (this.selectionCooldown.checkFinished()) {
 
             // 'Sound'가 기본 선택 상태에서 좌우 화살표로 바로 볼륨 조절 가능
