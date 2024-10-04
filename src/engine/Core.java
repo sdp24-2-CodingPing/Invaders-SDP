@@ -182,10 +182,11 @@ public final class Core {
 			case 5:
 				//Setting
 
-				/* Please fill in this case state as you finish your work on Setting Screen.*/
-
-				LOGGER.warning("Setting screen has to come out. Please implement setting screen.");
-				returnCode = 1;
+				currentScreen = new SettingScreen(width, height, FPS);
+				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+						+ " setting screen at " + FPS + " fps.");
+				returnCode = frame.setScreen(currentScreen);
+				LOGGER.info("Closing Setting screen.");
 				break;
 
 			case 6:
