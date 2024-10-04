@@ -197,6 +197,14 @@ public final class Core {
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing game setting screen.");
 
+			case 7:
+				//Credit Screen
+				currentScreen = new CreditScreen(width, height, FPS);
+				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+						+ " credit screen at " + FPS + " fps.");
+				returnCode = frame.setScreen(currentScreen);
+				LOGGER.info("Closing credit screen.");
+
 			default:
 				break;
 			}

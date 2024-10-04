@@ -61,7 +61,7 @@ public class SettingScreen extends Screen {
 
             // 'Ending Credit' 선택 시 다른 화면으로 전환
             if (inputManager.isKeyDown(KeyEvent.VK_SPACE) && selectedItem == 1) {
-                System.out.println("Ending Credit selected");
+                this.returnCode = 7;
                 this.isRunning = false; // 화면 전환용 종료 플래그
             }
         }
