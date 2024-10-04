@@ -49,7 +49,7 @@ public class CreditScreen extends Screen{
         }
 
         draw();
-        if (inputManager.isKeyDown(KeyEvent.VK_SPACE)
+        if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)
                 && this.inputDelay.checkFinished())
             this.isRunning = false;
     }
