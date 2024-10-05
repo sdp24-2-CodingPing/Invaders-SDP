@@ -541,6 +541,24 @@ public final class DrawManager {
 	}
 
 	/**
+	 * Draws credit screen.
+	 *
+	 * @param screen
+	 *            Screen to draw on.
+	 */
+	public void drawEndingCredit(final Screen screen, List<String> creditlist, int currentFrame)  {
+		backBufferGraphics.setColor(Color.WHITE);
+		final int startPoint = screen.getHeight() / 2;
+
+		for (int i = 0;i < creditlist.size(); i++) {
+			String target = creditlist.get(i);
+			drawCenteredRegularString(screen, target,startPoint + (fontRegularMetrics.getHeight() * 2) * i - currentFrame);
+		}
+
+
+	}
+
+	/**
 	 * Draws a centered string on regular font.
 	 * 
 	 * @param screen
