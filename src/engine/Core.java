@@ -217,6 +217,7 @@ public final class Core {
 						+ " credit screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing credit screen.");
+				break;
 
 			default:
 				break;
