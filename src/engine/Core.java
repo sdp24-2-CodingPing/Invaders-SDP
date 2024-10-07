@@ -174,7 +174,6 @@ public final class Core {
 
 			case 3:
 				//Shop
-
 				currentScreen = new ShopScreen(width, height, FPS, wallet);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " Shop screen at " + FPS + " fps.");
@@ -193,7 +192,6 @@ public final class Core {
 
 			case 5:
 				//Setting
-
 				currentScreen = new SettingScreen(width, height, FPS);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " setting screen at " + FPS + " fps.");
@@ -208,7 +206,7 @@ public final class Core {
 						+ " game setting screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing game setting screen.");
-                break;
+        break;
 
 			case 7:
 				//Credit Screen
