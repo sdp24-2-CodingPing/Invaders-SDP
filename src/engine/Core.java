@@ -208,6 +208,7 @@ public final class Core {
 						+ " game setting screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing game setting screen.");
+                break;
 
 			case 7:
 				//Credit Screen
@@ -216,6 +217,7 @@ public final class Core {
 						+ " credit screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing credit screen.");
+				break;
 
 			default:
 				break;
