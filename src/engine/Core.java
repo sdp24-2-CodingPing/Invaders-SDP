@@ -22,7 +22,7 @@ public final class Core {
 	/** Width of current screen. */
 	private static final int WIDTH = 600;
 	/** Height of current screen. */
-	private static final int HEIGHT = 650;
+	private static final int HEIGHT = 750;
 	/** Max fps of current screen. */
 	private static final int FPS = 60;
 

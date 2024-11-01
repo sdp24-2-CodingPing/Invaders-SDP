@@ -609,7 +609,7 @@ public final class DrawManager {
 	public void drawLaunchTrajectory(final Screen screen, final int positionX) {
 		backBufferGraphics.setColor(Color.DARK_GRAY);
 		for (int i = 0; i < screen.getHeight() - 140; i += 20){
-			backBufferGraphics.drawRect(positionX + 13, screen.getHeight() - 100 - i,1,10);
+			backBufferGraphics.drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
 		}
     }
 	/**
@@ -624,7 +624,7 @@ public final class DrawManager {
 									 final int threadNumber) {
 		threadBufferGraphics[threadNumber].setColor(Color.DARK_GRAY);
 		for (int i = 0; i < screen.getHeight() - 140; i += 20){
-			threadBufferGraphics[threadNumber].drawRect(positionX + 13, screen.getHeight() - 100 - i,1,10);
+			threadBufferGraphics[threadNumber].drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
 		}
 	}
 
