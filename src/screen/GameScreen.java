@@ -560,6 +560,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			drawManager.drawEntity(skills[i], offsetX + 2, HUD_Y + HUD_MARGIN_TOP + 2); // 스킬 아이콘 그리기
 		}
 
+		// Draw HP & EXP
+		drawManager.drawSegmentedBar(220, HUD_Y + HUD_MARGIN_TOP + 7, 350, 12, 10, 15, Color.GREEN);
+		drawManager.drawSegmentedBar(220, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 350, 12, 12, 20, Color.YELLOW);
 
 		// Countdown to game start.
 		if (!this.inputDelay.checkFinished()) {

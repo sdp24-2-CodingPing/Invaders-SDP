@@ -445,6 +445,39 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.BLACK);
 		backBufferGraphics.fillRect(x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness); // Draw inner box
 	}
+	/**
+	 * Draws a horizontal bar composed of multiple box segments.
+	 *
+	 * @param x             X coordinate of the bar's starting point.
+	 * @param y             Y coordinate of the bar's starting point.
+	 * @param w             Total width of the bar.
+	 * @param h             Height of each box segment.
+	 * @param currentValue  Current value to display (how many boxes are filled).
+	 * @param maximumValue  Maximum value (total number of boxes).
+	 * @param color         Color of the filled boxes.
+	 */
+	public void drawSegmentedBar(int x, int y, int w, int h, int currentValue, int maximumValue, Color color) {
+		int basicWidth = w / maximumValue; // Basic width of each box
+		int remainingWidth = w % maximumValue; // Remaining width to be distributed
+
+		// Draw filled and empty boxes
+		int startX = x; // Initial x coordinate for the first box
+		for (int i = 0; i < maximumValue; i++) {
+			int boxWidth = basicWidth;
+			if (i < remainingWidth) {
+				boxWidth += 1; // Distribute the remaining width to the first few boxes
+			}
+
+			if (i < currentValue) {
+				backBufferGraphics.setColor(color); // Color for filled boxes
+			} else {
+				backBufferGraphics.setColor(Color.GRAY); // Color for empty boxes
+			}
+
+			backBufferGraphics.fillRect(startX, y, boxWidth, h);
+			startX += boxWidth; // Update startX for the next box
+		}
+	}
 
 	/**
 	 * Draws current score on screen.
