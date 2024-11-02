@@ -410,6 +410,43 @@ public final class DrawManager {
 	}
 
 	/**
+	 * Draws a box outline on the screen with the specified color.
+	 *
+	 * @param screen    Screen to draw on.
+	 * @param color     Color of the box outline.
+	 * @param x         X coordinate of the upper-left corner of the outline.
+	 * @param y         Y coordinate of the upper-left corner of the outline.
+	 * @param w         Width of the outline.
+	 * @param h         Height of the outline.
+	 */
+	public void drawBox(final Screen screen, final Color color, final int x, final int y, final int w, final int h) {
+		backBufferGraphics.setColor(color);
+		backBufferGraphics.drawRect(x, y, w, h);
+	}
+
+	/**
+	 * Draws a thicker box outline by drawing two overlapping boxes.
+	 *
+	 * @param screen    Screen to draw on.
+	 * @param x         X coordinate of the upper-left corner of the inner box.
+	 * @param y         Y coordinate of the upper-left corner of the inner box.
+	 * @param w         Width of the inner box.
+	 * @param h         Height of the inner box.
+	 * @param thickness Thickness of the outer box.
+	 */
+	public void drawThickBox(final Screen screen, final int x, final int y, final int w, final int h, final int thickness) {
+		// Ensure thickness is not greater than the width or height
+		if (thickness * 2 > w || thickness * 2 > h) {
+			throw new IllegalArgumentException("Thickness is too large for the given width or height");
+		}
+
+		backBufferGraphics.setColor(Color.GREEN);
+		backBufferGraphics.fillRect(x, y, w, h); // Outer box
+		backBufferGraphics.setColor(Color.BLACK);
+		backBufferGraphics.fillRect(x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness); // Draw inner box
+	}
+
+	/**
 	 * Draws current score on screen.
 	 *
 	 * @param screen
