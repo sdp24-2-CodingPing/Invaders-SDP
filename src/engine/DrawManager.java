@@ -505,7 +505,7 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
 		String scoreString = String.format("lv.%d", level);
-		backBufferGraphics.drawString(scoreString, screen.getWidth() / 2 - 60, 25);
+		backBufferGraphics.drawString(scoreString, 20, 25);
 	}
 	/**
 	 * Draws level on screen.
@@ -521,7 +521,7 @@ public final class DrawManager {
 		threadBufferGraphics[threadNumber].setFont(fontRegular);
 		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
 		String scoreString = String.format("lv.%d", level);
-		threadBufferGraphics[threadNumber].drawString(scoreString, screen.getWidth() / 2 - 60, 25);
+		threadBufferGraphics[threadNumber].drawString(scoreString, 20, 25);
 	}
 
 	/**
@@ -564,7 +564,7 @@ public final class DrawManager {
         } else {
             elapsedTimeString = String.format("%d:%02d.%02d", min, sec, cent);
         }
-        backBufferGraphics.drawString(elapsedTimeString, screen.getWidth()/2, 25);
+        backBufferGraphics.drawString(elapsedTimeString, 80, 25);
     }
 
 	/**
@@ -592,7 +592,7 @@ public final class DrawManager {
 		} else {
 			elapsedTimeString = String.format("%d:%02d.%02d", min, sec, cent);
 		}
-		threadBufferGraphics[threadNumber].drawString(elapsedTimeString, screen.getWidth()/2, 25);
+		threadBufferGraphics[threadNumber].drawString(elapsedTimeString, 80, 25);
 	}
 
 	/**
