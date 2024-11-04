@@ -532,7 +532,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		drawManager.drawScore(this, this.score);
 		drawManager.drawElapsedTime(this, this.elapsedTime);
 		drawManager.drawAlertMessage(this, this.alertMessage);
-		drawManager.drawLives(this, this.lives, this.shipType);
+//		drawManager.drawLives(this, this.lives, this.shipType);
 		drawManager.drawLevel(this, this.level);
 		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
 		drawManager.drawReloadTimer(this,this.ship,ship.getRemainingReloadTime());
