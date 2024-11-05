@@ -410,6 +410,76 @@ public final class DrawManager {
 	}
 
 	/**
+	 * Draws a box outline on the screen with the specified color.
+	 *
+	 * @param screen    Screen to draw on.
+	 * @param color     Color of the box outline.
+	 * @param x         X coordinate of the upper-left corner of the outline.
+	 * @param y         Y coordinate of the upper-left corner of the outline.
+	 * @param w         Width of the outline.
+	 * @param h         Height of the outline.
+	 */
+	public void drawBox(final Screen screen, final Color color, final int x, final int y, final int w, final int h) {
+		backBufferGraphics.setColor(color);
+		backBufferGraphics.drawRect(x, y, w, h);
+	}
+
+	/**
+	 * Draws a thicker box outline by drawing two overlapping boxes.
+	 *
+	 * @param screen    Screen to draw on.
+	 * @param x         X coordinate of the upper-left corner of the inner box.
+	 * @param y         Y coordinate of the upper-left corner of the inner box.
+	 * @param w         Width of the inner box.
+	 * @param h         Height of the inner box.
+	 * @param thickness Thickness of the outer box.
+	 */
+	public void drawThickBox(final Screen screen, final int x, final int y, final int w, final int h, final int thickness) {
+		// Ensure thickness is not greater than the width or height
+		if (thickness * 2 > w || thickness * 2 > h) {
+			throw new IllegalArgumentException("Thickness is too large for the given width or height");
+		}
+
+		backBufferGraphics.setColor(Color.GREEN);
+		backBufferGraphics.fillRect(x, y, w, h); // Outer box
+		backBufferGraphics.setColor(Color.BLACK);
+		backBufferGraphics.fillRect(x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness); // Draw inner box
+	}
+	/**
+	 * Draws a horizontal bar composed of multiple box segments.
+	 *
+	 * @param x             X coordinate of the bar's starting point.
+	 * @param y             Y coordinate of the bar's starting point.
+	 * @param w             Total width of the bar.
+	 * @param h             Height of each box segment.
+	 * @param currentValue  Current value to display (how many boxes are filled).
+	 * @param maximumValue  Maximum value (total number of boxes).
+	 * @param color         Color of the filled boxes.
+	 */
+	public void drawSegmentedBar(int x, int y, int w, int h, int currentValue, int maximumValue, Color color) {
+		int basicWidth = w / maximumValue; // Basic width of each box
+		int remainingWidth = w % maximumValue; // Remaining width to be distributed
+
+		// Draw filled and empty boxes
+		int startX = x; // Initial x coordinate for the first box
+		for (int i = 0; i < maximumValue; i++) {
+			int boxWidth = basicWidth;
+			if (i < remainingWidth) {
+				boxWidth += 1; // Distribute the remaining width to the first few boxes
+			}
+
+			if (i < currentValue) {
+				backBufferGraphics.setColor(color); // Color for filled boxes
+			} else {
+				backBufferGraphics.setColor(Color.GRAY); // Color for empty boxes
+			}
+
+			backBufferGraphics.fillRect(startX, y, boxWidth, h);
+			startX += boxWidth; // Update startX for the next box
+		}
+	}
+
+	/**
 	 * Draws current score on screen.
 	 *
 	 * @param screen
@@ -435,7 +505,7 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
 		String scoreString = String.format("lv.%d", level);
-		backBufferGraphics.drawString(scoreString, screen.getWidth() / 2 - 60, 25);
+		backBufferGraphics.drawString(scoreString, 20, 25);
 	}
 	/**
 	 * Draws level on screen.
@@ -451,7 +521,7 @@ public final class DrawManager {
 		threadBufferGraphics[threadNumber].setFont(fontRegular);
 		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
 		String scoreString = String.format("lv.%d", level);
-		threadBufferGraphics[threadNumber].drawString(scoreString, screen.getWidth() / 2 - 60, 25);
+		threadBufferGraphics[threadNumber].drawString(scoreString, 20, 25);
 	}
 
 	/**
@@ -494,7 +564,7 @@ public final class DrawManager {
         } else {
             elapsedTimeString = String.format("%d:%02d.%02d", min, sec, cent);
         }
-        backBufferGraphics.drawString(elapsedTimeString, screen.getWidth()/2, 25);
+        backBufferGraphics.drawString(elapsedTimeString, 80, 25);
     }
 
 	/**
@@ -522,7 +592,7 @@ public final class DrawManager {
 		} else {
 			elapsedTimeString = String.format("%d:%02d.%02d", min, sec, cent);
 		}
-		threadBufferGraphics[threadNumber].drawString(elapsedTimeString, screen.getWidth()/2, 25);
+		threadBufferGraphics[threadNumber].drawString(elapsedTimeString, 80, 25);
 	}
 
 	/**
@@ -609,7 +679,7 @@ public final class DrawManager {
 	public void drawLaunchTrajectory(final Screen screen, final int positionX) {
 		backBufferGraphics.setColor(Color.DARK_GRAY);
 		for (int i = 0; i < screen.getHeight() - 140; i += 20){
-			backBufferGraphics.drawRect(positionX + 13, screen.getHeight() - 100 - i,1,10);
+			backBufferGraphics.drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
 		}
     }
 	/**
@@ -624,7 +694,7 @@ public final class DrawManager {
 									 final int threadNumber) {
 		threadBufferGraphics[threadNumber].setColor(Color.DARK_GRAY);
 		for (int i = 0; i < screen.getHeight() - 140; i += 20){
-			threadBufferGraphics[threadNumber].drawRect(positionX + 13, screen.getHeight() - 100 - i,1,10);
+			threadBufferGraphics[threadNumber].drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
 		}
 	}
 
