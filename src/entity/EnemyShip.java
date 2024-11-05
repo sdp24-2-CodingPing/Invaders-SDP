@@ -1,6 +1,9 @@
 package entity;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import engine.Cooldown;
 import engine.Core;
@@ -54,7 +57,7 @@ public class EnemyShip extends Entity {
 	 */
 	public EnemyShip(final int positionX, final int positionY,
 			final SpriteType spriteType, final GameState gameState) {
-		super(positionX, positionY, 12 * 2, 8 * 2, getDefaultColor(spriteType));
+		super(positionX, positionY, 12 * 2, 8 * 2, EnemyColorSelector.getColorForEnemy(spriteType));
 
 		this.spriteType = spriteType;
 		this.animationCooldown = Core.getCooldown(500);
@@ -98,27 +101,44 @@ public class EnemyShip extends Entity {
 	/**
 	 * Giving color for each enemy ship
 	 */
-		public static Color getDefaultColor(SpriteType spriteType) {
-			switch (spriteType) {
-				case EnemyShipA1:
-				case EnemyShipA2:
-					return Color.RED; // Цвет для типа A
-				case EnemyShipB1:
-				case EnemyShipB2:
-					return Color.GREEN; // Цвет для типа B
-				case EnemyShipC1:
-				case EnemyShipC2:
-					return Color.BLUE; // Цвет для типа C
-				case EnemyShipD1:
-				case EnemyShipD2:
-					return Color.YELLOW; // Цвет для типа D
-				case EnemyShipE1:
-				case EnemyShipE2:
-					return Color.ORANGE; // Цвет для типа E
-				default:
-					return Color.WHITE; // Цвет по умолчанию
-			}
+	public static class EnemyColorSelector {
+
+		// Color allocation by proportion (Red: 20%, Green: 30%, Blue: 50%)
+		private static final int RED_COUNT = 2;   // 20%
+		private static final int GREEN_COUNT = 3; // 30%
+		private static final int BLUE_COUNT = 5;  // 50%
+
+		private static final List<Color> colorPool = new ArrayList<>();
+		private static int colorIndex = 0;
+
+		static {
+			resetColorPool(); // Initialize color pool
 		}
+
+		// Method to initialize and shuffle the color pool according to the proportion
+		private static void resetColorPool() {
+			colorPool.clear();
+
+			for (int i = 0; i < RED_COUNT; i++) colorPool.add(Color.RED);
+			for (int i = 0; i < GREEN_COUNT; i++) colorPool.add(Color.GREEN);
+			for (int i = 0; i < BLUE_COUNT; i++) colorPool.add(Color.BLUE);
+
+			Collections.shuffle(colorPool); // Shuffle the order of colors
+			colorIndex = 0; // Reset color index
+		}
+
+		// Method to assign colors sequentially
+		public static Color getColorForEnemy(SpriteType spriteType) {
+			// If the list reaches the end, reshuffle and reinitialize
+			if (colorIndex >= colorPool.size()) {
+				resetColorPool();
+			}
+
+			return colorPool.get(colorIndex++); // Return current color and increment index
+		}
+	}
+
+
 
 	/**
 	 * Constructor, establishes the ship's properties for a special ship, with
