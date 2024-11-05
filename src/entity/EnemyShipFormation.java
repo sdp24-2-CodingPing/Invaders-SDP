@@ -94,7 +94,9 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	/** Number of not destroyed ships. */
 	private int shipCount;
 
-	private int point = 0;
+	private int pointValue = 0;
+
+	private int expValue = 0;
 
 	private int distroyedship = 0;
 
@@ -449,31 +451,33 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		this.shipCount--;
 	}
 
-	public final void HealthManageDestroy(final EnemyShip destroyedShip, final float balance) {
+	public final void HealthManageDestroy(final EnemyShip enemyShip, final float balance) {
 		for (List<EnemyShip> column : this.enemyShips)
 			for (int i = 0; i < column.size(); i++)
-				if (column.get(i) != null && column.get(i).equals(destroyedShip)) {
+				if (column.get(i) != null && column.get(i).equals(enemyShip)) {
 					//If health is 0, number of remaining enemy ships--, score awarded, number of destroyed ships++
-					if(destroyedShip.getHealth() <= 0){
+					if(enemyShip.getHealth() <= 0){
 						this.shipCount--;
 						this.logger.info("Destroyed ship in ("
 								+ this.enemyShips.indexOf(column) + "," + i + ")");
-						point = destroyedShip.getPointValue();
+						pointValue = enemyShip.getPointValue();
+						expValue = enemyShip.getExpValue(); //죽은 enemy에 대한 exp
 						distroyedship = 1;
 					}else{
-						point = 0;
+						pointValue = 0;
+						expValue = 0;
 						distroyedship = 0;
 					}
 					column.get(i).HealthManageDestroy(balance);
 				}
 
 		// Updates the list of ships that can shoot the player.
-		if (this.shooters.contains(destroyedShip)) {
-			int destroyedShipIndex = this.shooters.indexOf(destroyedShip);
+		if (this.shooters.contains(enemyShip)) {
+			int destroyedShipIndex = this.shooters.indexOf(enemyShip);
 			int destroyedShipColumnIndex = -1;
 
 			for (List<EnemyShip> column : this.enemyShips)
-				if (column.contains(destroyedShip)) {
+				if (column.contains(enemyShip)) {
 					destroyedShipColumnIndex = this.enemyShips.indexOf(column);
 					break;
 				}
@@ -536,7 +540,9 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	}
 
 
-	public int getPoint(){return point; }
+	public int getPointValue(){return pointValue; }
+
+	public int getExpValue(){return expValue; }
 
 	public int getDistroyedship(){return distroyedship; }
 

@@ -64,9 +64,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** Set of all bullets fired by on screen ships. */
 	private Set<Bullet> bullets;
 	/** Current score. */
-	private String name1;
-
 	private int score;
+	/** Current exp. */
+	private int exp;
 	/** tempScore records the score up to the previous level. */
 	private int tempScore;
 	/** Current ship type. */
@@ -908,7 +908,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 						this.enemyShipFormation.HealthManageDestroy(enemyShip, balance);
 						// If the enemy doesn't die, the combo increases;
 						// if the enemy dies, both the combo and score increase.
-						this.score += Score.comboScore(this.enemyShipFormation.getPoint(), this.combo);
+						this.score += Score.comboScore(this.enemyShipFormation.getPointValue(), this.combo);
+						this.exp += this.enemyShipFormation.getExpValue();
+						logger.info("You got this exp" + this.exp);
 						this.shipsDestroyed += this.enemyShipFormation.getDistroyedship();
 						this.combo++;
 						this.hitBullets++;
@@ -951,11 +953,13 @@ public class GameScreen extends Screen implements Callable<GameState> {
 						this.hitBullets++;
 						itemBoxIterator.remove();
 						recyclable.add(bullet);
-						Entry<Integer, Integer> itemResult = this.itemManager.useItem();
+						List<Integer> itemResult = this.itemManager.useItem();
 
 						if (itemResult != null) {
-							this.score += itemResult.getKey();
-							this.shipsDestroyed += itemResult.getValue();
+							this.score += itemResult.getFirst();
+							this.exp += itemResult.get(1);
+							logger.info("You got this exp" + this.exp);
+							this.shipsDestroyed += itemResult.getLast();
 						}
 					}
 				}
