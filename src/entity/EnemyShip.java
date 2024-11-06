@@ -94,32 +94,32 @@ public class EnemyShip extends Entity {
 		switch (this.spriteType) {
 		case EnemyShipA1:
 		case EnemyShipA2:
-			this.pointValue = (int) (A_TYPE_POINTS+(gameState.getLevel()*0.1)+Core.getLevelSetting());
-			this.expValue = (int) (A_TYPE_EXP+(gameState.getLevel()*0.1)+Core.getLevelSetting());
+			this.pointValue = (int) (A_TYPE_POINTS+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
+			this.expValue = (int) (A_TYPE_EXP+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
 			break;
 		case EnemyShipB1:
 		case EnemyShipB2:
-			this.pointValue = (int) (B_TYPE_POINTS+(gameState.getLevel()*0.1)+Core.getLevelSetting());
-			this.expValue = (int) (B_TYPE_EXP+(gameState.getLevel()*0.1)+Core.getLevelSetting());
+			this.pointValue = (int) (B_TYPE_POINTS+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
+			this.expValue = (int) (B_TYPE_EXP+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
 			break;
 		case EnemyShipC1:
 		case EnemyShipC2:
-			this.pointValue = (int) (C_TYPE_POINTS+(gameState.getLevel()*0.1)+Core.getLevelSetting());
-			this.expValue = (int) (C_TYPE_EXP+(gameState.getLevel()*0.1)+Core.getLevelSetting());
+			this.pointValue = (int) (C_TYPE_POINTS+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
+			this.expValue = (int) (C_TYPE_EXP+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
 			break;
 		case EnemyShipD1:
 		case EnemyShipD2:
 			this.pointValue = D_TYPE_POINTS;
-			this.expValue = (int) (D_TYPE_EXP+(gameState.getLevel()*0.1)+Core.getLevelSetting());
+			this.expValue = (int) (D_TYPE_EXP+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
 			break;
 		case EnemyShipE1:
 		case EnemyShipE2:
 			this.pointValue = E_TYPE_POINTS;
-			this.expValue = (int) (E_TYPE_EXP+(gameState.getLevel()*0.1)+Core.getLevelSetting());
+			this.expValue = (int) (E_TYPE_EXP+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
 			break;
 		case EnemyShipF1:
 			this.pointValue = F_TYPE_POINTS;
-			this.expValue = (int) (F_TYPE_EXP+(gameState.getLevel()*0.1)+Core.getLevelSetting());
+			this.expValue = (int) (F_TYPE_EXP+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
 			break;
 		default:
 			this.pointValue = 0;

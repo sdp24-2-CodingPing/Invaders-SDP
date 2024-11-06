@@ -451,17 +451,17 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		this.shipCount--;
 	}
 
-	public final void HealthManageDestroy(final EnemyShip enemyShip, final float balance) {
+	public final void healthManageDestroy(final EnemyShip shotEnemy, final float balance) {
 		for (List<EnemyShip> column : this.enemyShips)
 			for (int i = 0; i < column.size(); i++)
-				if (column.get(i) != null && column.get(i).equals(enemyShip)) {
+				if (column.get(i) != null && column.get(i).equals(shotEnemy)) {
 					//If health is 0, number of remaining enemy ships--, score awarded, number of destroyed ships++
-					if(enemyShip.getHealth() <= 0){
+					if(shotEnemy.getHealth() <= 0){
 						this.shipCount--;
 						this.logger.info("Destroyed ship in ("
 								+ this.enemyShips.indexOf(column) + "," + i + ")");
-						pointValue = enemyShip.getPointValue();
-						expValue = enemyShip.getExpValue(); //죽은 enemy에 대한 exp
+						pointValue = shotEnemy.getPointValue();
+						expValue = shotEnemy.getExpValue(); //죽은 enemy에 대한 exp
 						distroyedship = 1;
 					}else{
 						pointValue = 0;
@@ -472,12 +472,12 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 				}
 
 		// Updates the list of ships that can shoot the player.
-		if (this.shooters.contains(enemyShip)) {
-			int destroyedShipIndex = this.shooters.indexOf(enemyShip);
+		if (this.shooters.contains(shotEnemy)) {
+			int destroyedShipIndex = this.shooters.indexOf(shotEnemy);
 			int destroyedShipColumnIndex = -1;
 
 			for (List<EnemyShip> column : this.enemyShips)
-				if (column.contains(enemyShip)) {
+				if (column.contains(shotEnemy)) {
 					destroyedShipColumnIndex = this.enemyShips.indexOf(column);
 					break;
 				}

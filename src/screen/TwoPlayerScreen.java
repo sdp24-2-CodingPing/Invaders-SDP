@@ -3,6 +3,7 @@ package screen;
 import engine.Core;
 import engine.GameSettings;
 import engine.GameState;
+import engine.ShipLevelManager;
 import entity.Wallet;
 
 import java.util.concurrent.ExecutorService;
@@ -16,6 +17,10 @@ public class TwoPlayerScreen extends Screen {
     private final ExecutorService executor;
     /** Game difficulty settings each player **/
     private final GameSettings[] gameSettings = new GameSettings[2];
+
+    /** Ship level managers each player **/
+    private final ShipLevelManager[] shipLevelManagers = new ShipLevelManager[2];
+
     /** Current game wallet **/
     private final Wallet wallet;
 
@@ -57,6 +62,7 @@ public class TwoPlayerScreen extends Screen {
         for (int playerNumber = 0; playerNumber < 2; playerNumber++) {
             this.gameSettings[playerNumber] = new GameSettings(gameSettings);
             this.gameStates[playerNumber] = new GameState(gameState);
+            this.shipLevelManagers[playerNumber] = new ShipLevelManager(0,0);
             gameFinished[playerNumber] = false;
         }
 
@@ -100,12 +106,12 @@ public class TwoPlayerScreen extends Screen {
         try {
             if (players[PLAYER1_NUMBER].isDone()) {
                 gameStates[PLAYER1_NUMBER] = players[PLAYER1_NUMBER].get();
-                gameStates[PLAYER1_NUMBER] = new GameState(gameStates[PLAYER1_NUMBER], gameStates[PLAYER1_NUMBER].getLevel() + 1);
+                gameStates[PLAYER1_NUMBER] = new GameState(gameStates[PLAYER1_NUMBER], gameStates[PLAYER1_NUMBER].getGameLevel() + 1, gameStates[PLAYER1_NUMBER].getShipLevel());
                 runGameScreen(PLAYER1_NUMBER);
             }
             if (players[PLAYER2_NUMBER].isDone()) {
                 gameStates[PLAYER2_NUMBER] = players[PLAYER2_NUMBER].get();
-                gameStates[PLAYER2_NUMBER] = new GameState(gameStates[PLAYER2_NUMBER], gameStates[PLAYER2_NUMBER].getLevel() + 1);
+                gameStates[PLAYER2_NUMBER] = new GameState(gameStates[PLAYER2_NUMBER], gameStates[PLAYER2_NUMBER].getGameLevel() + 1, gameStates[PLAYER2_NUMBER].getShipLevel());
                 runGameScreen(PLAYER2_NUMBER);
             }
 
@@ -126,17 +132,19 @@ public class TwoPlayerScreen extends Screen {
         GameState gameState = playerNumber == 0 ? gameStates[PLAYER1_NUMBER] : gameStates[PLAYER2_NUMBER];
 
         if (gameState.getLivesRemaining() > 0) {
-            boolean bonusLife = gameState.getLevel()
+            boolean bonusLife = gameState.getGameLevel()
                     % Core.EXTRA_LIFE_FRECUENCY == 0
                     && gameState.getLivesRemaining() < Core.MAX_LIVES;
-            GameScreen gameScreen = new GameScreen(gameState, gameSettings[playerNumber].LevelSettings(
+            GameScreen gameScreen = new GameScreen(gameState,
+                    gameSettings[playerNumber].levelSettings(
                 gameSettings[playerNumber].getFormationWidth(),
                 gameSettings[playerNumber].getFormationHeight(),
                 gameSettings[playerNumber].getBaseSpeed(),
                 gameSettings[playerNumber].getShootingFrecuency(),
-                gameState.getLevel(),
+                gameState.getGameLevel(),
                 Core.getLevelSetting()
             ),
+                    shipLevelManagers[playerNumber],
                     bonusLife, width / 2, height, fps / 2, wallet, playerNumber);
             gameScreen.initialize();
             players[playerNumber] = executor.submit(gameScreen);

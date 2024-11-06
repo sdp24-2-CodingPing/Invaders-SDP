@@ -81,7 +81,6 @@ public final class Core {
 		int width = frame.getWidth();
 		int height = frame.getHeight();
 
-		GameState gameState;
 
 		AchievementManager achievementManager;
 		Wallet wallet = Wallet.getWallet();
@@ -91,42 +90,40 @@ public final class Core {
 		int returnCode = 1;
 		do {
 			MAX_LIVES = wallet.getLives_lv()+2;
-			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
+			GameState gameState = new GameState(1, 1, 0, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0, 0);
+			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
+			ShipLevelManager levelManager = new ShipLevelManager(0, 0);
 			achievementManager = new AchievementManager();
 
-			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
-
 			switch (returnCode) {
+			case 1:
+				// Main menu.
+				currentScreen = new TitleScreen(width, height, FPS, wallet);
+				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+						+ " title screen at " + FPS + " fps.");
+				returnCode = frame.setScreen(currentScreen);
+				LOGGER.info("Closing title screen.");
+				break;
+			case 2:
+				// Game & score.
+				do {
+					// One extra live every few levels.
+					startTime = System.currentTimeMillis();
+					boolean bonusLife = gameState.getGameLevel()
+							% EXTRA_LIFE_FRECUENCY == 0
+							&& gameState.getLivesRemaining() < MAX_LIVES;
+					LOGGER.info("difficulty is " + DifficultySetting);
+					//add variation
+					gameSetting = gameSetting.levelSettings(gameSetting.getFormationWidth(),
+							gameSetting.getFormationHeight(),
+							gameSetting.getBaseSpeed(),
+							gameSetting.getShootingFrecuency(),
+							gameState.getGameLevel(), DifficultySetting);
 
-				case 1:
-					// Main menu.
-					currentScreen = new TitleScreen(width, height, FPS, wallet);
+					currentScreen = new GameScreen(gameState,
+							gameSetting, levelManager,
+							bonusLife, width, height, FPS, wallet);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-							+ " title screen at " + FPS + " fps.");
-					returnCode = frame.setScreen(currentScreen);
-					LOGGER.info("Closing title screen.");
-
-					break;
-				case 2:
-					// Game & score.
-					do {
-						// One extra live every few levels.
-						startTime = System.currentTimeMillis();
-						boolean bonusLife = gameState.getLevel()
-								% EXTRA_LIFE_FRECUENCY == 0
-								&& gameState.getLivesRemaining() < MAX_LIVES;
-						LOGGER.info("difficulty is " + DifficultySetting);
-						//add variation
-						gameSetting = gameSetting.LevelSettings(gameSetting.getFormationWidth(),
-								gameSetting.getFormationHeight(),
-								gameSetting.getBaseSpeed(),
-								gameSetting.getShootingFrecuency(),
-								gameState.getLevel(), DifficultySetting);
-
-						currentScreen = new GameScreen(gameState,
-								gameSetting,
-								bonusLife, width, height, FPS, wallet);
-						LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 
 								+ " game screen at " + FPS + " fps.");
 						frame.setScreen(currentScreen);
@@ -272,7 +269,7 @@ public final class Core {
 
 	/**
 	 * Controls access to the logger.
-	 *
+	 * 
 	 * @return Application logger.
 	 */
 	public static Logger getLogger() {
@@ -281,7 +278,7 @@ public final class Core {
 
 	/**
 	 * Controls access to the drawing manager.
-	 *
+	 * 
 	 * @return Application draw manager.
 	 */
 	public static DrawManager getDrawManager() {
@@ -290,7 +287,7 @@ public final class Core {
 
 	/**
 	 * Controls access to the input manager.
-	 *
+	 * 
 	 * @return Application input manager.
 	 */
 	public static InputManager getInputManager() {
@@ -299,7 +296,7 @@ public final class Core {
 
 	/**
 	 * Controls access to the file manager.
-	 *
+	 * 
 	 * @return Application file manager.
 	 */
 	public static FileManager getFileManager() {
@@ -308,7 +305,7 @@ public final class Core {
 
 	/**
 	 * Controls creation of new cooldowns.
-	 *
+	 * 
 	 * @param milliseconds
 	 *            Duration of the cooldown.
 	 * @return A new cooldown.
@@ -319,7 +316,7 @@ public final class Core {
 
 	/**
 	 * Controls creation of new cooldowns with variance.
-	 *
+	 * 
 	 * @param milliseconds
 	 *            Duration of the cooldown.
 	 * @param variance
@@ -327,7 +324,7 @@ public final class Core {
 	 * @return A new cooldown with variance.
 	 */
 	public static Cooldown getVariableCooldown(final int milliseconds,
-											   final int variance) {
+			final int variance) {
 		return new Cooldown(milliseconds, variance);
 	}
 
