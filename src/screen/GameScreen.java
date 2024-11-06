@@ -135,7 +135,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	private int hitBullets;
 
-    /**
+
+
+	/**
 	 * Constructor, establishes the properties of the screen.
 	 * 
 	 * @param gameState
@@ -330,8 +332,34 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/**
 	 * Updates the elements on screen and checks for events.
 	 */
+	private boolean isPaused = false;
+	private Long pauseStartTime = null;
+	private boolean escKeyPressed = false;
+
 	protected final void update() {
 		super.update();
+
+
+
+		// ESC 키 입력 처리 (토글 상태)
+		if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
+			if (!escKeyPressed) {
+				// 게임이 레벨업 상태이거나 카운트다운 상태일 때 ESC 입력을 무시
+				if (!this.levelFinished && this.inputDelay.checkFinished()) {
+					togglePause();
+				}
+				escKeyPressed = true; // 키가 눌렸음을 기록
+			}
+		} else {
+			escKeyPressed = false; // 키가 떼어진 경우 초기화
+		}
+
+		// 게임이 멈춘 상태라면 업데이트를 하지 않음
+		if (this.isPaused) {
+			return;
+		}
+
+
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
 			boolean player1Attacking = inputManager.isKeyDown(KeyEvent.VK_SPACE);
 			boolean player2Attacking = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
@@ -359,10 +387,15 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			/*Elapsed Time Update*/
 			long currentTime = System.currentTimeMillis();
 
-			if (this.prevTime != null)
-				this.elapsedTime += (int) (currentTime - this.prevTime);
-
-			this.prevTime = (int) currentTime;
+			if (!this.isPaused) {
+				if (this.prevTime != null) {
+					this.elapsedTime += (int) (currentTime - this.prevTime); // 일시정지 상태가 아닐 때만 시간 업데이트
+				}
+				this.prevTime = (int) currentTime;
+			} else {
+				// 일시정지 상태에서는 prevTime을 업데이트하지 않음
+				this.prevTime = null;
+			}
 
 			if(!itemManager.isGhostActive())
 				this.ship.setColor(Color.GREEN);
@@ -483,6 +516,25 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			//Reset alert message when level is finished
 			this.alertMessage = "";
 			this.isRunning = false;
+		}
+	}
+
+
+	private void togglePause() {
+		if (!this.isPaused) {
+			// 게임을 일시정지 상태로 설정하고 일시정지 시작 시간을 기록
+			this.isPaused = true;
+			this.pauseStartTime = System.currentTimeMillis();
+			this.logger.info("Game paused");
+		} else {
+			// 게임이 멈춘 상태라면, 게임을 재개하고 일시정지 시간을 제외
+			if (this.pauseStartTime != null) {
+				long pauseEndTime = System.currentTimeMillis();
+				this.elapsedTime -= (int) ((pauseEndTime - this.pauseStartTime)); // 일시정지된 시간만큼 빼기 (밀리초 단위)
+				this.pauseStartTime = null;
+			}
+			this.isPaused = false;
+			this.logger.info("Game resumed");
 		}
 	}
 
