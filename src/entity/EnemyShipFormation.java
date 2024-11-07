@@ -139,7 +139,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 				+ " ship formation in (" + positionX + "," + positionY + ")");
 
 		int totalEnemies = this.nShipsWide * this.nShipsHigh;
-		EnemyShip.EnemyColorSelector.initializeColorPool(totalEnemies);
+//		EnemyShip.EnemyColorSelector.initializeColorPool(totalEnemies);
 
 		// Each sub-list is a column on the formation.
 		for (int i = 0; i < this.nShipsWide; i++)

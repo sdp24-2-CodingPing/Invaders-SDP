@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import engine.Cooldown;
 import engine.Core;
@@ -44,7 +45,20 @@ public class EnemyShip extends Entity {
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
 
-    private int health;
+	private EnemyType enemyType;
+	private Color color;
+	private double health;
+
+	public enum EnemyType {
+		GRUNT,
+		ELITE,
+		CHAMPION
+	}
+
+	public EnemyType getEnemyType() {
+		return this.enemyType;
+	}
+
 	/**
 	 * Constructor, establishes the ship's properties.
 	 * 
@@ -57,16 +71,16 @@ public class EnemyShip extends Entity {
 	 */
 	public EnemyShip(final int positionX, final int positionY,
 			final SpriteType spriteType, final GameState gameState) {
-		super(positionX, positionY, 12 * 2, 8 * 2, EnemyColorSelector.getColorForEnemy(spriteType));
+		super(positionX, positionY, 12 * 2, 8 * 2, Color.BLUE);
 
+//		this.enemyType = determineEnemyType(EnemyColorSelector.getColorForEnemy(spriteType));
+		this.enemyType = determineEnemyType();
+		super.setColor(getColorByEnemyType(this.enemyType));
+//		super.setColor();
 		this.spriteType = spriteType;
 		this.animationCooldown = Core.getCooldown(500);
 		this.isDestroyed = false;
-        //Determine enemy health based on game level
-		this.health = 0;
-		for(int i =1; i<=gameState.getLevel()/3;i++){
-			this.health++;
-		}
+		initializeHealth(gameState, this.enemyType);
 
 		switch (this.spriteType) {
 		case EnemyShipA1:
@@ -99,49 +113,48 @@ public class EnemyShip extends Entity {
 	}
 
 	/**
-	 * Giving color for each enemy ship
+	 * Assigns base health for each enemy types, considering level scaling.
 	 */
-	public static class EnemyColorSelector {
+	private void initializeHealth(GameState gameState, EnemyType enemyType) {
+		double baseHealth = 1;
+		if (enemyType.equals(EnemyType.ELITE))	baseHealth = 3;
+		else if (enemyType.equals(EnemyType.CHAMPION)) baseHealth = 7;
 
-		private static final double RED_PROPORTION = 0.1;
-		private static final double GREEN_PROPORTION = 0.3;
-		private static final double BLUE_PROPORTION = 0.6;
+		double levelMultiplier = Math.pow(1.05, gameState.getLevel() - 1);
+		this.health = baseHealth * levelMultiplier;
+	}
 
-		private static final List<Color> colorPool = new ArrayList<>();
-		private static int colorIndex = 0;
-		private static int numEnemies = 0;
-
-		// Initialize the color pool with the current round's enemy count
-		public static void initializeColorPool(int totalEnemies) {
-			numEnemies = totalEnemies;
-			resetColorPool();
+	/**
+	 * Determines the enemy type based on the assigned color.
+	 */
+	private EnemyType determineEnemyType(Color color) {
+		if (color.equals(Color.BLUE)) {
+			return EnemyType.GRUNT;
+		} else if (color.equals(Color.GREEN)) {
+			return EnemyType.ELITE;
+		} else if (color.equals(Color.RED)) {
+			return EnemyType.CHAMPION;
 		}
+		return EnemyType.GRUNT;
+	}
 
-		// Initialize and shuffle the color pool based on proportions
-		private static void resetColorPool() {
-			colorPool.clear();
-
-			int redCount = (int)(numEnemies * RED_PROPORTION);
-			int greenCount = (int)(numEnemies * GREEN_PROPORTION);
-			int blueCount = numEnemies - redCount - greenCount;
-
-			for (int i = 0; i < redCount; i++) colorPool.add(Color.RED);
-			for (int i = 0; i < greenCount; i++) colorPool.add(Color.GREEN);
-			for (int i = 0; i < blueCount; i++) colorPool.add(Color.BLUE);
-
-			Collections.shuffle(colorPool);
-			colorIndex = 0;
+	private EnemyType determineEnemyType() {
+		Random random = new Random();
+		int range = random.nextInt(100);
+		if (range > 40) {
+			return EnemyType.GRUNT;
+		} else if (range > 10) {
+			return EnemyType.ELITE;
+		} else {
+			return EnemyType.CHAMPION;
 		}
+	}
 
-		// Assign colors sequentially
-		public static Color getColorForEnemy(SpriteType spriteType) {
-			if (colorIndex >= colorPool.size()) {
-				// Reset index if all colors have been used
-				colorIndex = 0;
-			}
-
-			return colorPool.get(colorIndex++); // Return current color and increment index
-		}
+	private Color getColorByEnemyType(EnemyType enemyType) {
+		if (enemyType.equals(EnemyType.GRUNT))	return Color.BLUE;
+		else if (enemyType.equals(EnemyType.ELITE))	return Color.GREEN;
+		else if (enemyType.equals(EnemyType.CHAMPION))	return Color.RED;
+		return Color.BLUE;
 	}
 
 	/**
@@ -234,16 +247,15 @@ public class EnemyShip extends Entity {
 	}
 
     public final void HealthManageDestroy(final float balance) { //Determine whether to destroy the enemy ship based on its health
-        if(this.health <= 0){
+		health --;
+		if(this.health <= 0){
             this.isDestroyed = true;
             this.spriteType = SpriteType.Explosion;
-        }else{
-            this.health--;
         }
         soundManager.playSound(Sound.ALIEN_HIT, balance);
     }
 
-	public int getHealth(){return this.health; }  //Receive enemy ship health
+	public double getHealth(){ return this.health; }  //Receive enemy ship health
 
 
 	/**
