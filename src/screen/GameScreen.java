@@ -70,8 +70,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private int exp;
 	/** tempScore records the score up to the previous level. */
 	private int tempScore;
-	/** tempExp records the exp up to the previous level. */
-	private int tempExp;
 	/** Current ship type. */
 	private Ship.ShipType shipType;
 	/** Player lives left. */
@@ -189,7 +187,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		this.maxCombo = gameState.getMaxCombo();
 		this.lapTime = gameState.getPrevTime();
 		this.tempScore = gameState.getPrevScore();
-		this.tempExp = gameState.getPrevExp();
 
 		this.hitBullets = gameState.getHitBullets();
 
@@ -571,10 +568,16 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 * @param shipLevel current ship level
 	 * */
 	private void manageLevelUpSkillStats(int exp, int shipLevel) {
-		List<Integer> levelResult = this.shipLevelManager.levelUp(exp, shipLevel);
+        List<Integer> levelResult = this.shipLevelManager.levelUp(exp, shipLevel);
 
 		this.exp = levelResult.get(0);
 		this.shipLevel = levelResult.get(1);
+		if (shipLevel < this.shipLevel){
+			logger.info("Level UP!!! \n" +
+					"|| before level up, your exp: " + exp +
+					"|| after level up, your exp: " + this.exp +
+					"|| level: " + shipLevel);
+		}
 
 		//1. 레벨이 오르면 스킬, 스탯 선택할 수 있도록
 		//2-1. 선택한 스킬을 스킬목록에 추가 ShipLevelManager에 반영.
@@ -692,7 +695,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					//Reset max combo and edit temporary values
                     this.lapTime = this.elapsedTime;
                     this.tempScore = this.score;
-					this.tempExp = this.exp;
                     this.maxCombo = 0;
                 } else {
 					// Don't show it just before the game starts, i.e. when the countdown is zero.
@@ -851,7 +853,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					//Reset mac combo and edit temporary values
 					this.lapTime = this.elapsedTime;
 					this.tempScore = this.score;
-					this.tempExp = this.exp;
 					this.maxCombo = 0;
 				} else {
 					// Don't show it just before the game starts, i.e. when the countdown is zero.
@@ -1072,7 +1073,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	public final GameState getGameState() {
 		return new GameState(this.gameLevel, this.shipLevel, this.score, this.exp, this.shipType, this.lives,
-				this.bulletsShot, this.shipsDestroyed, this.elapsedTime, this.alertMessage, 0, this.maxCombo, this.lapTime, this.tempScore, this.tempExp, this.hitBullets);
+				this.bulletsShot, this.shipsDestroyed, this.elapsedTime, this.alertMessage, 0, this.maxCombo, this.lapTime, this.tempScore, this.hitBullets);
 	}
 
 

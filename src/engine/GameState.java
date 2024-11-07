@@ -4,9 +4,9 @@ import entity.Ship;
 
 /**
  * Implements an object that stores the state of the game between levels.
- *
+ * 
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
- *
+ * 
  */
 public class GameState {
 	/** Current game level. */
@@ -90,6 +90,10 @@ public class GameState {
 		this.hitBullets = hitBullets;
 	}
 
+	/**
+	 * Constructor only used in two-player-mode
+	 * @param gameState GameState
+	 * */
 	public GameState(GameState gameState) {
 		this.gameLevel = gameState.gameLevel;
 		this.shipLevel = gameState.shipLevel;
@@ -107,10 +111,12 @@ public class GameState {
 		this.hitBullets = gameState.hitBullets;
 	}
 
-
-	public GameState(GameState gameState, int nextLevel, int shipLevel) {
+	/**
+	 * constructor that used to get previous stats of game, and get next level of game.
+	 * */
+	public GameState(GameState gameState, int nextLevel) {
 		this.gameLevel = nextLevel;
-		this.shipLevel = shipLevel;
+		this.shipLevel = gameState.getShipLevel();
 		this.score = gameState.score;
 		this.exp = gameState.exp;
 		this.shipType = gameState.shipType;

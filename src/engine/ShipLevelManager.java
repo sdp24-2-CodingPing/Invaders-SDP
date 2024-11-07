@@ -34,14 +34,14 @@ public class ShipLevelManager {
         int newExp = exp;
         int newShipLevel = shipLevel;
 
-        //logger.info("Old exp: " + newExp + ", Old ship level: " + newShipLevel);
         int requiredExp = getRequiredExpForLevel(shipLevel+1);
         while (newExp >= requiredExp) {
+            //logger.info("Old exp: " + newExp + ", Old ship level: " + newShipLevel);
             newExp -= requiredExp;
             newShipLevel++;
+            //logger.info("New exp: " + newExp + ", New ship level: " + newShipLevel);
         }
 
-        //logger.info("New exp: " + newExp + ", New ship level: " + newShipLevel);
         return List.of(newExp, newShipLevel);
     }
 

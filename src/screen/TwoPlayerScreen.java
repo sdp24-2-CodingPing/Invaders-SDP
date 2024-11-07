@@ -106,12 +106,12 @@ public class TwoPlayerScreen extends Screen {
         try {
             if (players[PLAYER1_NUMBER].isDone()) {
                 gameStates[PLAYER1_NUMBER] = players[PLAYER1_NUMBER].get();
-                gameStates[PLAYER1_NUMBER] = new GameState(gameStates[PLAYER1_NUMBER], gameStates[PLAYER1_NUMBER].getGameLevel() + 1, gameStates[PLAYER1_NUMBER].getShipLevel());
+                gameStates[PLAYER1_NUMBER] = new GameState(gameStates[PLAYER1_NUMBER], gameStates[PLAYER1_NUMBER].getGameLevel() + 1);
                 runGameScreen(PLAYER1_NUMBER);
             }
             if (players[PLAYER2_NUMBER].isDone()) {
                 gameStates[PLAYER2_NUMBER] = players[PLAYER2_NUMBER].get();
-                gameStates[PLAYER2_NUMBER] = new GameState(gameStates[PLAYER2_NUMBER], gameStates[PLAYER2_NUMBER].getGameLevel() + 1, gameStates[PLAYER2_NUMBER].getShipLevel());
+                gameStates[PLAYER2_NUMBER] = new GameState(gameStates[PLAYER2_NUMBER], gameStates[PLAYER2_NUMBER].getGameLevel() + 1);
                 runGameScreen(PLAYER2_NUMBER);
             }
 
