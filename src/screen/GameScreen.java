@@ -21,9 +21,9 @@ import entity.*;
 
 /**
  * Implements the game screen, where the action happens.
- * 
+ *
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
- * 
+ *
  */
 public class GameScreen extends Screen implements Callable<GameState> {
 
@@ -98,7 +98,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** Alert Message when a special enemy appears. */
 	private String alertMessage;
 	/** checks if it's executed. */
-  	private boolean isExecuted = false;
+	private boolean isExecuted = false;
 	/** timer.. */
 	private Timer timer;
 	private TimerTask timerTask;
@@ -139,7 +139,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	/**
 	 * Constructor, establishes the properties of the screen.
-	 * 
+	 *
 	 * @param gameState
 	 *            Current game state.
 	 * @param gameSettings
@@ -154,8 +154,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 *            Frames per second, frame rate at which the game is run.
 	 */
 	public GameScreen(final GameState gameState,
-			final GameSettings gameSettings, final boolean bonusLife,
-			final int width, final int height, final int fps, final Wallet wallet) {
+					  final GameSettings gameSettings, final boolean bonusLife,
+					  final int width, final int height, final int fps, final Wallet wallet) {
 		super(width, height, fps);
 
 		this.gameSettings = gameSettings;
@@ -243,9 +243,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 		enemyShipFormation = new EnemyShipFormation(this.gameSettings, this.gameState);
 		enemyShipFormation.attach(this);
-        // Appears each 10-30 seconds.
-        this.ship = ShipFactory.create(this.shipType, this.width / 2, this.height - 70);
-        ship.applyItem(wallet);
+		// Appears each 10-30 seconds.
+		this.ship = ShipFactory.create(this.shipType, this.width / 2, this.height - 70);
+		ship.applyItem(wallet);
 		//Create random Spider Web.
 		int web_count = 1 + level / 3;
 		web = new ArrayList<>();
@@ -289,7 +289,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		this.screenFinishedCooldown = Core.getCooldown(SCREEN_CHANGE_INTERVAL);
 		this.bullets = new HashSet<>();
 		this.barriers = new HashSet<>();
-        this.itemBoxes = new HashSet<>();
+		this.itemBoxes = new HashSet<>();
 		this.itemManager = new ItemManager(this.ship, this.enemyShipFormation, this.barriers,
 				balance);
 
@@ -308,15 +308,15 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			case 4: soundManager.loopSound(Sound.BGM_LV4); break;
 			case 5: soundManager.loopSound(Sound.BGM_LV5); break;
 			case 6: soundManager.loopSound(Sound.BGM_LV6); break;
-            case 7:
+			case 7:
 				// From level 7 and above, it continues to play at BGM_LV7.
-            default: soundManager.loopSound(Sound.BGM_LV7); break;
+			default: soundManager.loopSound(Sound.BGM_LV7); break;
 		}
 	}
 
 	/**
 	 * Starts the action.
-	 * 
+	 *
 	 * @return Next screen code.
 	 */
 	public final int run() {
@@ -347,6 +347,19 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				// 게임이 레벨업 상태이거나 카운트다운 상태일 때 ESC 입력을 무시
 				if (!this.levelFinished && this.inputDelay.checkFinished()) {
 					togglePause();
+
+					// 게임을 일시정지 상태로 전환했을 때, StopScreen 호출
+					if (this.isPaused) {
+						StopScreen stopScreen = new StopScreen(this.width, this.height, this.fps);
+						int returnCode = stopScreen.run();
+						if (returnCode == 1) {
+							// 메인 메뉴로 돌아가기
+							this.isRunning = false;
+						} else {
+							// 게임을 재개
+							togglePause(); // StopScreen에서 Resume을 선택했을 때 게임을 다시 재개
+						}
+					}
 				}
 				escKeyPressed = true; // 키가 눌렸음을 기록
 			}
@@ -526,6 +539,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			this.isPaused = true;
 			this.pauseStartTime = System.currentTimeMillis();
 			this.logger.info("Game paused");
+
+
 		} else {
 			// 게임이 멈춘 상태라면, 게임을 재개하고 일시정지 시간을 제외
 			if (this.pauseStartTime != null) {
@@ -598,15 +613,15 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 			//Intermediate aggregation
 			if (this.level > 1){
-                if (countdown == 0) {
+				if (countdown == 0) {
 					//Reset mac combo and edit temporary values
-                    this.lapTime = this.elapsedTime;
-                    this.tempScore = this.score;
-                    this.maxCombo = 0;
-                } else {
+					this.lapTime = this.elapsedTime;
+					this.tempScore = this.score;
+					this.maxCombo = 0;
+				} else {
 					// Don't show it just before the game starts, i.e. when the countdown is zero.
-                    drawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore);
-                }
+					drawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore);
+				}
 			}
 		}
 
@@ -916,7 +931,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				for (Block block : this.block) {
 					if (checkCollision(bullet, block)) {
 						recyclable.add(bullet);
-                        soundManager.playSound(Sound.BULLET_BLOCKING, balance);
+						soundManager.playSound(Sound.BULLET_BLOCKING, balance);
 						break;
 					}
 				}
@@ -943,7 +958,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	/**
 	 * Checks if two entities are colliding.
-	 * 
+	 *
 	 * @param a
 	 *            First entity, the bullet.
 	 * @param b
@@ -968,7 +983,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	/**
 	 * Returns a GameState object representing the status of the game.
-	 * 
+	 *
 	 * @return Current game state.
 	 */
 	public final GameState getGameState() {
