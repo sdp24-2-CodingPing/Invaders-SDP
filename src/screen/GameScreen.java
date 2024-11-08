@@ -560,6 +560,25 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			this.alertMessage = "";
 			this.isRunning = false;
 		}
+
+	}
+
+	private final void SelectingCardUpdate() {
+		super.update();
+		boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT);
+		boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT);
+
+		int currentCardIndex = 0;
+		int cardCount = 3;
+		ArrayList<Card> cardList = new ArrayList<>();
+		for (int i = 0; i < cardCount; i++) {
+			cardList.add(new Card());
+		}
+		if (moveRight)
+			currentCardIndex = (currentCardIndex + 1) % cardCount;
+		else if (moveLeft)
+			currentCardIndex = (currentCardIndex == 0) ? cardCount - 1 : currentCardIndex - 1;
+
 	}
 
 	/**
@@ -577,6 +596,12 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					"|| before level up, your exp: " + exp +
 					"|| after level up, your exp: " + this.exp +
 					"|| level: " + shipLevel);
+
+			ArrayList<Card> cardList = new ArrayList<>();
+			cardList.add(new Card("card1"));
+			cardList.add(new Card("card2"));
+			cardList.add(new Card("card3"));
+			SelectingCardUpdate();
 		}
 
 		//1. 레벨이 오르면 스킬, 스탯 선택할 수 있도록
