@@ -1,9 +1,6 @@
 package entity;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 import engine.Cooldown;
@@ -46,17 +43,12 @@ public class EnemyShip extends Entity {
 	private final SoundManager soundManager = SoundManager.getInstance();
 
 	private EnemyType enemyType;
-	private Color color;
 	private double health;
 
 	public enum EnemyType {
 		GRUNT,
 		ELITE,
 		CHAMPION
-	}
-
-	public EnemyType getEnemyType() {
-		return this.enemyType;
 	}
 
 	/**
@@ -73,10 +65,8 @@ public class EnemyShip extends Entity {
 			final SpriteType spriteType, final GameState gameState) {
 		super(positionX, positionY, 12 * 2, 8 * 2, Color.BLUE);
 
-//		this.enemyType = determineEnemyType(EnemyColorSelector.getColorForEnemy(spriteType));
 		this.enemyType = determineEnemyType();
 		super.setColor(getColorByEnemyType(this.enemyType));
-//		super.setColor();
 		this.spriteType = spriteType;
 		this.animationCooldown = Core.getCooldown(500);
 		this.isDestroyed = false;
