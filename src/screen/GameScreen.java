@@ -135,6 +135,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	private int hitBullets;
 
+	private boolean isGotoMainMenu;
+
 
 
 	/**
@@ -335,6 +337,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private boolean isPaused = false;
 	private Long pauseStartTime = null;
 	private boolean escKeyPressed = false;
+	private boolean isGameOver = false;  // 게임 오버 상태를 나타내는 플래그
 
 	protected final void update() {
 		super.update();
@@ -352,8 +355,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					if (this.isPaused) {
 						StopScreen stopScreen = new StopScreen(this.width, this.height, this.fps);
 						int returnCode = stopScreen.run();
-						if (returnCode == 1) {
+						if (returnCode == 1&& this.lives > 0) {
 							// 메인 메뉴로 돌아가기
+							this.isGotoMainMenu = true;
 							this.isRunning = false;
 						} else {
 							// 게임을 재개
@@ -515,14 +519,16 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		else
 			draw();
 
-		if ((this.enemyShipFormation.isEmpty() || this.lives <= 0)
-				&& !this.levelFinished) {
+		if ((this.enemyShipFormation.isEmpty() || this.lives <= 0) && !this.levelFinished) {
 			this.levelFinished = true;
-
-			soundManager.stopSound(soundManager.getCurrentBGM());
-			if (this.lives == 0)
-				soundManager.playSound(Sound.GAME_END);
 			this.screenFinishedCooldown.reset();
+
+			if (this.lives <= 0) {
+				this.isGameOver = true;  // 게임 오버 상태로 설정
+				soundManager.playSound(Sound.GAME_END);
+			} else {
+				soundManager.stopSound(soundManager.getCurrentBGM());
+			}
 		}
 
 		if (this.levelFinished && this.screenFinishedCooldown.checkFinished()) {
@@ -1010,5 +1016,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		if(this.lives < 0){
 			this.lives = 0;
 		}
+	}
+
+	public boolean getIsGotoMainMenu(){
+		return this.isGotoMainMenu;
 	}
 }

@@ -71,12 +71,21 @@ public class StopScreen extends Screen {
             if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
                 switch (selectedOption) {
                     case 0:
+                        // 게임 재개
+                        this.isRunning = false; // StopScreen 종료
                         soundManager.playSound(Sound.MENU_CLICK);
+                        Core.getInputManager().flushKeys();
                         break;
+
                     case 1:
+                        this.returnCode = 1; // 메인 메뉴로 돌아가기 위한 returnCode 설정
+                        this.isRunning = false; // StopScreen 종료
                         soundManager.playSound(Sound.MENU_CLICK);
                         break;
+
                     case 2:
+                        // 게임 종료
+                        System.exit(0); // 게임 완전 종료
                         break;
                 }
             }
@@ -99,7 +108,7 @@ public class StopScreen extends Screen {
 
         for (int i = 0; i < options.length; i++) {
             boolean isSelected = (i == selectedOption);
-            drawManager.drawCenteredRegularString(this, options[i], this.getHeight() / 2 + i * 50, isSelected);
+            drawManager.drawLeftAlignedRegularString(this, options[i], 200, this.getHeight() / 2 + i * 50, isSelected);
         }
 
         drawManager.completeDrawing(this);

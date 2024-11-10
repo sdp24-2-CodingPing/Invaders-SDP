@@ -1788,6 +1788,20 @@ public final class DrawManager {
 				- fontRegularMetrics.stringWidth(string) / 2, height);
 	}
 
+	public void drawLeftAlignedRegularString(Screen screen, String text, int x, int y, boolean isSelected) {
+		Graphics2D g = (Graphics2D) backBufferGraphics;
+
+		if (isSelected) {
+			g.setColor(Color.GREEN); // 색상 선택: 선택된 옵션일 때
+		} else {
+			g.setColor(Color.WHITE); // 색상 선택: 선택되지 않은 옵션일 때
+		}
+
+		g.setFont(fontRegular);
+		g.drawString(text, x, y);
+	}
+
+
 
 	/**
 	 * Draws the game setting row.
