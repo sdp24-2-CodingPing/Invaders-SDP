@@ -265,6 +265,31 @@ public final class Core {
 	}
 
 	/**
+	 * Get frame width
+	 * @return Width
+	 */
+	public static int getWidth() {
+		return WIDTH;
+	}
+
+	/**
+	 * Get frame height
+	 * @return Height
+	 */
+	public static int getHeight() {
+		return HEIGHT;
+	}
+
+	/**
+	 * Get frame fps
+	 * @return FPS
+	 */
+	public static int getFps() {
+		return FPS;
+	}
+
+
+	/**
 	 * Controls access to the logger.
 	 * 
 	 * @return Application logger.

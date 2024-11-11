@@ -1,6 +1,13 @@
 package entity;
 
 public class Card {
-    public Card(String card1) {
+    private final String cardName;
+
+    public Card(String cardName) {
+        this.cardName = cardName;
+    }
+
+    public String getCardName() {
+        return this.cardName;
     }
 }

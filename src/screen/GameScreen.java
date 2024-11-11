@@ -563,51 +563,18 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	}
 
-	private final void SelectingCardUpdate() {
-		super.update();
-		boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT);
-		boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT);
-
-		int currentCardIndex = 0;
-		int cardCount = 3;
-		ArrayList<Card> cardList = new ArrayList<>();
-		for (int i = 0; i < cardCount; i++) {
-			cardList.add(new Card());
-		}
-		if (moveRight)
-			currentCardIndex = (currentCardIndex + 1) % cardCount;
-		else if (moveLeft)
-			currentCardIndex = (currentCardIndex == 0) ? cardCount - 1 : currentCardIndex - 1;
-
-	}
-
 	/**
 	 * manages Level up
 	 * @param exp current exp
 	 * @param shipLevel current ship level
 	 * */
 	private void manageLevelUpSkillStats(int exp, int shipLevel) {
-        List<Integer> levelResult = this.shipLevelManager.levelUp(exp, shipLevel);
+		List<Integer> levelResult = this.shipLevelManager.managePlayerLevelUp(exp, shipLevel);
 
+		// TODO: 서현님 Branch와 병합 후 togglePause 메소드를 통해 진행시간 Sync를 맞춰야함.
+		// TODO: 경험치와 레벨은 추후 Player 객체를 따로 분리 후 Player의 스탯 및 경험치와 레벨, 체력 등을 관리
 		this.exp = levelResult.get(0);
 		this.shipLevel = levelResult.get(1);
-		if (shipLevel < this.shipLevel){
-			logger.info("Level UP!!! \n" +
-					"|| before level up, your exp: " + exp +
-					"|| after level up, your exp: " + this.exp +
-					"|| level: " + shipLevel);
-
-			ArrayList<Card> cardList = new ArrayList<>();
-			cardList.add(new Card("card1"));
-			cardList.add(new Card("card2"));
-			cardList.add(new Card("card3"));
-			SelectingCardUpdate();
-		}
-
-		//1. 레벨이 오르면 스킬, 스탯 선택할 수 있도록
-		//2-1. 선택한 스킬을 스킬목록에 추가 ShipLevelManager에 반영.
-		//2-2. 선택한 스탯을 gameState에 반영
-		//3. 반영된 스킬, 스탯을 ui로 보여줌 -> draw()에서 수행
 	}
 
 

@@ -3,7 +3,9 @@ package engine;
 import entity.Card;
 import entity.skill.LaserStrike;
 import entity.skill.Skill;
+import screen.CardSelectScreen;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -17,7 +19,6 @@ public class ShipLevelManager {
     /** Application logger. */
     private final Logger logger;
 
-    private List<Card> cardList;
 
     // 각 레벨에 필요한 경험치를 저장하는 배열 (예: level 1 -> 100 exp, level 2 -> 200 exp)
     private static final int[] EXP_REQUIRED = {0, 100, 200, 400, 800, 1600, 3200, 6400, 12800};
@@ -37,24 +38,28 @@ public class ShipLevelManager {
      * @param shipLevel current ship level
      * @return List<Integer> contains surplus exp after level up and level that you got if your exp is sufficient to level up. Unless, your current exp and current level
      * */
-    public List<Integer> levelUp(int exp, int shipLevel) {
+    public List<Integer> managePlayerLevelUp(int exp, int shipLevel) {
         int newExp = exp;
         int newShipLevel = shipLevel;
 
-        int requiredExp = getRequiredExpForLevel(shipLevel+1);
+        int requiredExp = getRequiredExpForLevel(newShipLevel+1);
         while (newExp >= requiredExp) {
-            //logger.info("Old exp: " + newExp + ", Old ship level: " + newShipLevel);
             newExp -= requiredExp;
             newShipLevel++;
-            //logger.info("New exp: " + newExp + ", New ship level: " + newShipLevel);
 
-//            List<Skill> skillChoices = getRandomSkills();
-//            for (int i=0; i < 3; i++){
-//            skillCard.addSkill(chooseSkill(skillChoices, i));
-//            }
-            this.cardList.add(new Card("card1"));
-            this.cardList.add(new Card("card2"));
-            this.cardList.add(new Card("card3"));
+            ArrayList<Card> cardList = new ArrayList<>();
+
+            cardList.add(new Card("card1"));
+            cardList.add(new Card("card2"));
+            cardList.add(new Card("card3"));
+
+            CardSelectScreen cardSelectScreen = new CardSelectScreen(Core.getWidth(), Core.getHeight(), Core.getFps(), cardList);
+            cardSelectScreen.initialize();
+            int selectedCard = cardSelectScreen.run();
+
+            logger.info("selected Card: " + selectedCard);
+
+            requiredExp = getRequiredExpForLevel(newShipLevel+1);
         }
 
         return List.of(newExp, newShipLevel);
