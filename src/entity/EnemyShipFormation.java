@@ -138,6 +138,8 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		this.logger.info("Initializing " + nShipsWide + "x" + nShipsHigh
 				+ " ship formation in (" + positionX + "," + positionY + ")");
 
+		int totalEnemies = this.nShipsWide * this.nShipsHigh;
+
 		// Each sub-list is a column on the formation.
 		for (int i = 0; i < this.nShipsWide; i++)
 			this.enemyShips.add(new ArrayList<EnemyShip>());

@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Color;
+import java.util.Random;
 
 import engine.Cooldown;
 import engine.Core;
@@ -41,7 +42,15 @@ public class EnemyShip extends Entity {
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
 
-    private int health;
+	private EnemyType enemyType;
+	private double health;
+
+	public enum EnemyType {
+		GRUNT,
+		ELITE,
+		CHAMPION
+	}
+
 	/**
 	 * Constructor, establishes the ship's properties.
 	 * 
@@ -54,16 +63,14 @@ public class EnemyShip extends Entity {
 	 */
 	public EnemyShip(final int positionX, final int positionY,
 			final SpriteType spriteType, final GameState gameState) {
-		super(positionX, positionY, 12 * 2, 8 * 2, getDefaultColor(spriteType));
+		super(positionX, positionY, 12 * 2, 8 * 2, Color.BLUE);
 
+		this.enemyType = determineEnemyType();
+		super.setColor(getColorByEnemyType(this.enemyType));
 		this.spriteType = spriteType;
 		this.animationCooldown = Core.getCooldown(500);
 		this.isDestroyed = false;
-        //Determine enemy health based on game level
-		this.health = 0;
-		for(int i =1; i<=gameState.getLevel()/3;i++){
-			this.health++;
-		}
+		initializeHealth(gameState, this.enemyType);
 
 		switch (this.spriteType) {
 		case EnemyShipA1:
@@ -96,29 +103,49 @@ public class EnemyShip extends Entity {
 	}
 
 	/**
-	 * Giving color for each enemy ship
+	 * Assigns base health for each enemy types, considering level scaling.
 	 */
-		public static Color getDefaultColor(SpriteType spriteType) {
-			switch (spriteType) {
-				case EnemyShipA1:
-				case EnemyShipA2:
-					return Color.RED; // Цвет для типа A
-				case EnemyShipB1:
-				case EnemyShipB2:
-					return Color.GREEN; // Цвет для типа B
-				case EnemyShipC1:
-				case EnemyShipC2:
-					return Color.BLUE; // Цвет для типа C
-				case EnemyShipD1:
-				case EnemyShipD2:
-					return Color.YELLOW; // Цвет для типа D
-				case EnemyShipE1:
-				case EnemyShipE2:
-					return Color.ORANGE; // Цвет для типа E
-				default:
-					return Color.WHITE; // Цвет по умолчанию
-			}
+	private void initializeHealth(GameState gameState, EnemyType enemyType) {
+		double baseHealth = 1;
+		if (enemyType.equals(EnemyType.ELITE))	baseHealth = 3;
+		else if (enemyType.equals(EnemyType.CHAMPION)) baseHealth = 7;
+
+		double levelMultiplier = Math.pow(1.05, gameState.getLevel() - 1);
+		this.health = baseHealth * levelMultiplier;
+	}
+
+	/**
+	 * Determines the enemy type based on the assigned color.
+	 */
+	private EnemyType determineEnemyType(Color color) {
+		if (color.equals(Color.BLUE)) {
+			return EnemyType.GRUNT;
+		} else if (color.equals(Color.GREEN)) {
+			return EnemyType.ELITE;
+		} else if (color.equals(Color.RED)) {
+			return EnemyType.CHAMPION;
 		}
+		return EnemyType.GRUNT;
+	}
+
+	private EnemyType determineEnemyType() {
+		Random random = new Random();
+		int range = random.nextInt(100);
+		if (range > 40) {
+			return EnemyType.GRUNT;
+		} else if (range > 10) {
+			return EnemyType.ELITE;
+		} else {
+			return EnemyType.CHAMPION;
+		}
+	}
+
+	private Color getColorByEnemyType(EnemyType enemyType) {
+		if (enemyType.equals(EnemyType.GRUNT))	return Color.BLUE;
+		else if (enemyType.equals(EnemyType.ELITE))	return Color.GREEN;
+		else if (enemyType.equals(EnemyType.CHAMPION))	return Color.RED;
+		return Color.BLUE;
+	}
 
 	/**
 	 * Constructor, establishes the ship's properties for a special ship, with
@@ -210,16 +237,15 @@ public class EnemyShip extends Entity {
 	}
 
     public final void HealthManageDestroy(final float balance) { //Determine whether to destroy the enemy ship based on its health
-        if(this.health <= 0){
+		health --;
+		if(this.health <= 0){
             this.isDestroyed = true;
             this.spriteType = SpriteType.Explosion;
-        }else{
-            this.health--;
         }
         soundManager.playSound(Sound.ALIEN_HIT, balance);
     }
 
-	public int getHealth(){return this.health; }  //Receive enemy ship health
+	public double getHealth(){ return this.health; }  //Receive enemy ship health
 
 
 	/**
