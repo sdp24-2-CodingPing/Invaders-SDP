@@ -4,9 +4,9 @@ import entity.Ship;
 
 /**
  * Implements an object that stores the state of the game between levels.
- * 
+ *
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
- * 
+ *
  */
 public class GameState {
 	/** Current game level. */
@@ -25,7 +25,7 @@ public class GameState {
 	private int elapsedTime;
 	/** Special enemy appearances alert message */
 	private String alertMessage;
-    /** Number of consecutive hits */
+	/** Number of consecutive hits */
 	private int combo;
 	/** Intermediate aggregation variables
 	 * max combo, elapsed time and total score
@@ -36,9 +36,11 @@ public class GameState {
 
 	private int hitBullets;
 
+	private int isGotoMainMenu;
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param level
 	 *            Current game level.
 	 * @param score
@@ -59,11 +61,11 @@ public class GameState {
 	 *            Ships destroyed consequtive.
 	 */
 	public GameState(final int level, final int score,
-			final Ship.ShipType shipType,
-			final int livesRemaining, final int bulletsShot,
-			final int shipsDestroyed, final int elapsedTime, final String alertMessage, final int combo,
+					 final Ship.ShipType shipType,
+					 final int livesRemaining, final int bulletsShot,
+					 final int shipsDestroyed, final int elapsedTime, final String alertMessage, final int combo,
 					 final int maxCombo, final int prevTime, final int prevScore, final int hitBullets) {
-				
+
 		this.level = level;
 		this.score = score;
 		this.shipType = shipType;

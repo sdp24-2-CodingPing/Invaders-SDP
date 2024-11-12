@@ -2,6 +2,7 @@ package engine;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Set;
 
 /**
  * Manages keyboard input for the provided screen.
@@ -17,6 +18,7 @@ public final class InputManager implements KeyListener {
 	private static boolean[] keys;
 	/** Singleton instance of the class. */
 	private static InputManager instance;
+	private Set<Integer> pressedKeys;
 
 	/**
 	 * Private constructor.
@@ -80,5 +82,11 @@ public final class InputManager implements KeyListener {
 	@Override
 	public void keyTyped(final KeyEvent key) {
 
+	}
+
+	public void flushKeys() {
+		for (int i = 0; i < NUM_KEYS; i++) {
+			keys[i] = false;  // 모든 키 상태 초기화
+		}
 	}
 }
