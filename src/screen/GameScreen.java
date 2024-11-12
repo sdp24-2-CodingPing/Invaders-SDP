@@ -17,6 +17,8 @@ import java.util.TimerTask;
 
 import engine.*;
 import entity.*;
+import entity.skill.LaserStrike;
+import entity.skill.Skill;
 
 
 /**
@@ -245,15 +247,15 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 		enemyShipFormation = new EnemyShipFormation(this.gameSettings, this.gameState);
 		enemyShipFormation.attach(this);
-		// Appears each 10-30 seconds.
-		this.ship = ShipFactory.create(this.shipType, this.width / 2, this.height - 70);
-		ship.applyItem(wallet);
+    // Appears each 10-30 seconds.
+    this.ship = ShipFactory.create(this.shipType, this.width / 2, this.height - 130);
+    ship.applyItem(wallet);
 		//Create random Spider Web.
 		int web_count = 1 + level / 3;
 		web = new ArrayList<>();
 		for(int i = 0; i < web_count; i++) {
 			double randomValue = Math.random();
-			this.web.add(new Web((int) Math.max(0, randomValue * width - 12 * 2), this.height - 70));
+			this.web.add(new Web((int) Math.max(0, randomValue * width - 12 * 2), this.height - 130));
 			this.logger.info("Spider web creation location : " + web.get(i).getPositionX());
 		}
 		//Create random Block.
@@ -603,12 +605,37 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		drawManager.drawScore(this, this.score);
 		drawManager.drawElapsedTime(this, this.elapsedTime);
 		drawManager.drawAlertMessage(this, this.alertMessage);
-		drawManager.drawLives(this, this.lives, this.shipType);
+//		drawManager.drawLives(this, this.lives, this.shipType);
 		drawManager.drawLevel(this, this.level);
 		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
 		drawManager.drawReloadTimer(this,this.ship,ship.getRemainingReloadTime());
 		drawManager.drawCombo(this,this.combo);
 
+		// HUD with essential information. (Item, HP, EXP)
+		int HUD_Y = 640;
+		drawManager.drawHorizontalLine(this, HUD_Y);
+		drawManager.drawHorizontalLine(this, HUD_Y);
+		int HUD_MARGIN_TOP = 16; // Padding from the top of the item box
+		int BOX_WIDTH = 48; // Width of the item box
+		int BOX_HEIGHT = 48; // Height of the item box
+		int BOX_MARGIN = 10; // Margin between boxes
+
+		// 배열로 스킬 객체 생성, 추후 다른 스킬 객체로 채워질 수 있음
+		Skill[] skills = new Skill[3];
+		for (int i = 0; i < skills.length; i++) {
+			skills[i] = new LaserStrike(); // 초기화는 LaserStrike로, 다른 스킬로 대체 가능
+		}
+
+		// 스킬 박스와 스킬 아이콘 그리기
+		for (int i = 0; i < skills.length; i++) {
+			int offsetX = 20 + i * (BOX_WIDTH + BOX_MARGIN); // X 좌표 계산
+			drawManager.drawThickBox(this, offsetX, HUD_Y + HUD_MARGIN_TOP, BOX_WIDTH, BOX_HEIGHT, 2); // 스킬 박스 그리기
+			drawManager.drawEntity(skills[i], offsetX + 2, HUD_Y + HUD_MARGIN_TOP + 2); // 스킬 아이콘 그리기
+		}
+
+		// Draw HP & EXP
+		drawManager.drawSegmentedBar(220, HUD_Y + HUD_MARGIN_TOP + 7, 350, 12, 10, 15, Color.GREEN);
+		drawManager.drawSegmentedBar(220, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 350, 12, 12, 20, Color.YELLOW);
 
 		// Countdown to game start.
 		if (!this.inputDelay.checkFinished()) {
