@@ -79,16 +79,16 @@ public class GameSettings {
 	 * @param formationHeight control Enemy height
 	 * @param baseSpeed control Enemy speed
 	 * @param shootingFrecuency control Enemy shooting Frequency
-	 * @param level Level
+	 * @param gameLevel Level
 	 * @param difficulty set difficulty
 	 * @return return type GameSettings
 	 */
-	public GameSettings LevelSettings(int formationWidth, int formationHeight,
-									  int baseSpeed, int shootingFrecuency, int level, int difficulty) {
+	public GameSettings levelSettings(int formationWidth, int formationHeight,
+									  int baseSpeed, int shootingFrecuency, int gameLevel, int difficulty) {
 		this.difficulty = difficulty;
 		return switch (difficulty) {
 			case 0 -> {
-				if(level%3 == 0 && level < 5){
+				if(gameLevel%3 == 0 && gameLevel < 5){
 					if(formationWidth == formationHeight){
 						if(formationWidth < 14) formationWidth += 1;
                     } else {
@@ -98,7 +98,7 @@ public class GameSettings {
 					else baseSpeed = -150;
                     if(shootingFrecuency-100 > 100) shootingFrecuency -= 100;
 					else shootingFrecuency = 100;
-                }else if(level % 2 == 0 && level >= 5){
+                }else if(gameLevel % 2 == 0 && gameLevel >= 5){
 					if(formationWidth == formationHeight){
 						if(formationWidth < 14) formationWidth += 1;
 					} else {
@@ -112,7 +112,7 @@ public class GameSettings {
                 yield new GameSettings(formationWidth, formationHeight, baseSpeed, shootingFrecuency);
 			}
 			case 1 -> {
-				if(level%2 == 0 && level < 5){
+				if(gameLevel%2 == 0 && gameLevel < 5){
 					if(formationWidth == formationHeight){
 						if(formationWidth < 14) formationWidth += 1;
 					} else {
@@ -122,7 +122,7 @@ public class GameSettings {
 					else baseSpeed = -150;
 					if(shootingFrecuency-200 > 200) shootingFrecuency -= 200;
 					else shootingFrecuency = 100;
-				}else if(level >= 5){
+				}else if(gameLevel >= 5){
 					if(formationWidth == formationHeight){
 						if(formationWidth < 14) formationWidth += 1;
 					} else {
@@ -136,7 +136,7 @@ public class GameSettings {
                 yield new GameSettings(formationWidth, formationHeight, baseSpeed, shootingFrecuency);
 			}
 			case 2 -> {
-				if(level%2 == 0 && level < 5){
+				if(gameLevel%2 == 0 && gameLevel < 5){
 					if(formationWidth == formationHeight){
 						if(formationWidth < 14) formationWidth += 1;
 					} else {
@@ -146,7 +146,7 @@ public class GameSettings {
 					else baseSpeed = -150;
 					if(shootingFrecuency-300 > 300) shootingFrecuency -= 300;
 					else shootingFrecuency = 100;
-				}else if(level >= 5){
+				}else if(gameLevel >= 5){
 					if(formationWidth == formationHeight){
 						if(formationWidth < 14) formationWidth += 2;
 					} else {

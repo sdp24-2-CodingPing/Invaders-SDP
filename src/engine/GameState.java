@@ -4,15 +4,19 @@ import entity.Ship;
 
 /**
  * Implements an object that stores the state of the game between levels.
- *
+ * 
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
- *
+ * 
  */
 public class GameState {
 	/** Current game level. */
-	private int level;
+	private int gameLevel;
 	/** Current score. */
 	private int score;
+	/** Current score. */
+	private int exp;
+	/** Current ship level. */
+	private int shipLevel;
 	/** Current ship type. */
 	private Ship.ShipType shipType;
 	/** Lives currently remaining. */
@@ -28,11 +32,12 @@ public class GameState {
 	/** Number of consecutive hits */
 	private int combo;
 	/** Intermediate aggregation variables
-	 * max combo, elapsed time and total score
+	 * max combo, elapsed time and total score, total exp
 	 * you get from previous level */
 	private int maxCombo;
 	private int prevTime;
 	private int prevScore;
+	private int prevShipLevel;
 
 	private int hitBullets;
 
@@ -41,7 +46,7 @@ public class GameState {
 	/**
 	 * Constructor.
 	 *
-	 * @param level
+	 * @param gameLevel
 	 *            Current game level.
 	 * @param score
 	 *            Current score.
@@ -60,14 +65,16 @@ public class GameState {
 	 * @param combo
 	 *            Ships destroyed consequtive.
 	 */
-	public GameState(final int level, final int score,
+	public GameState(final int gameLevel, final int shipLevel, final int score, final int exp,
 					 final Ship.ShipType shipType,
 					 final int livesRemaining, final int bulletsShot,
 					 final int shipsDestroyed, final int elapsedTime, final String alertMessage, final int combo,
 					 final int maxCombo, final int prevTime, final int prevScore, final int hitBullets) {
 
-		this.level = level;
+		this.gameLevel = gameLevel;
+		this.shipLevel = shipLevel;
 		this.score = score;
+		this.exp = exp;
 		this.shipType = shipType;
 		this.livesRemaining = livesRemaining;
 		this.bulletsShot = bulletsShot;
@@ -81,8 +88,13 @@ public class GameState {
 		this.hitBullets = hitBullets;
 	}
 
+	/**
+	 * Constructor only used in two-player-mode
+	 * @param gameState GameState
+	 * */
 	public GameState(GameState gameState) {
-		this.level = gameState.level;
+		this.gameLevel = gameState.gameLevel;
+		this.shipLevel = gameState.shipLevel;
 		this.score = gameState.score;
 		this.shipType = gameState.shipType;
 		this.livesRemaining = gameState.livesRemaining;
@@ -96,10 +108,14 @@ public class GameState {
 		this.hitBullets = gameState.hitBullets;
 	}
 
-
+	/**
+	 * constructor that used to get previous stats of game, and get next level of game.
+	 * */
 	public GameState(GameState gameState, int nextLevel) {
-		this.level = nextLevel;
+		this.gameLevel = nextLevel;
+		this.shipLevel = gameState.getShipLevel();
 		this.score = gameState.score;
+		this.exp = gameState.exp;
 		this.shipType = gameState.shipType;
 		this.livesRemaining = gameState.livesRemaining;
 		this.bulletsShot = gameState.bulletsShot;
@@ -114,10 +130,17 @@ public class GameState {
 
 
 	/**
-	 * @return the level
+	 * @return the game level
 	 */
-	public final int getLevel() {
-		return level;
+	public final int getGameLevel() {
+		return gameLevel;
+	}
+
+	/**
+	 * @return the ship level
+	 */
+	public final int getShipLevel() {
+		return shipLevel;
 	}
 
 	/**
@@ -125,6 +148,13 @@ public class GameState {
 	 */
 	public final int getScore() {
 		return score;
+	}
+
+	/**
+	 * @return the exp
+	 */
+	public final int getExp() {
+		return exp;
 	}
 
 	/**
@@ -187,6 +217,8 @@ public class GameState {
 	 * @return the prevScore/tempScore
 	 */
 	public final int getPrevScore() { return prevScore;}
+
+	public final int getPrevShipLevel(){ return prevShipLevel; }
 
 	public final int getHitBullets() { return hitBullets;}
 
