@@ -141,9 +141,9 @@ public final class Core {
 						// 게임 오버 시 ScoreScreen으로 전환
 						if (gameState.getLivesRemaining() > 0) {
 							// 다음 레벨 진행
-							gameState = new GameState(gameState, gameState.getLevel() + 1);
+							gameState = new GameState(gameState, gameState.getGameLevel() + 1);
 							endTime = System.currentTimeMillis();
-							achievementManager.updatePlaying(gameState.getMaxCombo(), (int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getLivesRemaining(), gameState.getLevel() - 1);
+							achievementManager.updatePlaying(gameState.getMaxCombo(), (int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getLivesRemaining(), gameState.getGameLevel() - 1);
 						} else {
 							// ScoreScreen으로 전환하여 게임오버 화면 표시
 							currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);

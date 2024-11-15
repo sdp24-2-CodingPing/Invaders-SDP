@@ -135,7 +135,7 @@ public class EnemyShip extends Entity {
 		if (enemyType.equals(EnemyType.ELITE))	baseHealth = 3;
 		else if (enemyType.equals(EnemyType.CHAMPION)) baseHealth = 7;
 
-		double levelMultiplier = Math.pow(1.05, gameState.getLevel() - 1);
+		double levelMultiplier = Math.pow(1.05, gameState.getGameLevel() - 1);
 		this.health = baseHealth * levelMultiplier;
 	}
 

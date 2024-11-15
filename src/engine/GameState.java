@@ -37,7 +37,6 @@ public class GameState {
 	private int maxCombo;
 	private int prevTime;
 	private int prevScore;
-	private int prevExp;
 	private int prevShipLevel;
 
 	private int hitBullets;
@@ -70,7 +69,7 @@ public class GameState {
 					 final Ship.ShipType shipType,
 					 final int livesRemaining, final int bulletsShot,
 					 final int shipsDestroyed, final int elapsedTime, final String alertMessage, final int combo,
-					 final int maxCombo, final int prevTime, final int prevScore, final int prevExp, final int hitBullets) {
+					 final int maxCombo, final int prevTime, final int prevScore, final int hitBullets) {
 
 		this.gameLevel = gameLevel;
 		this.shipLevel = shipLevel;
@@ -86,7 +85,6 @@ public class GameState {
 		this.maxCombo = maxCombo;
 		this.prevTime = prevTime;
 		this.prevScore = prevScore;
-		this.prevExp = prevExp;
 		this.hitBullets = hitBullets;
 	}
 
@@ -107,7 +105,6 @@ public class GameState {
 		this.maxCombo = gameState.maxCombo;
 		this.prevTime = gameState.prevTime;
 		this.prevScore = gameState.prevScore;
-		this.prevExp = gameState.prevExp;
 		this.hitBullets = gameState.hitBullets;
 	}
 
@@ -128,7 +125,6 @@ public class GameState {
 		this.maxCombo = gameState.maxCombo;
 		this.prevTime = gameState.prevTime;
 		this.prevScore = gameState.prevScore;
-		this.prevExp = gameState.prevExp;
 		this.hitBullets = gameState.hitBullets;
 	}
 
@@ -221,11 +217,6 @@ public class GameState {
 	 * @return the prevScore/tempScore
 	 */
 	public final int getPrevScore() { return prevScore;}
-
-	/**
-	 * @return the prevExp/tempExp
-	 */
-	public final int getPrevExp() { return prevExp;}
 
 	public final int getPrevShipLevel(){ return prevShipLevel; }
 
