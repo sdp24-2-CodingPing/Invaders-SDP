@@ -877,7 +877,7 @@ public final class DrawManager {
 	 *            Screen to draw on.
 	 * @param score
 	 *            Score obtained.
-	 * @param livesRemaining
+	 * @param playerHp
 	 *            Lives remaining when finished.
 	 * @param shipsDestroyed
 	 *            Total ships destroyed.
@@ -887,10 +887,10 @@ public final class DrawManager {
 	 *            If the score is a new high score.
 	 */
 	public void drawResults(final Screen screen, final int score,
-			final int livesRemaining, final int shipsDestroyed,
+			final int playerHp, final int shipsDestroyed,
 			final double accuracy, final boolean isNewRecord, final int coinsEarned) {
 		String scoreString = String.format("score %04d", score);
-		String livesRemainingString = "lives remaining " + livesRemaining;
+		String playerHpString = "lives remaining " + playerHp;
 		String shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
 		String accuracyString = String
 				.format("accuracy %.2f%%", accuracy);
@@ -901,7 +901,7 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, scoreString, screen.getHeight()
 				/ height);
-		drawCenteredRegularString(screen, livesRemainingString,
+		drawCenteredRegularString(screen, playerHpString,
 				screen.getHeight() / height + fontRegularMetrics.getHeight()
 						* 2);
 		drawCenteredRegularString(screen, shipsDestroyedString,

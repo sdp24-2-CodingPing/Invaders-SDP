@@ -22,8 +22,6 @@ public class GameState {
 	private PlayerShip.ShipType shipType;
 	/** Current player ship */
 	private PlayerShip playerShip;
-	/** Lives currently remaining. */
-	private int livesRemaining;
 	/** Bullets shot until now. */
 	private int bulletsShot;
 	/** Ships destroyed until now. */
@@ -50,15 +48,13 @@ public class GameState {
 	 * @param gameLevel      Current game level.
 	 * @param score          Current score.
 	 * @param shipType       Current ship type.
-	 * @param livesRemaining Lives currently remaining.
 	 * @param bulletsShot    Bullets shot until now.
 	 * @param shipsDestroyed Ships destroyed until now.
 	 * @param elapsedTime    Elapsed time.
 	 * @param combo          Ships destroyed consequtive.
 	 */
 	public GameState(final int gameLevel, final int shipLevel, final int score, final int exp,
-					 final PlayerShip.ShipType shipType,
-					 final int livesRemaining, final int bulletsShot,
+					 final PlayerShip.ShipType shipType, final int bulletsShot,
 					 final int shipsDestroyed, final int elapsedTime, final int combo,
 					 final int maxCombo, final int prevTime, final int prevScore, final int hitBullets) {
 		this.gameLevel = gameLevel;
@@ -67,7 +63,6 @@ public class GameState {
 		this.exp = exp;
 		this.shipType = shipType;
 		this.playerShip = ShipFactory.create(shipType, Core.getWidth() / 2, Core.getHeight() - 130);
-		this.livesRemaining = livesRemaining;
 		this.bulletsShot = bulletsShot;
 		this.shipsDestroyed = shipsDestroyed;
 		this.elapsedTime = elapsedTime;
@@ -88,7 +83,6 @@ public class GameState {
 		this.score = gameState.score;
 		this.shipType = gameState.shipType;
 		this.playerShip = gameState.playerShip;
-		this.livesRemaining = gameState.livesRemaining;
 		this.bulletsShot = gameState.bulletsShot;
 		this.shipsDestroyed = gameState.shipsDestroyed;
 		this.elapsedTime = gameState.elapsedTime;
@@ -108,7 +102,6 @@ public class GameState {
 		this.score = gameState.score;
 		this.shipType = gameState.shipType;
 		this.playerShip = gameState.playerShip;
-		this.livesRemaining = gameState.livesRemaining;
 		this.bulletsShot = gameState.bulletsShot;
 		this.shipsDestroyed = gameState.shipsDestroyed;
 		this.elapsedTime = gameState.elapsedTime;

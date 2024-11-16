@@ -90,7 +90,7 @@ public final class Core {
 		int returnCode = 1;
 		do {
 			MAX_LIVES = wallet.getLives_lv()+2;
-			GameState gameState = new GameState(1, 1, 0, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, 0, 0, 0 ,0, 0);
+			GameState gameState = new GameState(1, 1, 0, 0, BASE_SHIP, 0, 0, 0, 0, 0, 0 ,0, 0);
 			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
 			ShipLevelManager levelManager = new ShipLevelManager(0, 0);
 			achievementManager = new AchievementManager();
