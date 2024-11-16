@@ -7,7 +7,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import entity.PlayerShip;
+import entity.player.PlayerShip;
 import entity.Wallet;
 import screen.*;
 
@@ -90,9 +90,8 @@ public final class Core {
 		int returnCode = 1;
 		do {
 			MAX_LIVES = wallet.getLives_lv()+2;
-			GameState gameState = new GameState(1, 1, 0, 0, BASE_SHIP, 0, 0, 0, 0, 0, 0 ,0, 0);
+			GameState gameState = new GameState(1, 0, 0, BASE_SHIP, 0, 0, 0, 0, 0, 0 ,0, 0);
 			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
-			ShipLevelManager levelManager = new ShipLevelManager(0, 0);
 			achievementManager = new AchievementManager();
 
 			switch (returnCode) {
@@ -118,8 +117,7 @@ public final class Core {
 							gameState.getGameLevel(), DifficultySetting);
 
 					currentScreen = new GameScreen(gameState,
-							gameSetting, levelManager,
-							width, height, FPS, wallet);
+							gameSetting, width, height, FPS, wallet);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 								+ " game screen at " + FPS + " fps.");
 					frame.setScreen(currentScreen);

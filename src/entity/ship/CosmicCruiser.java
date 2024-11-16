@@ -1,7 +1,7 @@
 package entity.ship;
 
 import engine.DrawManager;
-import entity.PlayerShip;
+import entity.player.PlayerShip;
 import entity.ShipMultipliers;
 
 /**

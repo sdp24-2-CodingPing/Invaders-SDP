@@ -5,7 +5,7 @@ import engine.Cooldown;
 import engine.Core;
 import engine.Sound;
 import engine.SoundManager;
-import entity.PlayerShip;
+import entity.player.PlayerShip;
 
 public class SettingScreen extends Screen {
 

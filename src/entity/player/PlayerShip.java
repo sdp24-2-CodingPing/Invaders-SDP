@@ -1,14 +1,12 @@
-package entity;
+package entity.player;
 
 import java.awt.Color;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import engine.Cooldown;
-import engine.Core;
+import engine.*;
 import engine.DrawManager.SpriteType;
-import engine.Sound;
-import engine.SoundManager;
+import entity.*;
 
 /**
  * Implements a ship, to be controlled by the player.
@@ -49,8 +47,8 @@ public abstract class PlayerShip extends Entity {
 
 	/** Player HP */
 	private int playerHP;
-	/** Player EXP */
-	private int playerExp;
+	/** Player level and exp */
+	private PlayerLevel playerLevel;
 
 	private long lastShootTime;
 	private boolean threadWeb = false;
@@ -82,6 +80,7 @@ public abstract class PlayerShip extends Entity {
 
 		this.logger = Core.getLogger();
 		this.playerHP = 3;
+		this.playerLevel = new PlayerLevel(0, 1);
 
 		this.name = name;
 		this.multipliers = multipliers;
@@ -215,15 +214,6 @@ public abstract class PlayerShip extends Entity {
 	}
 
 	/**
-	 * Checks if the ship can receive damage.
-	 *
-	 * @return True if the ship is currently receive damage
-	 */
-	public final boolean isReceiveDamagePossible() {
-		return !this.destructionCooldown.checkFinished();
-	}
-
-	/**
 	 * Player HP decrease by received damage
 	 * @param damage
 	 * 			received damage value
@@ -238,12 +228,53 @@ public abstract class PlayerShip extends Entity {
 	}
 
 	/**
+	 * Checks if the ship can receive damage.
+	 *
+	 * @return True if the ship is currently receive damage
+	 */
+	public final boolean isReceiveDamagePossible() {
+		return !this.destructionCooldown.checkFinished();
+	}
+
+	/**
+	 * Checks if the player ship can levelup
+	 *
+	 * @return True if the player ship is levelup
+	 */
+	public final boolean isPlayerLevelUp() {
+		return this.playerLevel.isLevelUpPossible();
+	}
+
+	public final void increasePlayerExp(int exp) {
+		this.playerLevel.setExp(this.playerLevel.getExp() + exp);
+	}
+
+	/**
+	 * Player levelup logic
+	 */
+	public final void managePlayerLevelUp () {
+		while (playerLevel.isLevelUpPossible()) {
+			playerLevel.levelUp();
+			playerLevel.selectLevelUpCard();
+		}
+	}
+
+	/**
 	 * Checks if the ship is destroyed.
 	 * 
 	 * @return True if the ship is currently destroyed.
 	 */
 	public final boolean isDestroyed() {
 		return getPlayerHP() <= 0;
+	}
+
+	/**
+	 * Get player level
+	 *
+	 * @return player level
+	 */
+	public final PlayerLevel getPlayerLevel() {
+		return this.playerLevel;
 	}
 
 	/**
@@ -257,6 +288,7 @@ public abstract class PlayerShip extends Entity {
 
 	/**
 	 * Getter for the ship's bullet speed.
+	 *
 	 * @return Speed of the bullets.
 	 */
 	public final int getBulletSpeed() {
@@ -265,6 +297,7 @@ public abstract class PlayerShip extends Entity {
 
 	/**
 	 * Getter for the ship's shooting interval.
+	 *
 	 * @return Time between shots.
 	 */
 	public final int getShootingInterval() {

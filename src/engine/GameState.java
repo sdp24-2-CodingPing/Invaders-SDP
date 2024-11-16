@@ -1,6 +1,6 @@
 package engine;
 
-import entity.PlayerShip;
+import entity.player.PlayerShip;
 import entity.ShipFactory;
 
 /**
@@ -53,12 +53,11 @@ public class GameState {
 	 * @param elapsedTime    Elapsed time.
 	 * @param combo          Ships destroyed consequtive.
 	 */
-	public GameState(final int gameLevel, final int shipLevel, final int score, final int exp,
+	public GameState(final int gameLevel, final int score, final int exp,
 					 final PlayerShip.ShipType shipType, final int bulletsShot,
 					 final int shipsDestroyed, final int elapsedTime, final int combo,
 					 final int maxCombo, final int prevTime, final int prevScore, final int hitBullets) {
 		this.gameLevel = gameLevel;
-		this.shipLevel = shipLevel;
 		this.score = score;
 		this.exp = exp;
 		this.shipType = shipType;
@@ -79,7 +78,6 @@ public class GameState {
 	 * */
 	public GameState(GameState gameState) {
 		this.gameLevel = gameState.gameLevel;
-		this.shipLevel = gameState.shipLevel;
 		this.score = gameState.score;
 		this.shipType = gameState.shipType;
 		this.playerShip = gameState.playerShip;
@@ -98,7 +96,6 @@ public class GameState {
 	 * */
 	public GameState(GameState gameState, int nextLevel) {
 		this.gameLevel = nextLevel;
-		this.shipLevel = gameState.getShipLevel();
 		this.score = gameState.score;
 		this.shipType = gameState.shipType;
 		this.playerShip = gameState.playerShip;
@@ -126,21 +123,6 @@ public class GameState {
 	 */
 	public final void setGameLevel(int gameLevel) {
 		this.gameLevel = gameLevel;
-	}
-
-	/**
-	 * Get ship level
-	 * @return the ship level
-	 */
-	public final int getShipLevel() {
-		return shipLevel;
-	}
-	/**
-	 * Set ship level
-	 * @param shipLevel
-	 */
-	public final void setShipLevel(int shipLevel) {
-		this.shipLevel = shipLevel;
 	}
 
 	/**

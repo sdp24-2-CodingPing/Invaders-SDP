@@ -16,6 +16,7 @@ import java.util.TimerTask;
 
 import engine.*;
 import entity.*;
+import entity.player.PlayerShip;
 import entity.skill.LaserStrike;
 import entity.skill.Skill;
 
@@ -103,8 +104,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private Set<ItemBox> itemBoxes;
 	/** Barriers appear in game screen. */
 	private Set<Barrier> barriers;
-	/** Instance of ShipLevelManager. */
-	private ShipLevelManager shipLevelManager;
 	/** Sound balance for each player*/
 	private float balance = 0.0f;
 
@@ -121,8 +120,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 *            Current game state.
 	 * @param gameSettings
 	 *            Current game settings.
-	 * @param shipLevelManager
-	 *            manages level, skills and stats.
 	 * @param width
 	 *            Screen width.
 	 * @param height
@@ -131,13 +128,12 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 *            Frames per second, frame rate at which the game is run.
 	 */
 	public GameScreen(final GameState gameState,
-					  final GameSettings gameSettings, final ShipLevelManager shipLevelManager,
+					  final GameSettings gameSettings,
 					  final int width, final int height, final int fps, final Wallet wallet) {
 		super(width, height, fps);
 
 		this.gameSettings = gameSettings;
 		this.gameState = gameState;
-		this.shipLevelManager = shipLevelManager;
 		this.playerNumber = -1;
 
 		try {
@@ -183,10 +179,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 *            Player number for two player mode
 	 */
 	public GameScreen(final GameState gameState,
-					  final GameSettings gameSettings, final ShipLevelManager shipLevelManager,
+					  final GameSettings gameSettings,
 					  final int width, final int height, final int fps, final Wallet wallet,
 					  final int playerNumber) {
-		this(gameState, gameSettings, shipLevelManager, width, height, fps, wallet);
+		this(gameState, gameSettings, width, height, fps, wallet);
 		this.playerNumber = playerNumber;
 		this.balance = switch (playerNumber) {
 			case 0: yield -1.0f; // 1P
@@ -209,6 +205,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		this.playerShip = gameState.getPlayerShip();
 
 		// Apply items to the ship.
+		// TODO: 한번만 적용되도록 위치 변경해야함.
         playerShip.applyShopItem(wallet);
 
 		//Create random Spider Web.
@@ -480,7 +477,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 		manageCollisions();
 
-		manageLevelUpSkillStats(this.gameState.getExp(), this.gameState.getShipLevel());
+		manageLevelUpSkillStats(this.gameState.getPlayerShip());
 
 		cleanBullets();
 
@@ -511,16 +508,14 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	/**
 	 * manages Level up
-	 * @param exp current exp
-	 * @param shipLevel current ship level
+	 * @param playerShip current Player Ship
 	 * */
-	private void manageLevelUpSkillStats(int exp, int shipLevel) {
-		List<Integer> levelResult = this.shipLevelManager.managePlayerLevelUp(exp, shipLevel);
-
-		// TODO: 서현님 Branch와 병합 후 togglePause 메소드를 통해 진행시간 Sync를 맞춰야함.
-		// TODO: 경험치와 레벨은 추후 Player 객체를 따로 분리 후 Player의 스탯 및 경험치와 레벨, 체력 등을 관리
-		this.gameState.setExp(levelResult.get(0));
-		this.gameState.setShipLevel(levelResult.get(1));
+	private void manageLevelUpSkillStats(PlayerShip playerShip) {
+		if (playerShip.isPlayerLevelUp()) {
+			togglePause();
+			playerShip.managePlayerLevelUp();
+			togglePause();
+		}
 	}
 
 
@@ -888,7 +883,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 						// If the enemy doesn't die, the combo increases;
 						// if the enemy dies, both the combo and score increase.
 						this.gameState.setScore(this.gameState.getScore() + Score.comboScore(this.enemyShipFormation.getPointValue(), this.gameState.getCombo()));
-						this.gameState.setExp(this.gameState.getExp() + this.enemyShipFormation.getExpValue());
+//						this.gameState.setExp(this.gameState.getExp() + this.enemyShipFormation.getExpValue());
+						this.gameState.getPlayerShip().increasePlayerExp(this.enemyShipFormation.getExpValue());
 						logger.info("You got this exp by shooing bullets: " + this.gameState.getExp());
 						this.gameState.setShipsDestroyed(this.gameState.getShipsDestroyed() + this.enemyShipFormation.getDistroyedship());
 						this.gameState.setCombo(this.gameState.getCombo() + 1);
@@ -908,7 +904,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 						&& !this.enemyShipSpecial.isDestroyed()
 						&& checkCollision(bullet, this.enemyShipSpecial)) {
 					this.gameState.setScore(this.gameState.getScore() + Score.comboScore(this.enemyShipSpecial.getPointValue(), this.gameState.getCombo()));
-					this.gameState.setExp(this.gameState.getExp() + this.enemyShipSpecial.getExpValue());
+//					this.gameState.setExp(this.gameState.getExp() + this.enemyShipSpecial.getExpValue());
+					this.gameState.getPlayerShip().increasePlayerExp(this.enemyShipSpecial.getExpValue());
 					this.gameState.setShipsDestroyed(this.gameState.getShipsDestroyed() + 1);
 					this.gameState.setCombo(this.gameState.getCombo() + 1);
 					this.gameState.setHitBullets(this.gameState.getHitBullets() + 1);
@@ -938,7 +935,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 						// only in case of bomb item, itemResult is not null
 						if (itemResult != null) {
 							this.gameState.setScore(this.gameState.getScore() + itemResult.getFirst());
-							this.gameState.setExp(this.gameState.getExp() + itemResult.get(1));
+//							this.gameState.setExp(this.gameState.getExp() + itemResult.get(1));
+							this.gameState.getPlayerShip().increasePlayerExp(itemResult.get(1));
 							logger.info("You got this exp by bomb: " + this.gameState.getExp());
 							this.gameState.setShipsDestroyed(this.gameState.getShipsDestroyed() + itemResult.getLast());
 						}

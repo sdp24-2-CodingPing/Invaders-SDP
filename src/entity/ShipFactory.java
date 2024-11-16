@@ -1,5 +1,6 @@
 package entity;
 
+import entity.player.PlayerShip;
 import entity.ship.*;
 
 /**

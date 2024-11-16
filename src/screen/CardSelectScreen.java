@@ -121,7 +121,6 @@ public class CardSelectScreen extends Screen {
 
 		drawManager.drawCardSelectTitle(this);
 		drawManager.drawCardList(this, this.cardList, this.returnCode);
-//		drawManager.drawMenu(this, this.returnCode);
 
 		drawManager.completeDrawing(this);
 	}

@@ -2,7 +2,7 @@ package engine;
 
 import entity.EnemyShip;
 import entity.EnemyShipFormation;
-import entity.PlayerShip;
+import entity.player.PlayerShip;
 import entity.Barrier;
 
 import java.awt.*;
