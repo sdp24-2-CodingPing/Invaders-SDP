@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import entity.*;
-import screen.GameSettingScreen;
 import screen.Screen;
 
 /**
@@ -639,13 +638,13 @@ public final class DrawManager {
 	 * @param lives
 	 *            Current lives.
 	 */
-	public void drawLives(final Screen screen, final int lives, final Ship.ShipType shipType) {
+	public void drawLives(final Screen screen, final int lives, final PlayerShip.ShipType shipType) {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
 		backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
-		Ship dummyShip = ShipFactory.create(shipType, 0, 0);
+		PlayerShip dummyPlayerShip = ShipFactory.create(shipType, 0, 0);
 		for (int i = 0; i < lives; i++)
-			drawEntity(dummyShip, 40 + 35 * i, 10);
+			drawEntity(dummyPlayerShip, 40 + 35 * i, 10);
 	}
 
 
@@ -659,13 +658,13 @@ public final class DrawManager {
 	 * @param threadNumber
 	 *            Thread number for two player mode
 	 */
-	public void drawLives(final Screen screen, final int lives, final Ship.ShipType shipType, final int threadNumber) {
+	public void drawLives(final Screen screen, final int lives, final PlayerShip.ShipType shipType, final int threadNumber) {
 		threadBufferGraphics[threadNumber].setFont(fontRegular);
 		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
 		threadBufferGraphics[threadNumber].drawString(Integer.toString(lives), 20, 25);
-		Ship dummyShip = ShipFactory.create(shipType, 0, 0);
+		PlayerShip dummyPlayerShip = ShipFactory.create(shipType, 0, 0);
 		for (int i = 0; i < lives; i++)
-			drawEntity(dummyShip, 40 + 35 * i, 10, threadNumber);
+			drawEntity(dummyPlayerShip, 40 + 35 * i, 10, threadNumber);
 	}
 
 	/**
@@ -1554,33 +1553,33 @@ public final class DrawManager {
 	 *
 	 * @param screen
 	 *            Screen to draw on.
-	 * @param ship
+	 * @param playerShip
 	 *            player's ship.
      * @param remainingTime
 	 *            remaining reload time.
 	 */
-	public void drawReloadTimer(final Screen screen,final Ship ship,final long remainingTime) {
+	public void drawReloadTimer(final Screen screen, final PlayerShip playerShip, final long remainingTime) {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
 		if(remainingTime > 0){
 
-			int shipX = ship.getPositionX();
-			int shipY = ship.getPositionY();
-			int shipWidth = ship.getWidth();
+			int shipX = playerShip.getPositionX();
+			int shipY = playerShip.getPositionY();
+			int shipWidth = playerShip.getWidth();
 			int circleSize = 16;
 			int startAngle = 90;
 			int endAngle = 0;
 			switch(Core.BASE_SHIP){
-				case Ship.ShipType.VoidReaper:
+				case PlayerShip.ShipType.VoidReaper:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
 				    break;
-				case Ship.ShipType.CosmicCruiser:
+				case PlayerShip.ShipType.CosmicCruiser:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
 				    break;
-				case Ship.ShipType.StarDefender:
+				case PlayerShip.ShipType.StarDefender:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
 					break;
-				case Ship.ShipType.GalacticGuardian:
+				case PlayerShip.ShipType.GalacticGuardian:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
 					break;
 
@@ -1596,35 +1595,35 @@ public final class DrawManager {
 	 *
 	 * @param screen
 	 *            Screen to draw on.
-	 * @param ship
+	 * @param playerShip
 	 *            player's ship.
 	 * @param remainingTime
 	 *            remaining reload time.
 	 * @param threadNumber
 	 *            Thread number for two player mode
 	 */
-	public void drawReloadTimer(final Screen screen,final Ship ship,final long remainingTime, final int threadNumber) {
+	public void drawReloadTimer(final Screen screen, final PlayerShip playerShip, final long remainingTime, final int threadNumber) {
 		threadBufferGraphics[threadNumber].setFont(fontRegular);
 		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
 		if(remainingTime > 0){
 
-			int shipX = ship.getPositionX();
-			int shipY = ship.getPositionY();
-			int shipWidth = ship.getWidth();
+			int shipX = playerShip.getPositionX();
+			int shipY = playerShip.getPositionY();
+			int shipWidth = playerShip.getWidth();
 			int circleSize = 16;
 			int startAngle = 90;
 			int endAngle = 0;
 			switch(Core.BASE_SHIP){
-				case Ship.ShipType.VoidReaper:
+				case PlayerShip.ShipType.VoidReaper:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
 					break;
-				case Ship.ShipType.CosmicCruiser:
+				case PlayerShip.ShipType.CosmicCruiser:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
 					break;
-				case Ship.ShipType.StarDefender:
+				case PlayerShip.ShipType.StarDefender:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
 					break;
-				case Ship.ShipType.GalacticGuardian:
+				case PlayerShip.ShipType.GalacticGuardian:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
 					break;
 			}
@@ -1873,7 +1872,7 @@ public final class DrawManager {
 			backBufferGraphics.fillRect(x + index*60, y+index*20, (isSelected ? 10 : 0), 10);
 			// Ship name
 			backBufferGraphics.setFont(fontRegular);
-			backBufferGraphics.drawString(Ship.ShipType.values()[index].name(), x + index*60 + 15, y+index*20);
+			backBufferGraphics.drawString(PlayerShip.ShipType.values()[index].name(), x + index*60 + 15, y+index*20);
 		} else {
 			// Ship box
 			backBufferGraphics.setColor(isSelected ? Color.GREEN : Color.WHITE);
@@ -1882,7 +1881,7 @@ public final class DrawManager {
 			backBufferGraphics.fillRect(x + index*60, y+index*20, (isSelected ? 10 : 0), 10);
 			// Ship name
 			backBufferGraphics.setFont(fontRegular);
-			backBufferGraphics.drawString(Ship.ShipType.values()[index].name(), x + index*60 + 15, y + index*20);
+			backBufferGraphics.drawString(PlayerShip.ShipType.values()[index].name(), x + index*60 + 15, y + index*20);
 		}
 
 	}

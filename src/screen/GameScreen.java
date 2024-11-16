@@ -52,7 +52,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** Formation of enemy ships. */
 	private EnemyShipFormation enemyShipFormation;
 	/** Player's ship. */
-	private Ship ship;
+	private PlayerShip playerShip;
 	/** Bonus enemy ship that appears sometimes. */
 	private EnemyShip enemyShipSpecial;
 	/** Minimum time between bonus ship appearances. */
@@ -71,7 +71,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** tempScore records the score up to the previous level. */
 	private int tempScore;
 	/** Current ship type. */
-	private Ship.ShipType shipType;
+	private PlayerShip.ShipType shipType;
 	/** Player lives left. */
 	private int lives;
 	/** Total bullets shot by the player. */
@@ -258,10 +258,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		enemyShipFormation.attach(this);
 
 		// Create your ship.
-        this.ship = ShipFactory.create(this.shipType, this.width / 2, this.height - 130);
+        this.playerShip = ShipFactory.create(this.shipType, this.width / 2, this.height - 130);
 
 		// Apply items to the ship.
-        ship.applyItem(wallet);
+        playerShip.applyShopItem(wallet);
 
 		//Create random Spider Web.
 		int web_count = 1 + gameLevel / 3;
@@ -306,7 +306,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		this.bullets = new HashSet<>();
 		this.barriers = new HashSet<>();
 		this.itemBoxes = new HashSet<>();
-		this.itemManager = new ItemManager(this.ship, this.enemyShipFormation, this.barriers,
+		this.itemManager = new ItemManager(this.playerShip, this.enemyShipFormation, this.barriers,
 				balance);
 
 		// Special input delay / countdown.
@@ -397,19 +397,19 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 			if (player1Attacking && player2Attacking) {
 				// Both players are attacking
-				if (this.ship.shoot(this.bullets, this.itemManager.getShotNum()))
+				if (this.playerShip.shoot(this.bullets, this.itemManager.getShotNum()))
 					this.bulletsShot += this.itemManager.getShotNum();
 			} else {
 				switch (playerNumber) {
 					case 1:
 						if (player2Attacking) {
-							if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), 1.0f)) // Player 1 attack
+							if (this.playerShip.shoot(this.bullets, this.itemManager.getShotNum(), 1.0f)) // Player 1 attack
 								this.bulletsShot += this.itemManager.getShotNum();
 						}
 						break;
 					default:
 						if (player1Attacking) {
-							if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), -1.0f)) // Player 1 attack
+							if (this.playerShip.shoot(this.bullets, this.itemManager.getShotNum(), -1.0f)) // Player 1 attack
 								this.bulletsShot += this.itemManager.getShotNum();
 						}
 						break;
@@ -430,10 +430,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 			//check if the ship is ghost mode, if not, set color green
 			if(!itemManager.isGhostActive())
-				this.ship.setColor(Color.GREEN);
+				this.playerShip.setColor(Color.GREEN);
 
 			//move ship left or right direction
-			if (!this.ship.isDestroyed()) {
+			if (!this.playerShip.isDestroyed()) {
 				boolean moveRight;
 				boolean moveLeft;
 				switch (playerNumber) {
@@ -452,26 +452,26 @@ public class GameScreen extends Screen implements Callable<GameState> {
 								|| inputManager.isKeyDown(KeyEvent.VK_A);
 				}
 
-				boolean isRightBorder = this.ship.getPositionX()
-						+ this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
-				boolean isLeftBorder = this.ship.getPositionX()
-						- this.ship.getSpeed() < 1;
+				boolean isRightBorder = this.playerShip.getPositionX()
+						+ this.playerShip.getWidth() + this.playerShip.getSpeed() > this.width - 1;
+				boolean isLeftBorder = this.playerShip.getPositionX()
+						- this.playerShip.getSpeed() < 1;
 
 				if (moveRight && !isRightBorder) {
-					this.ship.moveRight(balance);
+					this.playerShip.moveRight(balance);
 				}
 				if (moveLeft && !isLeftBorder) {
-					this.ship.moveLeft(balance);
+					this.playerShip.moveLeft(balance);
 				}
 				for(int i = 0; i < web.size(); i++) {
 					//escape Spider Web
-					if (ship.getPositionX() + 6 <= web.get(i).getPositionX() - 6
-							|| web.get(i).getPositionX() + 6 <= ship.getPositionX() - 6) {
-						this.ship.setThreadWeb(false);
+					if (playerShip.getPositionX() + 6 <= web.get(i).getPositionX() - 6
+							|| web.get(i).getPositionX() + 6 <= playerShip.getPositionX() - 6) {
+						this.playerShip.setThreadWeb(false);
 					}
 					//get caught in a spider's web
 					else {
-						this.ship.setThreadWeb(true);
+						this.playerShip.setThreadWeb(true);
 						break;
 					}
 				}
@@ -519,7 +519,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			}
 
 			//Check if the player ship has been shot or not.
-			this.ship.update();
+			this.playerShip.update();
 
 			// If Time-stop is active, Stop updating enemy ships' move and their shoots.
 			if (!itemManager.isTimeStopActive()) {
@@ -605,9 +605,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		drawManager.initDrawing(this);
 		drawManager.drawGameTitle(this);
 
-		drawManager.drawLaunchTrajectory( this,this.ship.getPositionX());
+		drawManager.drawLaunchTrajectory( this,this.playerShip.getPositionX());
 
-		drawManager.drawEntity(this.ship, this.ship.getPositionX(), this.ship.getPositionY());
+		drawManager.drawEntity(this.playerShip, this.playerShip.getPositionX(), this.playerShip.getPositionY());
 
 		//draw Spider Web
 		for (int i = 0; i < web.size(); i++) {
@@ -645,7 +645,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 //		drawManager.drawLives(this, this.lives, this.shipType);
 		drawManager.drawLevel(this, this.gameLevel);
 		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
-		drawManager.drawReloadTimer(this,this.ship,ship.getRemainingReloadTime());
+		drawManager.drawReloadTimer(this,this.playerShip, playerShip.getRemainingReloadTime());
 		drawManager.drawCombo(this,this.combo);
 
 		// HUD with essential information. (Item, HP, EXP)
@@ -778,10 +778,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		drawManager.initThreadDrawing(this, playerNumber);
 		drawManager.drawGameTitle(this, playerNumber);
 
-		drawManager.drawLaunchTrajectory( this,this.ship.getPositionX(), playerNumber);
+		drawManager.drawLaunchTrajectory( this,this.playerShip.getPositionX(), playerNumber);
 
-		drawManager.drawEntity(this.ship, this.ship.getPositionX(),
-				this.ship.getPositionY(), playerNumber);
+		drawManager.drawEntity(this.playerShip, this.playerShip.getPositionX(),
+				this.playerShip.getPositionY(), playerNumber);
 
 		//draw Spider Web
 		for (int i = 0; i < web.size(); i++) {
@@ -817,7 +817,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		drawManager.drawLives(this, this.lives, this.shipType, playerNumber);
 		drawManager.drawLevel(this, this.gameLevel, playerNumber);
 		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1, playerNumber);
-		drawManager.drawReloadTimer(this,this.ship,ship.getRemainingReloadTime(), playerNumber);
+		drawManager.drawReloadTimer(this,this.playerShip, playerShip.getRemainingReloadTime(), playerNumber);
 		drawManager.drawCombo(this,this.combo, playerNumber);
 
 		// Show GameOver if one player ends first
@@ -913,10 +913,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			// Enemy ship's bullets
 			if (bullet.getSpeed() > 0) {
 				//collision between enemy's bullet and player ship
-				if (checkCollision(bullet, this.ship) && !this.levelFinished && !itemManager.isGhostActive()) {
+				if (checkCollision(bullet, this.playerShip) && !this.levelFinished && !itemManager.isGhostActive()) {
 					recyclable.add(bullet);
-					if (!this.ship.isDestroyed()) {
-						this.ship.destroy(balance);
+					if (!this.playerShip.isDestroyed()) {
+						this.playerShip.destroy(balance);
 						lvdamage();
 						this.logger.info("Hit on player ship, " + this.lives
 
