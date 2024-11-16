@@ -178,9 +178,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		this.elapsedTime = gameState.getElapsedTime();
 		this.alertMessage = gameState.getAlertMessage();
 		this.shipType = gameState.getShipType();
-		this.lives = gameState.getLivesRemaining();
-		if (this.bonusLife)
-			this.lives++;
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
 		this.playerNumber = -1;
@@ -338,8 +335,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	public final int run() {
 		super.run();
 
-		this.score += LIFE_SCORE * (this.lives - 1);
-		if(this.lives == 0) this.score += 100;
 		this.logger.info("Screen cleared with a score of " + this.score);
 
 		return this.returnCode;
@@ -369,7 +364,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					if (this.isPaused) {
 						StopScreen stopScreen = new StopScreen(this.width, this.height, this.fps);
 						int returnCode = stopScreen.run();
-						if (returnCode == 1&& this.lives > 0) {
+						if (returnCode == 1&& !this.playerShip.isDestroyed()) {
 							// 메인 메뉴로 돌아가기
 							this.isGotoMainMenu = true;
 							this.isRunning = false;
@@ -433,7 +428,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				this.playerShip.setColor(Color.GREEN);
 
 			//move ship left or right direction
-			if (!this.playerShip.isDestroyed()) {
+			if (!this.playerShip.isReceiveDamagePossible()) {
 				boolean moveRight;
 				boolean moveLeft;
 				switch (playerNumber) {
@@ -543,11 +538,11 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		else
 			draw();
 
-		if ((this.enemyShipFormation.isEmpty() || this.lives <= 0) && !this.levelFinished) {
+		if ((this.enemyShipFormation.isEmpty() || this.playerShip.isDestroyed()) && !this.levelFinished) {
 			this.levelFinished = true;
 			this.screenFinishedCooldown.reset();
 
-			if (this.lives <= 0) {
+			if (this.playerShip.isDestroyed()) {
 				this.isGameOver = true;  // 게임 오버 상태로 설정
 				soundManager.playSound(Sound.GAME_END);
 			} else {
@@ -814,14 +809,13 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		drawManager.drawScore(this, this.score, playerNumber);
 		drawManager.drawElapsedTime(this, this.elapsedTime, playerNumber);
 		drawManager.drawAlertMessage(this, this.alertMessage, playerNumber);
-		drawManager.drawLives(this, this.lives, this.shipType, playerNumber);
 		drawManager.drawLevel(this, this.gameLevel, playerNumber);
 		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1, playerNumber);
 		drawManager.drawReloadTimer(this,this.playerShip, playerShip.getRemainingReloadTime(), playerNumber);
 		drawManager.drawCombo(this,this.combo, playerNumber);
 
 		// Show GameOver if one player ends first
-		if (this.levelFinished && this.screenFinishedCooldown.checkFinished() && this.lives <= 0) {
+		if (this.levelFinished && this.screenFinishedCooldown.checkFinished() && this.playerShip.isDestroyed()) {
 			drawManager.drawInGameOver(this, this.height, playerNumber);
 			drawManager.drawHorizontalLine(this, this.height / 2 - this.height
 					/ 12, playerNumber);
@@ -915,12 +909,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				//collision between enemy's bullet and player ship
 				if (checkCollision(bullet, this.playerShip) && !this.levelFinished && !itemManager.isGhostActive()) {
 					recyclable.add(bullet);
-					if (!this.playerShip.isDestroyed()) {
-						this.playerShip.destroy(balance);
-						lvdamage();
-						this.logger.info("Hit on player ship, " + this.lives
-
-								+ " lives remaining.");
+					if (!this.playerShip.isReceiveDamagePossible()) {
+						this.playerShip.receiveDamage(1, balance);
 					}
 				}
 				//collision between enemy's bullet and barrier
@@ -1078,15 +1068,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	public final GameState call() {
 		run();
 		return getGameState();
-	}
-	//Enemy bullet damage increases depending on stage level
-	public void lvdamage(){
-		for(int i = 0; i<= gameLevel /3; i++){
-			this.lives--;
-		}
-		if(this.lives < 0){
-			this.lives = 0;
-		}
 	}
 
 	public boolean getIsGotoMainMenu(){

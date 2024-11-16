@@ -2,6 +2,7 @@ package entity;
 
 import java.awt.Color;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import engine.Cooldown;
 import engine.Core;
@@ -16,6 +17,9 @@ import engine.SoundManager;
  * 
  */
 public abstract class PlayerShip extends Entity {
+
+	/** Application logger. */
+	protected Logger logger;
 
 	/** Time between shots. */
 	private static int SHOOTING_INTERVAL = 750;
@@ -43,6 +47,10 @@ public abstract class PlayerShip extends Entity {
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
 
+	/** Player HP */
+	private int playerHP;
+	/** Player EXP */
+	private int playerExp;
 
 	private long lastShootTime;
 	private boolean threadWeb = false;
@@ -71,6 +79,8 @@ public abstract class PlayerShip extends Entity {
 						 final String name, final ShipMultipliers multipliers,
 						 final SpriteType spriteType) {
 		super(positionX, positionY, 13 * 2, 8 * 2, Color.GREEN);
+
+		this.logger = Core.getLogger();
 
 		this.name = name;
 		this.multipliers = multipliers;
@@ -195,11 +205,35 @@ public abstract class PlayerShip extends Entity {
 	}
 
 	/**
-	 * Switches the ship to its destroyed state.
+	 * Get Player HP
+	 *
+	 * @return player HP
 	 */
-	public final void destroy(float balance) {
+	public final int getPlayerHP() {
+		return this.playerHP;
+	}
+
+	/**
+	 * Checks if the ship can receive damage.
+	 *
+	 * @return True if the ship is currently receive damage
+	 */
+	public final boolean isReceiveDamagePossible() {
+		return !this.destructionCooldown.checkFinished();
+	}
+
+	/**
+	 * Player HP decrease by received damage
+	 * @param damage
+	 * 			received damage value
+	 * @param balance
+	 * 			sound balance (for two player mode)
+	 */
+	public final void receiveDamage(int damage, float balance) {
 		this.destructionCooldown.reset();
+		this.playerHP = Math.max(this.playerHP - damage, 0);
 		soundManager.playSound(Sound.PLAYER_HIT, balance);
+		this.logger.info("Hit on player ship, " + getPlayerHP() + " HP remaining.");
 	}
 
 	/**
@@ -208,7 +242,7 @@ public abstract class PlayerShip extends Entity {
 	 * @return True if the ship is currently destroyed.
 	 */
 	public final boolean isDestroyed() {
-		return !this.destructionCooldown.checkFinished();
+		return getPlayerHP() <= 0;
 	}
 
 	/**
