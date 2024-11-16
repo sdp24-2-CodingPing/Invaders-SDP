@@ -86,8 +86,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private long gameStartTime;
 	/** Checks if the level is finished. */
 	private boolean levelFinished;
-	/** Checks if a bonus life is received. */
-	private boolean bonusLife;
 	/** Player number for two player mode **/
 	private int playerNumber;
 	/** list of highScores for find recode. */
@@ -153,8 +151,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 *            Current game settings.
 	 * @param shipLevelManager
 	 *            manages level, skills and stats.
-	 * @param bonusLife
-	 *            Checks if a bonus life is awarded this level.
 	 * @param width
 	 *            Screen width.
 	 * @param height
@@ -163,14 +159,13 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 *            Frames per second, frame rate at which the game is run.
 	 */
 	public GameScreen(final GameState gameState,
-					  final GameSettings gameSettings, final ShipLevelManager shipLevelManager, final boolean bonusLife,
+					  final GameSettings gameSettings, final ShipLevelManager shipLevelManager,
 					  final int width, final int height, final int fps, final Wallet wallet) {
 		super(width, height, fps);
 
 		this.gameSettings = gameSettings;
 		this.gameState = gameState;
 		this.shipLevelManager = shipLevelManager;
-		this.bonusLife = bonusLife;
 		this.gameLevel = gameState.getGameLevel();
 		this.shipLevel = gameState.getShipLevel();
 		this.score = gameState.getScore();
@@ -220,8 +215,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 *            Current game state.
 	 * @param gameSettings
 	 *            Current game settings.
-	 * @param bonusLife
-	 *            Checks if a bonus life is awarded this level.
 	 * @param width
 	 *            Screen width.
 	 * @param height
@@ -232,10 +225,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 *            Player number for two player mode
 	 */
 	public GameScreen(final GameState gameState,
-					  final GameSettings gameSettings, final ShipLevelManager shipLevelManager, final boolean bonusLife,
+					  final GameSettings gameSettings, final ShipLevelManager shipLevelManager,
 					  final int width, final int height, final int fps, final Wallet wallet,
 					  final int playerNumber) {
-		this(gameState, gameSettings, shipLevelManager, bonusLife, width, height, fps, wallet);
+		this(gameState, gameSettings, shipLevelManager, width, height, fps, wallet);
 		this.playerNumber = playerNumber;
 		this.balance = switch (playerNumber) {
 			case 0: yield -1.0f; // 1P
@@ -254,8 +247,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		enemyShipFormation = new EnemyShipFormation(this.gameSettings, this.gameState);
 		enemyShipFormation.attach(this);
 
-		// Create your ship.
-        this.playerShip = ShipFactory.create(this.shipType, this.width / 2, this.height - 130);
+		// Get your ship from GameState
+		this.playerShip = gameState.getPlayerShip();
 
 		// Apply items to the ship.
         playerShip.applyShopItem(wallet);
@@ -672,7 +665,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		// Countdown to game start.
 		if (!this.inputDelay.checkFinished()) {
 			int countdown = (int) ((INPUT_DELAY - (System.currentTimeMillis() - this.gameStartTime)) / 1000);
-			drawManager.drawCountDown(this, this.gameLevel, countdown, this.bonusLife);
+			drawManager.drawCountDown(this, this.gameLevel, countdown);
 			drawManager.drawHorizontalLine(this, this.height / 2 - this.height / 12);
 			drawManager.drawHorizontalLine(this, this.height / 2 + this.height / 12);
 
@@ -827,7 +820,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		if (!this.inputDelay.checkFinished()) {
 			int countdown = (int) ((INPUT_DELAY - (System.currentTimeMillis() - this.gameStartTime)) / 1000);
 			drawManager.drawCountDown(this, this.gameLevel, countdown,
-					this.bonusLife, playerNumber);
+					 playerNumber);
 			drawManager.drawHorizontalLine(this, this.height / 2 - this.height
 					/ 12, playerNumber);
 			drawManager.drawHorizontalLine(this, this.height / 2 + this.height
@@ -1055,8 +1048,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	public final GameState getGameState() {
 		return new GameState(this.gameLevel, this.shipLevel, this.score, this.exp, this.shipType, this.lives,
-				this.bulletsShot, this.shipsDestroyed, this.elapsedTime, this.alertMessage, 0, this.maxCombo, this.lapTime, this.tempScore, this.hitBullets);
-	}
+				this.bulletsShot, this.shipsDestroyed, this.elapsedTime, this.alertMessage, 0, this.maxCombo, this.lapTime, this.tempScore, this.hitBullets);	}
 
 
 	/**

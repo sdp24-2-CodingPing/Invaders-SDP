@@ -109,9 +109,6 @@ public final class Core {
 				do {
 					// One extra live every few levels.
 					startTime = System.currentTimeMillis();
-					boolean bonusLife = gameState.getGameLevel()
-							% EXTRA_LIFE_FRECUENCY == 0
-							&& gameState.getLivesRemaining() < MAX_LIVES;
 					LOGGER.info("difficulty is " + DifficultySetting);
 					//add variation
 					gameSetting = gameSetting.levelSettings(gameSetting.getFormationWidth(),
@@ -122,14 +119,14 @@ public final class Core {
 
 					currentScreen = new GameScreen(gameState,
 							gameSetting, levelManager,
-							bonusLife, width, height, FPS, wallet);
+							width, height, FPS, wallet);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 								+ " game screen at " + FPS + " fps.");
-						frame.setScreen(currentScreen);
-						LOGGER.info("Closing game screen.");
+					frame.setScreen(currentScreen);
+					LOGGER.info("Closing game screen.");
 
 					if (((GameScreen) currentScreen).getIsGotoMainMenu()) {
-						if (gameState.getLivesRemaining() > 0) {
+						if (!gameState.getPlayerShip().isDestroyed()) {
 							isGotoMainMenu = true;
 							break;
 						}
@@ -138,11 +135,11 @@ public final class Core {
 					gameState = ((GameScreen) currentScreen).getGameState();
 
 					// 게임 오버 시 ScoreScreen으로 전환
-					if (gameState.getLivesRemaining() > 0) {
+					if (!gameState.getPlayerShip().isDestroyed()) {
 						// 다음 레벨 진행
 						gameState = new GameState(gameState, gameState.getGameLevel() + 1);
 						endTime = System.currentTimeMillis();
-						achievementManager.updatePlaying(gameState.getMaxCombo(), (int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getLivesRemaining(), gameState.getGameLevel() - 1);
+						achievementManager.updatePlaying(gameState.getMaxCombo(), (int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getPlayerShip().getPlayerHP(), gameState.getGameLevel() - 1);
 					} else {
 						// ScoreScreen으로 전환하여 게임오버 화면 표시
 						currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);
@@ -150,7 +147,7 @@ public final class Core {
 						LOGGER.info("Closing score screen.");
 						break;
 					}
-				} while (gameState.getLivesRemaining() > 0);
+				} while (!gameState.getPlayerShip().isDestroyed());
 
 
 				if (isGotoMainMenu){
@@ -163,7 +160,7 @@ public final class Core {
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "
 						+ gameState.getShipType().toString() + " ship, "
-						+ gameState.getLivesRemaining() + " lives remaining, "
+						+ gameState.getPlayerShip().getPlayerHP() + " player hp, "
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
 				currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);
@@ -236,7 +233,7 @@ public final class Core {
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "
-						+ gameState.getLivesRemaining() + " lives remaining, "
+						+ gameState.getPlayerShip().getPlayerHP() + " player hp, "
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
 				DrawManager.getInstance().setFrame(frame);

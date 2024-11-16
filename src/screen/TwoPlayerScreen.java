@@ -131,12 +131,9 @@ public class TwoPlayerScreen extends Screen {
     private void runGameScreen(int playerNumber){
         GameState gameState = playerNumber == 0 ? gameStates[PLAYER1_NUMBER] : gameStates[PLAYER2_NUMBER];
 
-        if (gameState.getLivesRemaining() > 0) {
-            boolean bonusLife = gameState.getGameLevel()
-                    % Core.EXTRA_LIFE_FRECUENCY == 0
-                    && gameState.getLivesRemaining() < Core.MAX_LIVES;
+        if (!gameState.getPlayerShip().isDestroyed()) {
             GameScreen gameScreen = new GameScreen(gameState,
-                    gameSettings[playerNumber].levelSettings(
+                gameSettings[playerNumber].levelSettings(
                 gameSettings[playerNumber].getFormationWidth(),
                 gameSettings[playerNumber].getFormationHeight(),
                 gameSettings[playerNumber].getBaseSpeed(),
@@ -145,7 +142,7 @@ public class TwoPlayerScreen extends Screen {
                 Core.getLevelSetting()
             ),
                     shipLevelManagers[playerNumber],
-                    bonusLife, width / 2, height, fps / 2, wallet, playerNumber);
+                    width / 2, height, fps / 2, wallet, playerNumber);
             gameScreen.initialize();
             players[playerNumber] = executor.submit(gameScreen);
         }

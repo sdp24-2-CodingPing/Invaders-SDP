@@ -81,6 +81,7 @@ public abstract class PlayerShip extends Entity {
 		super(positionX, positionY, 13 * 2, 8 * 2, Color.GREEN);
 
 		this.logger = Core.getLogger();
+		this.playerHP = 3;
 
 		this.name = name;
 		this.multipliers = multipliers;

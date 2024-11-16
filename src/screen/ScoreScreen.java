@@ -25,7 +25,7 @@ public class ScoreScreen extends Screen {
 	/** Current score. */
 	private int score;
 	/** Player lives left. */
-	private int livesRemaining;
+	private int playerHp;
 	/** Total bullets shot by the player. */
 	private int bulletsShot;
 	/** Total ships destroyed by the player. */
@@ -67,7 +67,7 @@ public class ScoreScreen extends Screen {
 		this.name2 = name2;
 
 		this.score = gameState.getScore();
-		this.livesRemaining = gameState.getLivesRemaining();
+		this.playerHp = gameState.getPlayerShip().getPlayerHP();
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
 		this.isMultiplay = isMultiplay;
@@ -186,7 +186,7 @@ public class ScoreScreen extends Screen {
 
 		drawManager.drawGameOver(this, this.inputDelay.checkFinished(),
 				this.isNewRecord);
-		drawManager.drawResults(this, this.score, this.livesRemaining,
+		drawManager.drawResults(this, this.score, this.playerHp,
 				this.shipsDestroyed, this.accuracy, this.isNewRecord, this.coinsEarned);
 
 		drawManager.completeDrawing(this);

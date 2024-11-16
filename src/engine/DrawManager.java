@@ -1456,12 +1456,10 @@ public final class DrawManager {
 	 *            Game difficulty level.
 	 * @param number
 	 *            Countdown number.
-	 * @param bonusLife
-	 *            Checks if a bonus life is received.
 	 */
 
 	public void drawCountDown(final Screen screen, final int level,
-			final int number, final boolean bonusLife) {
+			final int number) {
 		int rectWidth = screen.getWidth();
 		int rectHeight = screen.getHeight() / 6;
 		backBufferGraphics.setColor(Color.BLACK);
@@ -1469,16 +1467,9 @@ public final class DrawManager {
 				rectWidth, rectHeight);
 		backBufferGraphics.setColor(Color.GREEN);
 		if (number >= 4)
-			if (!bonusLife) {
-				drawCenteredBigString(screen, "Level " + level,
-						screen.getHeight() / 2
-						+ fontBigMetrics.getHeight() / 3);
-			} else {
-				drawCenteredBigString(screen, "Level " + level
-						+ " - Bonus life!",
-						screen.getHeight() / 2
-						+ fontBigMetrics.getHeight() / 3);
-			}
+			drawCenteredBigString(screen, "Level " + level,
+					screen.getHeight() / 2
+					+ fontBigMetrics.getHeight() / 3);
 		else if (number != 0)
 			drawCenteredBigString(screen, Integer.toString(number),
 					screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3);
@@ -1676,13 +1667,11 @@ public final class DrawManager {
 	 *            Game difficulty level.
 	 * @param number
 	 *            Countdown number.
-	 * @param bonusLife
-	 *            Checks if a bonus life is received.
 	 * @param threadNumber
 	 *            Thread number for two player mode
 	 */
 	public void drawCountDown(final Screen screen, final int level,
-							  final int number, final boolean bonusLife, final int threadNumber) {
+							  final int number, final int threadNumber) {
 		int rectWidth = screen.getWidth();
 		int rectHeight = screen.getHeight() / 6;
 		threadBufferGraphics[threadNumber].setColor(Color.BLACK);
@@ -1690,16 +1679,9 @@ public final class DrawManager {
 				rectWidth, rectHeight);
 		threadBufferGraphics[threadNumber].setColor(Color.GREEN);
 		if (number >= 4)
-			if (!bonusLife) {
-				drawCenteredBigString(screen, "Level " + level,
-						screen.getHeight() / 2
-								+ fontBigMetrics.getHeight() / 3, threadNumber);
-			} else {
-				drawCenteredBigString(screen, "Level " + level
-								+ " - Bonus life!",
-						screen.getHeight() / 2
-								+ fontBigMetrics.getHeight() / 3, threadNumber);
-			}
+			drawCenteredBigString(screen, "Level " + level,
+					screen.getHeight() / 2
+							+ fontBigMetrics.getHeight() / 3, threadNumber);
 		else if (number != 0)
 			drawCenteredBigString(screen, Integer.toString(number),
 					screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3, threadNumber);

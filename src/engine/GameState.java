@@ -1,6 +1,7 @@
 package engine;
 
 import entity.PlayerShip;
+import entity.ShipFactory;
 
 /**
  * Implements an object that stores the state of the game between levels.
@@ -19,6 +20,8 @@ public class GameState {
 	private int shipLevel;
 	/** Current ship type. */
 	private PlayerShip.ShipType shipType;
+	/** Current player ship */
+	private PlayerShip playerShip;
 	/** Lives currently remaining. */
 	private int livesRemaining;
 	/** Bullets shot until now. */
@@ -46,36 +49,27 @@ public class GameState {
 	/**
 	 * Constructor.
 	 *
-	 * @param gameLevel
-	 *            Current game level.
-	 * @param score
-	 *            Current score.
-	 * @param shipType
-	 * 		  	  Current ship type.
-	 * @param livesRemaining
-	 *            Lives currently remaining.
-	 * @param bulletsShot
-	 *            Bullets shot until now.
-	 * @param shipsDestroyed
-	 *            Ships destroyed until now.
-	 * @param elapsedTime
-	 * 			  Elapsed time.
-	 * @param alertMessage
-	 *  		  Display alert message before a bonus enemy created.
-	 * @param combo
-	 *            Ships destroyed consequtive.
+	 * @param gameLevel      Current game level.
+	 * @param score          Current score.
+	 * @param shipType       Current ship type.
+	 * @param livesRemaining Lives currently remaining.
+	 * @param bulletsShot    Bullets shot until now.
+	 * @param shipsDestroyed Ships destroyed until now.
+	 * @param elapsedTime    Elapsed time.
+	 * @param alertMessage   Display alert message before a bonus enemy created.
+	 * @param combo          Ships destroyed consequtive.
 	 */
 	public GameState(final int gameLevel, final int shipLevel, final int score, final int exp,
 					 final PlayerShip.ShipType shipType,
 					 final int livesRemaining, final int bulletsShot,
 					 final int shipsDestroyed, final int elapsedTime, final String alertMessage, final int combo,
 					 final int maxCombo, final int prevTime, final int prevScore, final int hitBullets) {
-
 		this.gameLevel = gameLevel;
 		this.shipLevel = shipLevel;
 		this.score = score;
 		this.exp = exp;
 		this.shipType = shipType;
+		this.playerShip = ShipFactory.create(shipType, Core.getWidth() / 2, Core.getHeight() - 130);
 		this.livesRemaining = livesRemaining;
 		this.bulletsShot = bulletsShot;
 		this.shipsDestroyed = shipsDestroyed;
@@ -97,6 +91,7 @@ public class GameState {
 		this.shipLevel = gameState.shipLevel;
 		this.score = gameState.score;
 		this.shipType = gameState.shipType;
+		this.playerShip = gameState.playerShip;
 		this.livesRemaining = gameState.livesRemaining;
 		this.bulletsShot = gameState.bulletsShot;
 		this.shipsDestroyed = gameState.shipsDestroyed;
@@ -162,6 +157,13 @@ public class GameState {
 	 */
 	public final PlayerShip.ShipType getShipType() {
 		return shipType;
+	}
+
+	/**
+	 * @return the player ship
+	 */
+	public final PlayerShip getPlayerShip() {
+		return playerShip;
 	}
 
 	/**
