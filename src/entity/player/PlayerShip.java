@@ -247,6 +247,7 @@ public abstract class PlayerShip extends Entity {
 
 	public final void increasePlayerExp(int exp) {
 		this.playerLevel.setExp(this.playerLevel.getExp() + exp);
+		logger.info("you get the " + exp + "exp, your current exp: " + this.playerLevel.getExp());
 	}
 
 	/**

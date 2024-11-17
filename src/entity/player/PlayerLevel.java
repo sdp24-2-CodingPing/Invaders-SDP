@@ -36,6 +36,7 @@ public class PlayerLevel {
         if (isLevelUpPossible()) {
             this.exp -= this.getRequiredExpForLevelUp(this.level);
             this.level += 1;
+            logger.info("Level Up! your level: " + this.level);
         }
     }
 
