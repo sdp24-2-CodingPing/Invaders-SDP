@@ -38,8 +38,8 @@ public class PlayerLevel {
 
     public void levelUp () {
         if (isLevelUpPossible()) {
-            this.level += 1;
             this.exp -= this.getRequiredExpForLevel(this.level);
+            this.level += 1;
         }
     }
 
