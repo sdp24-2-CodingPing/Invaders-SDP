@@ -2,13 +2,9 @@ package entity.player;
 
 import engine.Core;
 import entity.Card;
-import entity.skill.LaserStrike;
-import entity.skill.Skill;
 import screen.CardSelectScreen;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.logging.Logger;
 /**
  * manages exp, level, skill and stats
@@ -20,7 +16,7 @@ public class PlayerLevel {
     /** Application logger. */
     private final Logger logger;
 
-    // 각 레벨에 필요한 경험치를 저장하는 배열 (예: level 1 -> 100 exp, level 2 -> 200 exp)
+    // 현제 레벨에서 레벨업 시 필요한 경험치를 저장하는 배열 (예: level 1 -> 100 exp, level 2 -> 200 exp)
     private static final int[] EXP_REQUIRED = {0, 100, 200, 400, 800, 1600, 3200, 6400, 12800};
 
     /**
@@ -33,12 +29,12 @@ public class PlayerLevel {
     }
 
     public boolean isLevelUpPossible () {
-        return (this.exp >= this.getRequiredExpForLevel(this.level));
+        return (this.exp >= this.getRequiredExpForLevelUp(this.level));
     }
 
     public void levelUp () {
         if (isLevelUpPossible()) {
-            this.exp -= this.getRequiredExpForLevel(this.level);
+            this.exp -= this.getRequiredExpForLevelUp(this.level);
             this.level += 1;
         }
     }
@@ -59,11 +55,11 @@ public class PlayerLevel {
     }
 
     /**
-     * get required EXP for particular level
-     * @param level particular level that you want to figure out how many EXP is required to get that level
-     * @return int EXP required to get that level
+     * get required level up EXP for current level
+     * @param level player ship current level
+     * @return int EXP required to current level for level up
      * */
-    public int getRequiredExpForLevel(int level) {
+    public int getRequiredExpForLevelUp(int level) {
         if (level < EXP_REQUIRED.length) {
             return EXP_REQUIRED[level];
         } else {
