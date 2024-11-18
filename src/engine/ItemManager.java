@@ -2,14 +2,12 @@ package engine;
 
 import entity.EnemyShip;
 import entity.EnemyShipFormation;
-import entity.Ship;
+import entity.player.PlayerShip;
 import entity.Barrier;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -40,7 +38,7 @@ public class ItemManager {
     /** Random generator. */
     private final Random rand;
     /** Player's ship. */
-    private final Ship ship;
+    private final PlayerShip playerShip;
     /** Formation of enemy ships. */
     private final EnemyShipFormation enemyShipFormation;
     /** Set of Barriers in game screen. */
@@ -74,16 +72,16 @@ public class ItemManager {
     /**
      * Constructor, sets the initial conditions.
      *
-     * @param ship Player's ship.
+     * @param playerShip Player's ship.
      * @param enemyShipFormation Formation of enemy ships.
      * @param barriers Set of barriers in game screen.
      * @param balance 1p -1.0, 2p 1.0, both 0.0
      *
      */
-    public ItemManager(Ship ship, EnemyShipFormation enemyShipFormation, Set<Barrier> barriers, float balance) {
+    public ItemManager(PlayerShip playerShip, EnemyShipFormation enemyShipFormation, Set<Barrier> barriers, float balance) {
         this.shotNum = 1;
         this.rand = new Random();
-        this.ship = ship;
+        this.playerShip = playerShip;
         this.enemyShipFormation = enemyShipFormation;
         this.barriers = barriers;
         this.logger = Core.getLogger();
@@ -276,7 +274,7 @@ public class ItemManager {
     private List<Integer> operateGhost() {
         this.soundManager.playSound(Sound.ITEM_GHOST, balance);
 
-        this.ship.setColor(Color.DARK_GRAY);
+        this.playerShip.setColor(Color.DARK_GRAY);
         this.ghost_cooldown = Core.getCooldown(GHOST_COOLDOWN);
         this.ghost_cooldown.reset();
 

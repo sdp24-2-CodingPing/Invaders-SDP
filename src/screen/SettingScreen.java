@@ -5,7 +5,7 @@ import engine.Cooldown;
 import engine.Core;
 import engine.Sound;
 import engine.SoundManager;
-import entity.Ship;
+import entity.player.PlayerShip;
 
 public class SettingScreen extends Screen {
 
@@ -85,11 +85,11 @@ public class SettingScreen extends Screen {
             if(selectedItem == 2){
                 if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
                         this.currentShip = Math.max(0 , currentShip - 1);
-                    Core.BASE_SHIP = Ship.ShipType.values()[currentShip];
+                    Core.BASE_SHIP = PlayerShip.ShipType.values()[currentShip];
                     this.selectionCooldown.reset();
                 } else if (inputManager.isKeyDown(KeyEvent.VK_RIGHT)) {
-                    this.currentShip = Math.min(Ship.ShipType.values().length - 1 , currentShip + 1);
-                    Core.BASE_SHIP = Ship.ShipType.values()[currentShip];
+                    this.currentShip = Math.min(PlayerShip.ShipType.values().length - 1 , currentShip + 1);
+                    Core.BASE_SHIP = PlayerShip.ShipType.values()[currentShip];
                     this.selectionCooldown.reset();
                 }
             }
@@ -145,7 +145,7 @@ public class SettingScreen extends Screen {
 
         drawManager.drawVolumePercentage(this, this.getWidth() / 2, this.getHeight() / 3 + VOLUME_BAR_GAP + VOLUME_PERCENTAGE_GAP, volumeLevel, isVolumeSelected);
 
-        int NumberOfShips = Ship.ShipType.values().length;
+        int NumberOfShips = PlayerShip.ShipType.values().length;
         for (int j = 0; j < NumberOfShips; j++){
             drawManager.drawShipBoxes(this, this.getWidth() / 2 - 30*NumberOfShips, this.getHeight() - 150, isShipChoiceSelected, j, j==this.currentShip);
         }
