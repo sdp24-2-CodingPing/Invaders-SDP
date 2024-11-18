@@ -27,18 +27,17 @@ public class GameSettings {
 	 * @param baseSpeed
 	 *            Speed of the enemies.
 	 * @param shootingFrequency
-	 *            Frecuen
-	 *            cy of enemy shootings, +/- 30%.
+	 *            Frequency of enemy shootings, +/- 30%.
 	 */
 	public GameSettings(final int formationWidth, final int formationHeight,
-			final int baseSpeed, final int shootingFrequency) { // fix typo
+			final int baseSpeed, final int shootingFrequency) {
 		this.formationWidth = formationWidth;
 		this.formationHeight = formationHeight;
 		this.baseSpeed = baseSpeed;
 		this.shootingFrecuency = shootingFrequency;
 	}
 
-	public GameSettings(GameSettings gameSettings) { // fix typo
+	public GameSettings(GameSettings gameSettings) {
 		this.formationWidth = gameSettings.formationWidth;
 		this.formationHeight = gameSettings.formationHeight;
 		this.baseSpeed = gameSettings.baseSpeed;
