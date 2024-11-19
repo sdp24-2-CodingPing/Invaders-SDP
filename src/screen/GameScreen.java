@@ -16,6 +16,7 @@ import java.util.TimerTask;
 
 import engine.*;
 import entity.*;
+import entity.player.PlayerActionManager;
 import entity.player.PlayerShip;
 import entity.skill.LaserStrike;
 import entity.skill.Skill;
@@ -98,6 +99,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private List<Blocker> blockers = new ArrayList<>();
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
+	/** instance of playerActionManager*/
+	private PlayerActionManager playerActionManager;
 	/** Singleton instance of ItemManager. */
 	private ItemManager itemManager;
 	/** Item boxes that dropped when kill enemy ships. */
@@ -253,6 +256,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		this.itemBoxes = new HashSet<>();
 		this.itemManager = new ItemManager(this.playerShip, this.enemyShipFormation, this.barriers,
 				balance);
+		// create Player Action Manager by new
+		this.playerActionManager = new PlayerActionManager(this.playerShip, this.inputManager, this.gameState, this.itemManager);
 
 		// Special input delay / countdown.
 		this.gameStartTime = System.currentTimeMillis();
@@ -300,10 +305,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		super.update();
 
 		// ESC 키 입력 처리 (토글 상태)
-		if (manageGameStop()) return;
+		manageGameStop();
 
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
-			managePlayerShooting();
+			managePlayerShooting(this.bullets, this.playerNumber);
 			/*Elapsed Time Update*/
 			manageElapsedTime();
 
@@ -313,10 +318,11 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 			//move ship left or right direction
 			if (!this.playerShip.isReceiveDamagePossible()) {
-				managePlayerShipMovement();
+				managePlayerShipMovement(playerNumber, this.width, balance, web);
 			}
 
-			//Todo: this.gameState.enemyShipSpecialManager.update();로 수정하기
+			//Todo: this.enemyShipSpecialManager.update();로 수정하기
+			//	initialize()에서 this.enemyShipSpecialManager = gameState.getEnemyShipSpecial로 받아오게 만들기
 			//Special enemy ship moves to right side.
 			manageEnemyShipSpecial();
 
@@ -347,16 +353,18 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			draw();
 
 		checkLevelCompletion();
-
 	}
 
+	/**
+	 * check current level is finished or not.
+	 * */
 	private void checkLevelCompletion() {
 		if ((this.enemyShipFormation.isEmpty() || this.playerShip.isDestroyed()) && !this.levelFinished) {
 			this.levelFinished = true;
 			this.screenFinishedCooldown.reset();
 
-			if (this.playerShip.isDestroyed()) {
-				this.isGameOver = true;  // 게임 오버 상태로 설정
+			if (this.playerShip.isDestroyed()) { // 게임 오버
+				this.isGameOver = true;
 				soundManager.playSound(Sound.GAME_END);
 			} else {
 				soundManager.stopSound(soundManager.getCurrentBGM());
@@ -370,6 +378,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		}
 	}
 
+	//Todo: enemyShipSpecialManager()로 분리
+	/**
+	 * */
 	private void manageEnemyShipSpecial() {
 		if (this.enemyShipSpecial != null) {
 			if (!this.enemyShipSpecial.isDestroyed())
@@ -412,54 +423,17 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		}
 	}
 
-	private void managePlayerShipMovement() {
-		boolean moveRight;
-		boolean moveLeft;
-		switch (playerNumber) {
-			case 0:
-				moveRight = inputManager.isKeyDown(KeyEvent.VK_D);
-				moveLeft = inputManager.isKeyDown(KeyEvent.VK_A);
-				break;
-			case 1:
-				moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT);
-				moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT);
-				break;
-			default:
-				moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT)
-						|| inputManager.isKeyDown(KeyEvent.VK_D);
-				moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT)
-						|| inputManager.isKeyDown(KeyEvent.VK_A);
-		}
-
-		boolean isRightBorder = this.playerShip.getPositionX()
-				+ this.playerShip.getWidth() + this.playerShip.getSpeed() > this.width - 1;
-		boolean isLeftBorder = this.playerShip.getPositionX()
-				- this.playerShip.getSpeed() < 1;
-
-		if (moveRight && !isRightBorder) {
-			this.playerShip.moveRight(balance);
-		}
-		if (moveLeft && !isLeftBorder) {
-			this.playerShip.moveLeft(balance);
-		}
-		for(int i = 0; i < web.size(); i++) {
-			//escape Spider Web
-			if (playerShip.getPositionX() + 6 <= web.get(i).getPositionX() - 6
-					|| web.get(i).getPositionX() + 6 <= playerShip.getPositionX() - 6) {
-				this.playerShip.setThreadWeb(false);
-			}
-			//get caught in a spider's web
-			else {
-				this.playerShip.setThreadWeb(true);
-				break;
-			}
-		}
-	}
-
+	/**
+	 * change color of player ship.
+	 * @param color the color that the player ship to be.
+	 * */
 	private void changePlayerColor(Color color) {
 		this.playerShip.setColor(color);
 	}
 
+	/**
+	 * update elapsed time of playing game.
+	 * */
 	private void manageElapsedTime() {
 		long currentTime = System.currentTimeMillis();
 
@@ -474,33 +448,26 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		}
 	}
 
-	private void managePlayerShooting() {
-		boolean player1Attacking = inputManager.isKeyDown(KeyEvent.VK_SPACE);
-		boolean player2Attacking = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
-
-		if (player1Attacking && player2Attacking) {
-			// Both players are attacking
-			if (this.playerShip.shoot(this.bullets, this.itemManager.getShotNum()))
-				this.gameState.setBulletsShot(this.gameState.getBulletsShot() + this.itemManager.getShotNum());
-		} else {
-			switch (playerNumber) {
-				case 1:
-					if (player2Attacking) {
-						if (this.playerShip.shoot(this.bullets, this.itemManager.getShotNum(), 1.0f)) // Player 1 attack
-							this.gameState.setBulletsShot(this.gameState.getBulletsShot() + this.itemManager.getShotNum());
-					}
-					break;
-				default:
-					if (player1Attacking) {
-						if (this.playerShip.shoot(this.bullets, this.itemManager.getShotNum(), -1.0f)) // Player 1 attack
-							this.gameState.setBulletsShot(this.gameState.getBulletsShot() + this.itemManager.getShotNum());
-					}
-					break;
-			}
-		}
+	/**
+	 * manage movement of player ship
+	 * @param playerNumber number of player. 0: 1-player, 1: 2-player
+	 * @param width width of current screen
+	 * @param balance balacne for sound
+	 * @param webs list of spider web*/
+	private void managePlayerShipMovement(int playerNumber, int width, float balance, List<Web> webs) {
+		playerActionManager.manageMovement(playerNumber, width, balance, webs);
 	}
 
-	private boolean manageGameStop() {
+	/**
+	 * manage shooting of player ship
+	 * @param bullets set of bullet of player ship
+	 * @param playerNumber number of player. 0: 1-player, 1: 2-player
+	 * */
+	private void managePlayerShooting(Set<Bullet> bullets, int playerNumber) {
+		playerActionManager.manageShooting(bullets, playerNumber);
+	}
+
+	private void manageGameStop() {
 		if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
 			if (!escKeyPressed) {
 				// 게임이 레벨업 상태이거나 카운트다운 상태일 때 ESC 입력을 무시
@@ -511,7 +478,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					if (this.isPaused) {
 						StopScreen stopScreen = new StopScreen(this.width, this.height, this.fps);
 						int returnCode = stopScreen.run();
-						if (returnCode == 1&& !this.playerShip.isDestroyed()) {
+						if (returnCode == 1 && !this.playerShip.isDestroyed()) {
 							// 메인 메뉴로 돌아가기
 							this.isGotoMainMenu = true;
 							this.isRunning = false;
@@ -526,12 +493,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		} else {
 			escKeyPressed = false; // 키가 떼어진 경우 초기화
 		}
-
-		// 게임이 멈춘 상태라면 업데이트를 하지 않음
-		if (this.isPaused) {
-			return true;
-		}
-		return false;
 	}
 
 	/**
@@ -547,6 +508,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	}
 
 
+	/**
+	* If current state is not a pause state, switch on the pause button, else, switch off the pause button
+	 * */
 	private void togglePause() {
 		if (!this.isPaused) {
 			// 게임을 일시정지 상태로 설정하고 일시정지 시작 시간을 기록
