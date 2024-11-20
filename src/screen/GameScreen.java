@@ -321,8 +321,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				managePlayerShipMovement(playerNumber, this.width, balance, web);
 			}
 
-			//Todo: this.enemyShipSpecialManager.update();로 수정하기
-			//	initialize()에서 this.enemyShipSpecialManager = gameState.getEnemyShipSpecial로 받아오게 만들기
+			//Todo: enemyShipSpecialManager를 새로 만들어서 구현하기
 			//Special enemy ship moves to right side.
 			manageEnemyShipSpecial();
 
@@ -382,22 +381,21 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/**
 	 * */
 	private void manageEnemyShipSpecial() {
-		if (this.enemyShipSpecial != null) {
-			if (!this.enemyShipSpecial.isDestroyed())
-				this.enemyShipSpecial.move(2, 0);
-			else if (this.enemyShipSpecialExplosionCooldown.checkFinished())
-				this.enemyShipSpecial = null;
-		}
+		//Special enemy ship movement
+		handleEnemyShipSpecialMovement();
 
 		//Special enemy ship appears.
-		if (this.enemyShipSpecial == null
-				&& this.enemyShipSpecialCooldown.checkFinished()) {
-			this.enemyShipSpecial = new EnemyShip();
-			this.alertMessage = "";
-			this.enemyShipSpecialCooldown.reset();
-			soundManager.playSound(Sound.UFO_APPEAR, balance);
-			this.logger.info("A special ship appears");
-		}
+		spawnEnemyShipSpecial();
+		makeAlertEnemyShipSpecialAppears();
+
+		//Special enemy ship disappears.
+		handleEnemyShipSpecialDisappear();
+	}
+
+	/**
+	 * make an alert that special enemy ship is going to appear
+	 * */
+	private void makeAlertEnemyShipSpecialAppears() {
 		if(this.enemyShipSpecial == null
 				&& this.enemyShipSpecialCooldown.checkAlert()) {
 			switch (this.enemyShipSpecialCooldown.checkAlertAnimation()){
@@ -414,12 +412,42 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					break;
 			}
 		}
+	}
 
-		//Special enemy ship disappears.
+	/**
+	 * spawn special enemy ship
+	 * */
+	private void spawnEnemyShipSpecial() {
+		if (this.enemyShipSpecial == null
+				&& this.enemyShipSpecialCooldown.checkFinished()) {
+			this.enemyShipSpecial = new EnemyShip();
+			this.alertMessage = "";
+			this.enemyShipSpecialCooldown.reset();
+			soundManager.playSound(Sound.UFO_APPEAR, balance);
+			this.logger.info("A special ship appears");
+		}
+	}
+
+	/**
+	 * make special enemy ship disappear
+	 * */
+	private void handleEnemyShipSpecialDisappear() {
 		if (this.enemyShipSpecial != null
 				&& this.enemyShipSpecial.getPositionX() > this.width) {
 			this.enemyShipSpecial = null;
 			this.logger.info("The special ship has escaped");
+		}
+	}
+
+	/**
+	 * handle movement of special enemy ship
+	 * */
+	private void handleEnemyShipSpecialMovement() {
+		if (this.enemyShipSpecial != null) {
+			if (!this.enemyShipSpecial.isDestroyed())
+				this.enemyShipSpecial.move(2, 0);
+			else if (this.enemyShipSpecialExplosionCooldown.checkFinished())
+				this.enemyShipSpecial = null;
 		}
 	}
 
@@ -500,7 +528,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 * @param playerShip current Player Ship
 	 * */
 	private void manageLevelUpSkillStats(PlayerShip playerShip) {
-		if (playerShip.isPlayerLevelUp()) {
+		if (playerShip.isPlayerLevelUpPossible()) {
 			togglePause();
 			playerShip.managePlayerLevelUp();
 			togglePause();

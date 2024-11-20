@@ -237,11 +237,11 @@ public abstract class PlayerShip extends Entity {
 	}
 
 	/**
-	 * Checks if the player ship can levelup
+	 * Checks if the player ship can level up
 	 *
-	 * @return True if the player ship is levelup
+	 * @return True if the player ship is level up
 	 */
-	public final boolean isPlayerLevelUp() {
+	public final boolean isPlayerLevelUpPossible() {
 		return this.playerLevel.isLevelUpPossible();
 	}
 
