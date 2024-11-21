@@ -132,7 +132,7 @@ public class TwoPlayerScreen extends Screen {
                 gameSettings[playerNumber].getFormationWidth(),
                 gameSettings[playerNumber].getFormationHeight(),
                 gameSettings[playerNumber].getBaseSpeed(),
-                gameSettings[playerNumber].getShootingFrecuency(),
+                gameSettings[playerNumber].getShootingFrequency(),
                 gameState.getGameLevel(),
                 Core.getLevelSetting()
             ), width / 2, height, fps / 2, wallet, playerNumber);

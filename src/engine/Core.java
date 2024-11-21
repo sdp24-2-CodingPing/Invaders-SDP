@@ -113,7 +113,7 @@ public final class Core {
 					gameSetting = gameSetting.levelSettings(gameSetting.getFormationWidth(),
 							gameSetting.getFormationHeight(),
 							gameSetting.getBaseSpeed(),
-							gameSetting.getShootingFrecuency(),
+							gameSetting.getShootingFrequency(),
 							gameState.getGameLevel(), DifficultySetting);
 
 					currentScreen = new GameScreen(gameState,
