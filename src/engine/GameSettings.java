@@ -94,7 +94,7 @@ public class GameSettings {
 	 * @param difficulty set difficulty
 	 * @return return type GameSettings
 	 */
-	public GameSettings LevelSettings(int formationWidth, int formationHeight, int baseSpeed, int shootingFrequency, int gameLevel, int difficulty) {
+	public GameSettings levelSettings(int formationWidth, int formationHeight, int baseSpeed, int shootingFrequency, int gameLevel, int difficulty) {
 
 		DifficultyHandler handler = switch(difficulty) {
 			case 0 -> new EasyDifficultyHandler();

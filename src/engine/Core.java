@@ -110,7 +110,7 @@ public final class Core {
 					startTime = System.currentTimeMillis();
 					LOGGER.info("difficulty is " + DifficultySetting);
 					//add variation
-					gameSetting = gameSetting.LevelSettings(gameSetting.getFormationWidth(),
+					gameSetting = gameSetting.levelSettings(gameSetting.getFormationWidth(),
 							gameSetting.getFormationHeight(),
 							gameSetting.getBaseSpeed(),
 							gameSetting.getShootingFrequency(),

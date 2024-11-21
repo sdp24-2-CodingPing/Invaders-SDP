@@ -128,7 +128,7 @@ public class TwoPlayerScreen extends Screen {
 
         if (!gameState.getPlayerShip().isDestroyed()) {
             GameScreen gameScreen = new GameScreen(gameState,
-                gameSettings[playerNumber].LevelSettings(
+                gameSettings[playerNumber].levelSettings(
                 gameSettings[playerNumber].getFormationWidth(),
                 gameSettings[playerNumber].getFormationHeight(),
                 gameSettings[playerNumber].getBaseSpeed(),
