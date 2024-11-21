@@ -9,6 +9,7 @@ import engine.Core;
 import engine.Score;
 import engine.Sound;
 import engine.SoundManager;
+import engine.drawmanager.AchievementDrawManager;
 
 /**
  * Implements the achievement screen.
@@ -108,10 +109,10 @@ public class AchievementScreen extends Screen {
 	 */
 	private void draw() {
 		drawManager.initDrawing(this);
-		drawManager.drawAchievementMenu(this, this.totalScore, this.totalPlayTime,
+		AchievementDrawManager.drawAchievementMenu(this, this.totalScore, this.totalPlayTime,
 				this.maxCombo, this.currentPerfectStage, this.currentPerfectStage+1,
 				this.checkFlawlessFailure);
-		drawManager.drawHighScores(this, this.highScores);
+		AchievementDrawManager.drawHighScores(this, this.highScores);
 		drawManager.completeDrawing(this);
 	}
 }

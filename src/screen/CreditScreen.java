@@ -7,6 +7,7 @@ import java.util.List;
 import engine.Core;
 import engine.Sound;
 import engine.SoundManager;
+import engine.drawmanager.CreditDrawManager;
 
 public class CreditScreen extends Screen{
 
@@ -62,7 +63,7 @@ public class CreditScreen extends Screen{
 
     private void draw(){
         drawManager.initDrawing(this);
-        drawManager.drawEndingCredit(this,this.creditlist, currentFrame);
+        CreditDrawManager.drawEndingCredit(this,this.creditlist, currentFrame);
         drawManager.completeDrawing(this);
     }
 

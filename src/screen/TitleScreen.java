@@ -7,6 +7,7 @@ import engine.Core;
 import engine.Sound;
 import engine.SoundManager;
 import entity.Wallet;
+import engine.drawmanager.TitleDrawManager;
 
 
 /**
@@ -132,8 +133,8 @@ public class TitleScreen extends Screen {
 	private void draw() {
 		drawManager.initDrawing(this);
 
-		drawManager.drawTitle(this);
-		drawManager.drawMenu(this, this.returnCode, wallet.getCoin());
+		TitleDrawManager.drawTitle(this);
+		TitleDrawManager.drawMenu(this, this.returnCode, wallet.getCoin());
 
 		drawManager.completeDrawing(this);
 	}

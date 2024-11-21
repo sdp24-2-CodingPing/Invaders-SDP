@@ -6,6 +6,7 @@ import engine.Core;
 import engine.Sound;
 import engine.SoundManager;
 import entity.Ship;
+import engine.drawmanager.SettingDrawManager;
 
 public class SettingScreen extends Screen {
 
@@ -130,24 +131,24 @@ public class SettingScreen extends Screen {
     private void draw() {
         drawManager.initDrawing(this);
 
-        drawManager.drawSettingsScreen(this);
+        SettingDrawManager.drawSettingsScreen(this);
 
         for (int i = 0; i < menuItems.length; i++) {
             boolean isSelected = (i == selectedItem);
-            drawManager.drawCenteredRegularString(this, menuItems[i], this.getHeight() / 3 + i * MENU_ITEM_GAP, isSelected);
+            SettingDrawManager.drawCenteredRegularString(this, menuItems[i], this.getHeight() / 3 + i * MENU_ITEM_GAP, isSelected);
         }
 
         int filledWidth = (volumeLevel * VOLUME_BAR_WIDTH) / 100;
         boolean isVolumeSelected = (selectedItem == 0);
         boolean isShipChoiceSelected = (selectedItem == 2);
 
-        drawManager.drawVolumeBar(this, this.getWidth() / 2 - VOLUME_BAR_WIDTH / 2, this.getHeight() / 3 + VOLUME_BAR_GAP, VOLUME_BAR_WIDTH, filledWidth, isVolumeSelected);
+        SettingDrawManager.drawVolumeBar(this, this.getWidth() / 2 - VOLUME_BAR_WIDTH / 2, this.getHeight() / 3 + VOLUME_BAR_GAP, VOLUME_BAR_WIDTH, filledWidth, isVolumeSelected);
 
-        drawManager.drawVolumePercentage(this, this.getWidth() / 2, this.getHeight() / 3 + VOLUME_BAR_GAP + VOLUME_PERCENTAGE_GAP, volumeLevel, isVolumeSelected);
+        SettingDrawManager.drawVolumePercentage(this, this.getWidth() / 2, this.getHeight() / 3 + VOLUME_BAR_GAP + VOLUME_PERCENTAGE_GAP, volumeLevel, isVolumeSelected);
 
         int NumberOfShips = Ship.ShipType.values().length;
         for (int j = 0; j < NumberOfShips; j++){
-            drawManager.drawShipBoxes(this, this.getWidth() / 2 - 30*NumberOfShips, this.getHeight() - 150, isShipChoiceSelected, j, j==this.currentShip);
+            SettingDrawManager.drawShipBoxes(this, this.getWidth() / 2 - 30*NumberOfShips, this.getHeight() - 150, isShipChoiceSelected, j, j==this.currentShip);
         }
 
         drawManager.completeDrawing(this);

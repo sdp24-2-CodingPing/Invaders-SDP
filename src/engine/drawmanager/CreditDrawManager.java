@@ -1,4 +1,32 @@
 package engine.drawmanager;
 
-public class CreditDrawManager {
+import engine.DrawManager;
+import screen.Screen;
+
+import java.awt.*;
+import java.util.List;
+
+/**
+ * Manages drawing for the Credit screen.
+ */
+public class CreditDrawManager extends DrawManager {
+
+    /**
+     * Draws credit screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     */
+    public static void drawEndingCredit(final Screen screen, List<String> creditlist, int currentFrame)  {
+        backBufferGraphics.setColor(Color.WHITE);
+        final int startPoint = screen.getHeight() / 2;
+
+        for (int i = 0;i < creditlist.size(); i++) {
+            String target = creditlist.get(i);
+            drawCenteredRegularString(screen, target,startPoint + (fontRegularMetrics.getHeight() * 2) * i - currentFrame);
+        }
+
+
+    }
+
 }
