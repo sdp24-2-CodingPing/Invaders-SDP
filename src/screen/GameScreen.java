@@ -16,6 +16,8 @@ import java.util.TimerTask;
 
 
 import engine.*;
+import engine.drawmanager.GameDrawManager;
+import engine.drawmanager.GameSettingDrawManager;
 import entity.*;
 import entity.skill.LaserStrike;
 import entity.skill.Skill;
@@ -566,55 +568,55 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	private void draw() {
 		drawManager.initDrawing(this);
-		drawManager.drawGameTitle(this);
+		GameDrawManager.drawGameTitle(this);
 
-		drawManager.drawLaunchTrajectory( this,this.ship.getPositionX());
+		GameDrawManager.drawLaunchTrajectory( this,this.ship.getPositionX());
 
-		drawManager.drawEntity(this.ship, this.ship.getPositionX(), this.ship.getPositionY());
+		GameDrawManager.drawEntity(this.ship, this.ship.getPositionX(), this.ship.getPositionY());
 
 		//draw Spider Web
 		for (int i = 0; i < web.size(); i++) {
-			drawManager.drawEntity(this.web.get(i), this.web.get(i).getPositionX(),
+			GameDrawManager.drawEntity(this.web.get(i), this.web.get(i).getPositionX(),
 					this.web.get(i).getPositionY());
 		}
 		//draw Blocks
 		for (Block block : block)
-			drawManager.drawEntity(block, block.getPositionX(),
+			GameDrawManager.drawEntity(block, block.getPositionX(),
 					block.getPositionY());
 
 
 		if (this.enemyShipSpecial != null)
-			drawManager.drawEntity(this.enemyShipSpecial,
+			GameDrawManager.drawEntity(this.enemyShipSpecial,
 					this.enemyShipSpecial.getPositionX(),
 					this.enemyShipSpecial.getPositionY());
 
 		enemyShipFormation.draw();
 
 		for (ItemBox itemBox : this.itemBoxes)
-			drawManager.drawEntity(itemBox, itemBox.getPositionX(), itemBox.getPositionY());
+			GameDrawManager.drawEntity(itemBox, itemBox.getPositionX(), itemBox.getPositionY());
 
 		for (Barrier barrier : this.barriers)
-			drawManager.drawEntity(barrier, barrier.getPositionX(), barrier.getPositionY());
+			GameDrawManager.drawEntity(barrier, barrier.getPositionX(), barrier.getPositionY());
 
 		for (Bullet bullet : this.bullets)
-			drawManager.drawEntity(bullet, bullet.getPositionX(),
+			GameDrawManager.drawEntity(bullet, bullet.getPositionX(),
 					bullet.getPositionY());
 
 
 		// Interface.
-		drawManager.drawScore(this, this.score);
-		drawManager.drawElapsedTime(this, this.elapsedTime);
-		drawManager.drawAlertMessage(this, this.alertMessage);
+		GameDrawManager.drawScore(this, this.score);
+		GameDrawManager.drawElapsedTime(this, this.elapsedTime);
+		GameDrawManager.drawAlertMessage(this, this.alertMessage);
 //		drawManager.drawLives(this, this.lives, this.shipType);
-		drawManager.drawLevel(this, this.level);
-		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
-		drawManager.drawReloadTimer(this,this.ship,ship.getRemainingReloadTime());
-		drawManager.drawCombo(this,this.combo);
+		GameDrawManager.drawLevel(this, this.level);
+		GameDrawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
+		GameDrawManager.drawReloadTimer(this,this.ship,ship.getRemainingReloadTime());
+		GameDrawManager.drawCombo(this,this.combo);
 
 		// HUD with essential information. (Item, HP, EXP)
 		int HUD_Y = 640;
-		drawManager.drawHorizontalLine(this, HUD_Y);
-		drawManager.drawHorizontalLine(this, HUD_Y);
+		GameDrawManager.drawHorizontalLine(this, HUD_Y);
+		GameDrawManager.drawHorizontalLine(this, HUD_Y);
 		int HUD_MARGIN_TOP = 16; // Padding from the top of the item box
 		int BOX_WIDTH = 48; // Width of the item box
 		int BOX_HEIGHT = 48; // Height of the item box
@@ -629,20 +631,20 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		// 스킬 박스와 스킬 아이콘 그리기
 		for (int i = 0; i < skills.length; i++) {
 			int offsetX = 20 + i * (BOX_WIDTH + BOX_MARGIN); // X 좌표 계산
-			drawManager.drawThickBox(this, offsetX, HUD_Y + HUD_MARGIN_TOP, BOX_WIDTH, BOX_HEIGHT, 2); // 스킬 박스 그리기
-			drawManager.drawEntity(skills[i], offsetX + 2, HUD_Y + HUD_MARGIN_TOP + 2); // 스킬 아이콘 그리기
+			GameDrawManager.drawThickBox(this, offsetX, HUD_Y + HUD_MARGIN_TOP, BOX_WIDTH, BOX_HEIGHT, 2); // 스킬 박스 그리기
+			GameDrawManager.drawEntity(skills[i], offsetX + 2, HUD_Y + HUD_MARGIN_TOP + 2); // 스킬 아이콘 그리기
 		}
 
 		// Draw HP & EXP
-		drawManager.drawSegmentedBar(220, HUD_Y + HUD_MARGIN_TOP + 7, 350, 12, 10, 15, Color.GREEN);
-		drawManager.drawSegmentedBar(220, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 350, 12, 12, 20, Color.YELLOW);
+		GameDrawManager.drawSegmentedBar(220, HUD_Y + HUD_MARGIN_TOP + 7, 350, 12, 10, 15, Color.GREEN);
+		GameDrawManager.drawSegmentedBar(220, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 350, 12, 12, 20, Color.YELLOW);
 
 		// Countdown to game start.
 		if (!this.inputDelay.checkFinished()) {
 			int countdown = (int) ((INPUT_DELAY - (System.currentTimeMillis() - this.gameStartTime)) / 1000);
-			drawManager.drawCountDown(this, this.level, countdown, this.bonusLife);
-			drawManager.drawHorizontalLine(this, this.height / 2 - this.height / 12);
-			drawManager.drawHorizontalLine(this, this.height / 2 + this.height / 12);
+			GameDrawManager.drawCountDown(this, this.level, countdown, this.bonusLife);
+			GameDrawManager.drawHorizontalLine(this, this.height / 2 - this.height / 12);
+			GameDrawManager.drawHorizontalLine(this, this.height / 2 + this.height / 12);
 
 			//Intermediate aggregation
 			if (this.level > 1){
@@ -653,20 +655,20 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					this.maxCombo = 0;
 				} else {
 					// Don't show it just before the game starts, i.e. when the countdown is zero.
-					drawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore);
+					GameDrawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore);
 				}
 			}
 		}
 
 
 		//add drawRecord method for drawing
-		drawManager.drawRecord(highScores,this);
+		GameDrawManager.drawRecord(highScores,this);
 
 
 		// Blocker drawing part
 		if (!blockers.isEmpty()) {
 			for (Blocker blocker : blockers) {
-				drawManager.drawRotatedEntity(blocker, blocker.getPositionX(), blocker.getPositionY(), blocker.getAngle());
+				GameDrawManager.drawRotatedEntity(blocker, blocker.getPositionX(), blocker.getPositionY(), blocker.getAngle());
 			}
 		}
 
@@ -739,67 +741,67 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	private void drawThread() {
 		drawManager.initThreadDrawing(this, playerNumber);
-		drawManager.drawGameTitle(this, playerNumber);
+		GameDrawManager.drawGameTitle(this, playerNumber);
 
-		drawManager.drawLaunchTrajectory( this,this.ship.getPositionX(), playerNumber);
+		GameDrawManager.drawLaunchTrajectory( this,this.ship.getPositionX(), playerNumber);
 
-		drawManager.drawEntity(this.ship, this.ship.getPositionX(),
+		GameDrawManager.drawEntity(this.ship, this.ship.getPositionX(),
 				this.ship.getPositionY(), playerNumber);
 
 		//draw Spider Web
 		for (int i = 0; i < web.size(); i++) {
-			drawManager.drawEntity(this.web.get(i), this.web.get(i).getPositionX(),
+			GameDrawManager.drawEntity(this.web.get(i), this.web.get(i).getPositionX(),
 					this.web.get(i).getPositionY(), playerNumber);
 		}
 		//draw Blocks
 		for (Block block : block)
-			drawManager.drawEntity(block, block.getPositionX(),
+			GameDrawManager.drawEntity(block, block.getPositionX(),
 					block.getPositionY(), playerNumber);
 
 		if (this.enemyShipSpecial != null)
-			drawManager.drawEntity(this.enemyShipSpecial,
+			GameDrawManager.drawEntity(this.enemyShipSpecial,
 					this.enemyShipSpecial.getPositionX(),
 					this.enemyShipSpecial.getPositionY(), playerNumber);
 
 		enemyShipFormation.draw(playerNumber);
 
 		for (ItemBox itemBox : this.itemBoxes)
-			drawManager.drawEntity(itemBox, itemBox.getPositionX(), itemBox.getPositionY(), playerNumber);
+			GameDrawManager.drawEntity(itemBox, itemBox.getPositionX(), itemBox.getPositionY(), playerNumber);
 
 		for (Barrier barrier : this.barriers)
-			drawManager.drawEntity(barrier, barrier.getPositionX(), barrier.getPositionY(), playerNumber);
+			GameDrawManager.drawEntity(barrier, barrier.getPositionX(), barrier.getPositionY(), playerNumber);
 
 		for (Bullet bullet : this.bullets)
-			drawManager.drawEntity(bullet, bullet.getPositionX(),
+			GameDrawManager.drawEntity(bullet, bullet.getPositionX(),
 					bullet.getPositionY(), playerNumber);
 
 		// Interface.
-		drawManager.drawScore(this, this.score, playerNumber);
-		drawManager.drawElapsedTime(this, this.elapsedTime, playerNumber);
-		drawManager.drawAlertMessage(this, this.alertMessage, playerNumber);
-		drawManager.drawLives(this, this.lives, this.shipType, playerNumber);
-		drawManager.drawLevel(this, this.level, playerNumber);
-		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1, playerNumber);
-		drawManager.drawReloadTimer(this,this.ship,ship.getRemainingReloadTime(), playerNumber);
-		drawManager.drawCombo(this,this.combo, playerNumber);
+		GameDrawManager.drawScore(this, this.score, playerNumber);
+		GameDrawManager.drawElapsedTime(this, this.elapsedTime, playerNumber);
+		GameDrawManager.drawAlertMessage(this, this.alertMessage, playerNumber);
+		GameDrawManager.drawLives(this, this.lives, this.shipType, playerNumber);
+		GameDrawManager.drawLevel(this, this.level, playerNumber);
+		GameDrawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1, playerNumber);
+		GameDrawManager.drawReloadTimer(this,this.ship,ship.getRemainingReloadTime(), playerNumber);
+		GameDrawManager.drawCombo(this,this.combo, playerNumber);
 
 		// Show GameOver if one player ends first
 		if (this.levelFinished && this.screenFinishedCooldown.checkFinished() && this.lives <= 0) {
-			drawManager.drawInGameOver(this, this.height, playerNumber);
-			drawManager.drawHorizontalLine(this, this.height / 2 - this.height
+			GameDrawManager.drawInGameOver(this, this.height, playerNumber);
+			GameDrawManager.drawHorizontalLine(this, this.height / 2 - this.height
 					/ 12, playerNumber);
-			drawManager.drawHorizontalLine(this, this.height / 2 + this.height
+			GameDrawManager.drawHorizontalLine(this, this.height / 2 + this.height
 					/ 12, playerNumber);
 		}
 
 		// Countdown to game start.
 		if (!this.inputDelay.checkFinished()) {
 			int countdown = (int) ((INPUT_DELAY - (System.currentTimeMillis() - this.gameStartTime)) / 1000);
-			drawManager.drawCountDown(this, this.level, countdown,
+			GameDrawManager.drawCountDown(this, this.level, countdown,
 					this.bonusLife, playerNumber);
-			drawManager.drawHorizontalLine(this, this.height / 2 - this.height
+			GameDrawManager.drawHorizontalLine(this, this.height / 2 - this.height
 					/ 12, playerNumber);
-			drawManager.drawHorizontalLine(this, this.height / 2 + this.height
+			GameDrawManager.drawHorizontalLine(this, this.height / 2 + this.height
 					/ 12, playerNumber);
 
 			//Intermediate aggregation
@@ -811,22 +813,22 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					this.maxCombo = 0;
 				} else {
 					// Don't show it just before the game starts, i.e. when the countdown is zero.
-					drawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore, playerNumber);
+					GameDrawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore, playerNumber);
 				}
 			}
 		}
 
 		//add drawRecord method for drawing
-		drawManager.drawRecord(highScores,this, playerNumber);
+		GameDrawManager.drawRecord(highScores,this, playerNumber);
 
 		// Blocker drawing part
 		if (!blockers.isEmpty()) {
 			for (Blocker blocker : blockers) {
-				drawManager.drawRotatedEntity(blocker, blocker.getPositionX(), blocker.getPositionY(), blocker.getAngle(), playerNumber);
+				GameDrawManager.drawRotatedEntity(blocker, blocker.getPositionX(), blocker.getPositionY(), blocker.getAngle(), playerNumber);
 			}
 		}
 
-		drawManager.flushBuffer(this, playerNumber);
+		GameDrawManager.flushBuffer(this, playerNumber);
 	}
 
 	/**

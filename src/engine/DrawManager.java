@@ -30,21 +30,21 @@ public class DrawManager {
 	/** Singleton instance of the class. */
 	private static DrawManager instance;
 	/** Current frame. */
-	private static Frame frame;
+	public static Frame frame;
 	/** FileManager instance. */
 	private static FileManager fileManager;
 	/** Application logger. */
 	protected static Logger logger;
 	/** Graphics context. */
-	private static Graphics graphics;
+	public static Graphics graphics;
 	/** Buffer Graphics. */
 	protected static Graphics backBufferGraphics;
 	/** Buffer Graphics for multi screens. */
-	private static final Graphics[] threadBufferGraphics = new Graphics[2];
+	public static final Graphics[] threadBufferGraphics = new Graphics[2];
 	/** Buffer image. */
-	private static BufferedImage backBuffer;
+	public static BufferedImage backBuffer;
 	/** Buffer images for multi screens **/
-	private static final BufferedImage[] threadBuffers = new BufferedImage[4];
+	public static final BufferedImage[] threadBuffers = new BufferedImage[4];
 	/** Small sized font. */
 	protected static Font fontSmall;
 	/** Small sized font properties. */
@@ -58,10 +58,10 @@ public class DrawManager {
 	/** Big sized font properties. */
 	protected static FontMetrics fontBigMetrics;
 	/** Vertical line width for two player mode **/
-	private static final int LINE_WIDTH = 1;
+	public static final int LINE_WIDTH = 1;
 
 	/** Sprite types mapped to their images. */
-	private static Map<SpriteType, boolean[][]> spriteMap;
+	public static Map<SpriteType, boolean[][]> spriteMap;
 
 //	/** For Shopscreen image */
 //	private static BufferedImage img_additionallife;
@@ -268,114 +268,114 @@ public class DrawManager {
 				frame.getInsets().top, frame);
 	}
 
-	/**
-	 * Merge second buffers to back buffer
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 */
-	public void mergeDrawing(final Screen screen) {
-		backBufferGraphics.drawImage(threadBuffers[2], 0, 0, frame);
-		backBufferGraphics.drawImage(threadBuffers[3], screen.getWidth() / 2 + LINE_WIDTH, 0, frame);
-	}
+//	/**
+//	 * Merge second buffers to back buffer
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 */
+//	public void mergeDrawing(final Screen screen) {
+//		backBufferGraphics.drawImage(threadBuffers[2], 0, 0, frame);
+//		backBufferGraphics.drawImage(threadBuffers[3], screen.getWidth() / 2 + LINE_WIDTH, 0, frame);
+//	}
 
-	/**
-	 * Flush buffer to second buffer
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param threadNumber
-	 * 			  Thread number for two player mode
-	 */
-	public void flushBuffer(final Screen screen, final int threadNumber) {
-		BufferedImage threadBuffer = new BufferedImage(screen.getWidth(),screen.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics threadGraphic = threadBuffer.getGraphics();
+//	/**
+//	 * Flush buffer to second buffer
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param threadNumber
+//	 * 			  Thread number for two player mode
+//	 */
+//	public void flushBuffer(final Screen screen, final int threadNumber) {
+//		BufferedImage threadBuffer = new BufferedImage(screen.getWidth(),screen.getHeight(), BufferedImage.TYPE_INT_RGB);
+//		Graphics threadGraphic = threadBuffer.getGraphics();
+//
+//		threadGraphic.drawImage(threadBuffers[threadNumber], 0, 0, frame);
+//		threadBuffers[threadNumber + 2] = threadBuffer;
+//	}
 
-		threadGraphic.drawImage(threadBuffers[threadNumber], 0, 0, frame);
-		threadBuffers[threadNumber + 2] = threadBuffer;
-	}
+//	/**
+//	 * Draws an entity, using the appropriate image.
+//	 *
+//	 * @param entity
+//	 *            Entity to be drawn.
+//	 * @param positionX
+//	 *            Coordinates for the left side of the image.
+//	 * @param positionY
+//	 *            Coordinates for the upper side of the image.
+//	 */
+//	public void drawEntity(final Entity entity, final int positionX,
+//			final int positionY) {
+//		boolean[][] image = spriteMap.get(entity.getSpriteType());
+//
+//		backBufferGraphics.setColor(entity.getColor());
+//		for (int i = 0; i < image.length; i++)
+//			for (int j = 0; j < image[i].length; j++)
+//				if (image[i][j])
+//					backBufferGraphics.drawRect(positionX + i * 2, positionY
+//							+ j * 2, 1, 1);
+//	}
 
-	/**
-	 * Draws an entity, using the appropriate image.
-	 * 
-	 * @param entity
-	 *            Entity to be drawn.
-	 * @param positionX
-	 *            Coordinates for the left side of the image.
-	 * @param positionY
-	 *            Coordinates for the upper side of the image.
-	 */
-	public void drawEntity(final Entity entity, final int positionX,
-			final int positionY) {
-		boolean[][] image = spriteMap.get(entity.getSpriteType());
+//    /**
+//     * Draws an entity, using the appropriate image.
+//     *
+//     * @param entity
+//     *            Entity to be drawn.
+//     * @param positionX
+//     *            Coordinates for the left side of the image.
+//     * @param positionY
+//     *            Coordinates for the upper side of the image.
+//     * @param threadNumber
+//     *            Thread number for two player mode
+//     */
+//    public void drawEntity(final Entity entity, final int positionX,
+//                           final int positionY, final int threadNumber) {
+//        boolean[][] image = spriteMap.get(entity.getSpriteType());
+//
+//        threadBufferGraphics[threadNumber].setColor(entity.getColor());
+//        for (int i = 0; i < image.length; i++)
+//            for (int j = 0; j < image[i].length; j++)
+//                if (image[i][j])
+//                    threadBufferGraphics[threadNumber].drawRect(positionX + i * 2, positionY
+//                            + j * 2, 1, 1);
+//    }
 
-		backBufferGraphics.setColor(entity.getColor());
-		for (int i = 0; i < image.length; i++)
-			for (int j = 0; j < image[i].length; j++)
-				if (image[i][j])
-					backBufferGraphics.drawRect(positionX + i * 2, positionY
-							+ j * 2, 1, 1);
-	}
+//	//Drawing an Entity (Blocker) that requires angle setting
+//	public void drawRotatedEntity(Entity entity, int x, int y, double angle) {
+//		Graphics2D g2d = (Graphics2D) backBufferGraphics; // Convert to Graphics2D
+//		AffineTransform oldTransform = g2d.getTransform(); // Save previous conversion
+//
+//		//Set center point to rotate
+//		int centerX = x + entity.getWidth() / 2;
+//		int centerY = y + entity.getHeight() / 2;
+//
+//		//rotate by a given angle
+//		g2d.rotate(Math.toRadians(angle), centerX, centerY);
+//
+//		//Drawing entities
+//		drawEntity(entity, x, y);
+//
+//		g2d.setTransform(oldTransform); // Restore to original conversion state
+//	}
 
-    /**
-     * Draws an entity, using the appropriate image.
-     *
-     * @param entity
-     *            Entity to be drawn.
-     * @param positionX
-     *            Coordinates for the left side of the image.
-     * @param positionY
-     *            Coordinates for the upper side of the image.
-     * @param threadNumber
-     *            Thread number for two player mode
-     */
-    public void drawEntity(final Entity entity, final int positionX,
-                           final int positionY, final int threadNumber) {
-        boolean[][] image = spriteMap.get(entity.getSpriteType());
-
-        threadBufferGraphics[threadNumber].setColor(entity.getColor());
-        for (int i = 0; i < image.length; i++)
-            for (int j = 0; j < image[i].length; j++)
-                if (image[i][j])
-                    threadBufferGraphics[threadNumber].drawRect(positionX + i * 2, positionY
-                            + j * 2, 1, 1);
-    }
-
-	//Drawing an Entity (Blocker) that requires angle setting
-	public void drawRotatedEntity(Entity entity, int x, int y, double angle) {
-		Graphics2D g2d = (Graphics2D) backBufferGraphics; // Convert to Graphics2D
-		AffineTransform oldTransform = g2d.getTransform(); // Save previous conversion
-
-		//Set center point to rotate
-		int centerX = x + entity.getWidth() / 2;
-		int centerY = y + entity.getHeight() / 2;
-
-		//rotate by a given angle
-		g2d.rotate(Math.toRadians(angle), centerX, centerY);
-
-		//Drawing entities
-		drawEntity(entity, x, y);
-
-		g2d.setTransform(oldTransform); // Restore to original conversion state
-	}
-
-	//Drawing an Entity (Blocker) that requires angle setting
-	public void drawRotatedEntity(Entity entity, int x, int y, double angle, final int threadNumber) {
-		Graphics2D g2d = (Graphics2D) threadBufferGraphics[threadNumber]; // Convert to Graphics2D
-		AffineTransform oldTransform = g2d.getTransform(); // Save previous conversion
-
-		//Set center point to rotate
-		int centerX = x + entity.getWidth() / 2;
-		int centerY = y + entity.getHeight() / 2;
-
-		//rotate by a given angle
-		g2d.rotate(Math.toRadians(angle), centerX, centerY);
-
-		//Drawing entities
-		drawEntity(entity, x, y, threadNumber);
-
-		g2d.setTransform(oldTransform); // Restore to original conversion state
-	}
+//	//Drawing an Entity (Blocker) that requires angle setting
+//	public void drawRotatedEntity(Entity entity, int x, int y, double angle, final int threadNumber) {
+//		Graphics2D g2d = (Graphics2D) threadBufferGraphics[threadNumber]; // Convert to Graphics2D
+//		AffineTransform oldTransform = g2d.getTransform(); // Save previous conversion
+//
+//		//Set center point to rotate
+//		int centerX = x + entity.getWidth() / 2;
+//		int centerY = y + entity.getHeight() / 2;
+//
+//		//rotate by a given angle
+//		g2d.rotate(Math.toRadians(angle), centerX, centerY);
+//
+//		//Drawing entities
+//		drawEntity(entity, x, y, threadNumber);
+//
+//		g2d.setTransform(oldTransform); // Restore to original conversion state
+//	}
 
 	/**
 	 * For debugging purposes, draws the canvas borders.
@@ -424,322 +424,322 @@ public class DrawManager {
 		backBufferGraphics.drawRect(x, y, w, h);
 	}
 
-	/**
-	 * Draws a thicker box outline by drawing two overlapping boxes.
-	 *
-	 * @param screen    Screen to draw on.
-	 * @param x         X coordinate of the upper-left corner of the inner box.
-	 * @param y         Y coordinate of the upper-left corner of the inner box.
-	 * @param w         Width of the inner box.
-	 * @param h         Height of the inner box.
-	 * @param thickness Thickness of the outer box.
-	 */
-	public void drawThickBox(final Screen screen, final int x, final int y, final int w, final int h, final int thickness) {
-		// Ensure thickness is not greater than the width or height
-		if (thickness * 2 > w || thickness * 2 > h) {
-			throw new IllegalArgumentException("Thickness is too large for the given width or height");
-		}
+//	/**
+//	 * Draws a thicker box outline by drawing two overlapping boxes.
+//	 *
+//	 * @param screen    Screen to draw on.
+//	 * @param x         X coordinate of the upper-left corner of the inner box.
+//	 * @param y         Y coordinate of the upper-left corner of the inner box.
+//	 * @param w         Width of the inner box.
+//	 * @param h         Height of the inner box.
+//	 * @param thickness Thickness of the outer box.
+//	 */
+//	public void drawThickBox(final Screen screen, final int x, final int y, final int w, final int h, final int thickness) {
+//		// Ensure thickness is not greater than the width or height
+//		if (thickness * 2 > w || thickness * 2 > h) {
+//			throw new IllegalArgumentException("Thickness is too large for the given width or height");
+//		}
+//
+//		backBufferGraphics.setColor(Color.GREEN);
+//		backBufferGraphics.fillRect(x, y, w, h); // Outer box
+//		backBufferGraphics.setColor(Color.BLACK);
+//		backBufferGraphics.fillRect(x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness); // Draw inner box
+//	}
+//	/**
+//	 * Draws a horizontal bar composed of multiple box segments.
+//	 *
+//	 * @param x             X coordinate of the bar's starting point.
+//	 * @param y             Y coordinate of the bar's starting point.
+//	 * @param w             Total width of the bar.
+//	 * @param h             Height of each box segment.
+//	 * @param currentValue  Current value to display (how many boxes are filled).
+//	 * @param maximumValue  Maximum value (total number of boxes).
+//	 * @param color         Color of the filled boxes.
+//	 */
+//	public void drawSegmentedBar(int x, int y, int w, int h, int currentValue, int maximumValue, Color color) {
+//		int basicWidth = w / maximumValue; // Basic width of each box
+//		int remainingWidth = w % maximumValue; // Remaining width to be distributed
+//
+//		// Draw filled and empty boxes
+//		int startX = x; // Initial x coordinate for the first box
+//		for (int i = 0; i < maximumValue; i++) {
+//			int boxWidth = basicWidth;
+//			if (i < remainingWidth) {
+//				boxWidth += 1; // Distribute the remaining width to the first few boxes
+//			}
+//
+//			if (i < currentValue) {
+//				backBufferGraphics.setColor(color); // Color for filled boxes
+//			} else {
+//				backBufferGraphics.setColor(Color.GRAY); // Color for empty boxes
+//			}
+//
+//			backBufferGraphics.fillRect(startX, y, boxWidth, h);
+//			startX += boxWidth; // Update startX for the next box
+//		}
+//	}
 
-		backBufferGraphics.setColor(Color.GREEN);
-		backBufferGraphics.fillRect(x, y, w, h); // Outer box
-		backBufferGraphics.setColor(Color.BLACK);
-		backBufferGraphics.fillRect(x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness); // Draw inner box
-	}
-	/**
-	 * Draws a horizontal bar composed of multiple box segments.
-	 *
-	 * @param x             X coordinate of the bar's starting point.
-	 * @param y             Y coordinate of the bar's starting point.
-	 * @param w             Total width of the bar.
-	 * @param h             Height of each box segment.
-	 * @param currentValue  Current value to display (how many boxes are filled).
-	 * @param maximumValue  Maximum value (total number of boxes).
-	 * @param color         Color of the filled boxes.
-	 */
-	public void drawSegmentedBar(int x, int y, int w, int h, int currentValue, int maximumValue, Color color) {
-		int basicWidth = w / maximumValue; // Basic width of each box
-		int remainingWidth = w % maximumValue; // Remaining width to be distributed
+//	/**
+//	 * Draws current score on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param score
+//	 *            Current score.
+//	 */
+//	public void drawScore(final Screen screen, final int score) {
+//		backBufferGraphics.setFont(fontRegular);
+//		backBufferGraphics.setColor(Color.WHITE);
+//		String scoreString = String.format("%04d", score);
+//		backBufferGraphics.drawString(scoreString, screen.getWidth() - 60, 25);
+//	}
+//  /**
+//	 * Draws level on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param level
+//	 *            Current level.
+//	 */
+//	public void drawLevel(final Screen screen, final int level) {
+//		backBufferGraphics.setFont(fontRegular);
+//		backBufferGraphics.setColor(Color.WHITE);
+//		String scoreString = String.format("lv.%d", level);
+//		backBufferGraphics.drawString(scoreString, 20, 25);
+//	}
+//	/**
+//	 * Draws level on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param level
+//	 *            Current level.
+//	 * @param threadNumber
+//	 *            Thread number for two player mode
+//	 */
+//	public void drawLevel(final Screen screen, final int level, final int threadNumber) {
+//		threadBufferGraphics[threadNumber].setFont(fontRegular);
+//		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
+//		String scoreString = String.format("lv.%d", level);
+//		threadBufferGraphics[threadNumber].drawString(scoreString, 20, 25);
+//	}
 
-		// Draw filled and empty boxes
-		int startX = x; // Initial x coordinate for the first box
-		for (int i = 0; i < maximumValue; i++) {
-			int boxWidth = basicWidth;
-			if (i < remainingWidth) {
-				boxWidth += 1; // Distribute the remaining width to the first few boxes
-			}
+//	/**
+//	 * Draws current score on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param score
+//	 *            Current score.
+//	 * @param threadNumber
+//	 *            Thread number for two player mode
+//	 */
+//	public void drawScore(final Screen screen, final int score, final int threadNumber) {
+//		threadBufferGraphics[threadNumber].setFont(fontRegular);
+//		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
+//		String scoreString = String.format("%04d", score);
+//		threadBufferGraphics[threadNumber].drawString(scoreString, screen.getWidth() - 60, 25);
+//	}
 
-			if (i < currentValue) {
-				backBufferGraphics.setColor(color); // Color for filled boxes
-			} else {
-				backBufferGraphics.setColor(Color.GRAY); // Color for empty boxes
-			}
+//	/**
+//	 * Draws elapsed time on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param elapsedTime
+//	 *            Elapsed time.
+//	 */
+//	public void drawElapsedTime(final Screen screen, final int elapsedTime) {
+//		backBufferGraphics.setFont(fontRegular);
+//		backBufferGraphics.setColor(Color.LIGHT_GRAY);
+//
+//		int cent = (elapsedTime % 1000)/10;
+//		int seconds = elapsedTime / 1000;
+//		int sec = seconds % 60;
+//		int min = seconds / 60;
+//
+//        String elapsedTimeString;
+//        if (min < 1){
+//            elapsedTimeString = String.format("%d.%02d", sec, cent);
+//        } else {
+//            elapsedTimeString = String.format("%d:%02d.%02d", min, sec, cent);
+//        }
+//        backBufferGraphics.drawString(elapsedTimeString, 80, 25);
+//    }
 
-			backBufferGraphics.fillRect(startX, y, boxWidth, h);
-			startX += boxWidth; // Update startX for the next box
-		}
-	}
+//	/**
+//	 * Draws elapsed time on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param elapsedTime
+//	 *            Elapsed time.
+//	 * @param threadNumber
+//	 *            Thread number for two player mode
+//	 */
+//	public void drawElapsedTime(final Screen screen, final int elapsedTime, final int threadNumber) {
+//		threadBufferGraphics[threadNumber].setFont(fontRegular);
+//		threadBufferGraphics[threadNumber].setColor(Color.LIGHT_GRAY);
+//
+//        int cent = (elapsedTime % 1000)/10;
+//        int seconds = elapsedTime / 1000;
+//        int sec = seconds % 60;
+//        int min = seconds / 60;
+//
+//		String elapsedTimeString;
+//		if (min < 1){
+//			elapsedTimeString = String.format("%d.%02d", sec, cent);
+//		} else {
+//			elapsedTimeString = String.format("%d:%02d.%02d", min, sec, cent);
+//		}
+//		threadBufferGraphics[threadNumber].drawString(elapsedTimeString, 80, 25);
+//	}
 
-	/**
-	 * Draws current score on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param score
-	 *            Current score.
-	 */
-	public void drawScore(final Screen screen, final int score) {
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.setColor(Color.WHITE);
-		String scoreString = String.format("%04d", score);
-		backBufferGraphics.drawString(scoreString, screen.getWidth() - 60, 25);
-	}
-    /**
-	 * Draws level on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param level
-	 *            Current level.
-	 */
-	public void drawLevel(final Screen screen, final int level) {
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.setColor(Color.WHITE);
-		String scoreString = String.format("lv.%d", level);
-		backBufferGraphics.drawString(scoreString, 20, 25);
-	}
-	/**
-	 * Draws level on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param level
-	 *            Current level.
-	 * @param threadNumber
-	 *            Thread number for two player mode
-	 */
-	public void drawLevel(final Screen screen, final int level, final int threadNumber) {
-		threadBufferGraphics[threadNumber].setFont(fontRegular);
-		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
-		String scoreString = String.format("lv.%d", level);
-		threadBufferGraphics[threadNumber].drawString(scoreString, 20, 25);
-	}
+//	/**
+//
+//	 * Draws alert message on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param alertMessage
+//	 *            Alert message.
+//	 */
+//	public void drawAlertMessage(final Screen screen, final String alertMessage) {
+//		backBufferGraphics.setFont(fontRegular);
+//		backBufferGraphics.setColor(Color.RED);
+//		backBufferGraphics.drawString(alertMessage,
+//				(screen.getWidth() - fontRegularMetrics.stringWidth(alertMessage))/2, 65);
+//	}
 
-	/**
-	 * Draws current score on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param score
-	 *            Current score.
-	 * @param threadNumber
-	 *            Thread number for two player mode
-	 */
-	public void drawScore(final Screen screen, final int score, final int threadNumber) {
-		threadBufferGraphics[threadNumber].setFont(fontRegular);
-		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
-		String scoreString = String.format("%04d", score);
-		threadBufferGraphics[threadNumber].drawString(scoreString, screen.getWidth() - 60, 25);
-	}
+//	/**
+//
+//	 * Draws alert message on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param alertMessage
+//	 *            Alert message.
+//	 * @param threadNumber
+//	 *            Thread number for two player mode
+//	 */
+//	public void drawAlertMessage(final Screen screen, final String alertMessage, final int threadNumber) {
+//		threadBufferGraphics[threadNumber].setFont(fontRegular);
+//		threadBufferGraphics[threadNumber].setColor(Color.RED);
+//		threadBufferGraphics[threadNumber].drawString(alertMessage,
+//				(screen.getWidth() - fontRegularMetrics.stringWidth(alertMessage))/2, 65);
+//	}
 
-	/**
-	 * Draws elapsed time on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param elapsedTime
-	 *            Elapsed time.
-	 */
-	public void drawElapsedTime(final Screen screen, final int elapsedTime) {
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.setColor(Color.LIGHT_GRAY);
-
-		int cent = (elapsedTime % 1000)/10;
-		int seconds = elapsedTime / 1000;
-		int sec = seconds % 60;
-		int min = seconds / 60;
-
-        String elapsedTimeString;
-        if (min < 1){
-            elapsedTimeString = String.format("%d.%02d", sec, cent);
-        } else {
-            elapsedTimeString = String.format("%d:%02d.%02d", min, sec, cent);
-        }
-        backBufferGraphics.drawString(elapsedTimeString, 80, 25);
-    }
-
-	/**
-	 * Draws elapsed time on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param elapsedTime
-	 *            Elapsed time.
-	 * @param threadNumber
-	 *            Thread number for two player mode
-	 */
-	public void drawElapsedTime(final Screen screen, final int elapsedTime, final int threadNumber) {
-		threadBufferGraphics[threadNumber].setFont(fontRegular);
-		threadBufferGraphics[threadNumber].setColor(Color.LIGHT_GRAY);
-
-        int cent = (elapsedTime % 1000)/10;
-        int seconds = elapsedTime / 1000;
-        int sec = seconds % 60;
-        int min = seconds / 60;
-
-		String elapsedTimeString;
-		if (min < 1){
-			elapsedTimeString = String.format("%d.%02d", sec, cent);
-		} else {
-			elapsedTimeString = String.format("%d:%02d.%02d", min, sec, cent);
-		}
-		threadBufferGraphics[threadNumber].drawString(elapsedTimeString, 80, 25);
-	}
-
-	/**
-
-	 * Draws alert message on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param alertMessage
-	 *            Alert message.
-	 */
-	public void drawAlertMessage(final Screen screen, final String alertMessage) {
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.setColor(Color.RED);
-		backBufferGraphics.drawString(alertMessage,
-				(screen.getWidth() - fontRegularMetrics.stringWidth(alertMessage))/2, 65);
-	}
-
-	/**
-
-	 * Draws alert message on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param alertMessage
-	 *            Alert message.
-	 * @param threadNumber
-	 *            Thread number for two player mode
-	 */
-	public void drawAlertMessage(final Screen screen, final String alertMessage, final int threadNumber) {
-		threadBufferGraphics[threadNumber].setFont(fontRegular);
-		threadBufferGraphics[threadNumber].setColor(Color.RED);
-		threadBufferGraphics[threadNumber].drawString(alertMessage,
-				(screen.getWidth() - fontRegularMetrics.stringWidth(alertMessage))/2, 65);
-	}
-
-	/**
-
-	 * Draws number of remaining lives on screen.
-	 * 
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param lives
-	 *            Current lives.
-	 */
-	public void drawLives(final Screen screen, final int lives, final Ship.ShipType shipType) {
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
-		Ship dummyShip = ShipFactory.create(shipType, 0, 0);
-		for (int i = 0; i < lives; i++)
-			drawEntity(dummyShip, 40 + 35 * i, 10);
-	}
+//	/**
+//
+//	 * Draws number of remaining lives on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param lives
+//	 *            Current lives.
+//	 */
+//	public void drawLives(final Screen screen, final int lives, final Ship.ShipType shipType) {
+//		backBufferGraphics.setFont(fontRegular);
+//		backBufferGraphics.setColor(Color.WHITE);
+//		backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
+//		Ship dummyShip = ShipFactory.create(shipType, 0, 0);
+//		for (int i = 0; i < lives; i++)
+//			drawEntity(dummyShip, 40 + 35 * i, 10);
+//	}
 
 
-	/**
-	 * Draws number of remaining lives on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param lives
-	 *            Current lives.
-	 * @param threadNumber
-	 *            Thread number for two player mode
-	 */
-	public void drawLives(final Screen screen, final int lives, final Ship.ShipType shipType, final int threadNumber) {
-		threadBufferGraphics[threadNumber].setFont(fontRegular);
-		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
-		threadBufferGraphics[threadNumber].drawString(Integer.toString(lives), 20, 25);
-		Ship dummyShip = ShipFactory.create(shipType, 0, 0);
-		for (int i = 0; i < lives; i++)
-			drawEntity(dummyShip, 40 + 35 * i, 10, threadNumber);
-	}
+//	/**
+//	 * Draws number of remaining lives on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param lives
+//	 *            Current lives.
+//	 * @param threadNumber
+//	 *            Thread number for two player mode
+//	 */
+//	public void drawLives(final Screen screen, final int lives, final Ship.ShipType shipType, final int threadNumber) {
+//		threadBufferGraphics[threadNumber].setFont(fontRegular);
+//		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
+//		threadBufferGraphics[threadNumber].drawString(Integer.toString(lives), 20, 25);
+//		Ship dummyShip = ShipFactory.create(shipType, 0, 0);
+//		for (int i = 0; i < lives; i++)
+//			drawEntity(dummyShip, 40 + 35 * i, 10, threadNumber);
+//	}
 
-	/**
-	 * Draws launch trajectory on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param positionX
-	 *            X coordinate of the line.
-	 */
+//	/**
+//	 * Draws launch trajectory on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param positionX
+//	 *            X coordinate of the line.
+//	 */
+//
+//	public void drawLaunchTrajectory(final Screen screen, final int positionX) {
+//		backBufferGraphics.setColor(Color.DARK_GRAY);
+//		for (int i = 0; i < screen.getHeight() - 140; i += 20){
+//			backBufferGraphics.drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
+//		}
+//    }
+//	/**
+//	 * Draws launch trajectory on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param positionX
+//	 *            X coordinate of the line.
+//	 */
+//	public void drawLaunchTrajectory(final Screen screen, final int positionX,
+//									 final int threadNumber) {
+//		threadBufferGraphics[threadNumber].setColor(Color.DARK_GRAY);
+//		for (int i = 0; i < screen.getHeight() - 140; i += 20){
+//			threadBufferGraphics[threadNumber].drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
+//		}
+//	}
 
-	public void drawLaunchTrajectory(final Screen screen, final int positionX) {
-		backBufferGraphics.setColor(Color.DARK_GRAY);
-		for (int i = 0; i < screen.getHeight() - 140; i += 20){
-			backBufferGraphics.drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
-		}
-    }
-	/**
-	 * Draws launch trajectory on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param positionX
-	 *            X coordinate of the line.
-	 */
-	public void drawLaunchTrajectory(final Screen screen, final int positionX,
-									 final int threadNumber) {
-		threadBufferGraphics[threadNumber].setColor(Color.DARK_GRAY);
-		for (int i = 0; i < screen.getHeight() - 140; i += 20){
-			threadBufferGraphics[threadNumber].drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
-		}
-	}
+//	/**
+//	 * Draws a thick line from side to side of the screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param positionY
+//	 *            Y coordinate of the line.
+//	 */
+//	public void drawHorizontalLine(final Screen screen, final int positionY) {
+//		backBufferGraphics.setColor(Color.GREEN);
+//		backBufferGraphics.drawLine(0, positionY, screen.getWidth(), positionY);
+//		backBufferGraphics.drawLine(0, positionY + 1, screen.getWidth(),
+//				positionY + 1);
+//	}
 
-	/**
-	 * Draws a thick line from side to side of the screen.
-	 * 
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param positionY
-	 *            Y coordinate of the line.
-	 */
-	public void drawHorizontalLine(final Screen screen, final int positionY) {
-		backBufferGraphics.setColor(Color.GREEN);
-		backBufferGraphics.drawLine(0, positionY, screen.getWidth(), positionY);
-		backBufferGraphics.drawLine(0, positionY + 1, screen.getWidth(),
-				positionY + 1);
-	}
+//	/**
+//	 * Draws a thick line from side to side of the screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param positionY
+//	 *            Y coordinate of the line.
+//	 * @param threadNumber
+//	 *            Thread number for two player mode
+//	 */
+//	public void drawHorizontalLine(final Screen screen, final int positionY, final int threadNumber) {
+//		threadBufferGraphics[threadNumber].setColor(Color.GREEN);
+//		threadBufferGraphics[threadNumber].drawLine(0, positionY, screen.getWidth(), positionY);
+//		threadBufferGraphics[threadNumber].drawLine(0, positionY + 1, screen.getWidth(),
+//				positionY + 1);
+//	}
 
-	/**
-	 * Draws a thick line from side to side of the screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param positionY
-	 *            Y coordinate of the line.
-	 * @param threadNumber
-	 *            Thread number for two player mode
-	 */
-	public void drawHorizontalLine(final Screen screen, final int positionY, final int threadNumber) {
-		threadBufferGraphics[threadNumber].setColor(Color.GREEN);
-		threadBufferGraphics[threadNumber].drawLine(0, positionY, screen.getWidth(), positionY);
-		threadBufferGraphics[threadNumber].drawLine(0, positionY + 1, screen.getWidth(),
-				positionY + 1);
-	}
-
-	/**
-	 * Draws a thick line from side to side of the screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 */
-	public void drawVerticalLine(final Screen screen) {
-		backBufferGraphics.setColor(Color.GREEN);
-		backBufferGraphics.drawLine(screen.getWidth() /2  ,0,screen.getWidth() / 2,screen.getHeight());
-	}
+//	/**
+//	 * Draws a thick line from side to side of the screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 */
+//	public void drawVerticalLine(final Screen screen) {
+//		backBufferGraphics.setColor(Color.GREEN);
+//		backBufferGraphics.drawLine(screen.getWidth() /2  ,0,screen.getWidth() / 2,screen.getHeight());
+//	}
 
 //	/**
 //	 * Draws game title.
@@ -760,17 +760,17 @@ public class DrawManager {
 //		drawCenteredBigString(screen, titleString, screen.getHeight() / 5);
 //	}
 
-	public void drawGameTitle(final Screen screen) {
-		String titleString = "Invaders";
-		backBufferGraphics.setColor(Color.DARK_GRAY);
-		drawCenteredBigString(screen, titleString, screen.getHeight() / 2);
-	}
+//	public void drawGameTitle(final Screen screen) {
+//		String titleString = "Invaders";
+//		backBufferGraphics.setColor(Color.DARK_GRAY);
+//		drawCenteredBigString(screen, titleString, screen.getHeight() / 2);
+//	}
 
-	public void drawGameTitle(final Screen screen, final int threadNumber) {
-		String titleString = "Invaders";
-		threadBufferGraphics[threadNumber].setColor(Color.DARK_GRAY);
-		drawCenteredBigString(screen, titleString, screen.getHeight() / 2, threadNumber);
-	}
+//	public void drawGameTitle(final Screen screen, final int threadNumber) {
+//		String titleString = "Invaders";
+//		threadBufferGraphics[threadNumber].setColor(Color.DARK_GRAY);
+//		drawCenteredBigString(screen, titleString, screen.getHeight() / 2, threadNumber);
+//	}
 
 
 //	/**
@@ -833,105 +833,105 @@ public class DrawManager {
 
 
 
-	/**
-	 * Draws game results.
-	 * 
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param score
-	 *            Score obtained.
-	 * @param livesRemaining
-	 *            Lives remaining when finished.
-	 * @param shipsDestroyed
-	 *            Total ships destroyed.
-	 * @param accuracy
-	 *            Total accuracy.
-	 * @param isNewRecord
-	 *            If the score is a new high score.
-	 */
-	public void drawResults(final Screen screen, final int score,
-			final int livesRemaining, final int shipsDestroyed,
-			final double accuracy, final boolean isNewRecord, final int coinsEarned) {
-		String scoreString = String.format("score %04d", score);
-		String livesRemainingString = "lives remaining " + livesRemaining;
-		String shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
-		String accuracyString = String
-				.format("accuracy %.2f%%", accuracy);
-		String coinsEarnedString = "EARNED COIN " + coinsEarned;
+//	/**
+//	 * Draws game results.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param score
+//	 *            Score obtained.
+//	 * @param livesRemaining
+//	 *            Lives remaining when finished.
+//	 * @param shipsDestroyed
+//	 *            Total ships destroyed.
+//	 * @param accuracy
+//	 *            Total accuracy.
+//	 * @param isNewRecord
+//	 *            If the score is a new high score.
+//	 */
+//	public void drawResults(final Screen screen, final int score,
+//			final int livesRemaining, final int shipsDestroyed,
+//			final double accuracy, final boolean isNewRecord, final int coinsEarned) {
+//		String scoreString = String.format("score %04d", score);
+//		String livesRemainingString = "lives remaining " + livesRemaining;
+//		String shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
+//		String accuracyString = String
+//				.format("accuracy %.2f%%", accuracy);
+//		String coinsEarnedString = "EARNED COIN " + coinsEarned;
+//
+//		int height = isNewRecord ? 4 : 2;
+//
+//		backBufferGraphics.setColor(Color.WHITE);
+//		drawCenteredRegularString(screen, scoreString, screen.getHeight()
+//				/ height);
+//		drawCenteredRegularString(screen, livesRemainingString,
+//				screen.getHeight() / height + fontRegularMetrics.getHeight()
+//						* 2);
+//		drawCenteredRegularString(screen, shipsDestroyedString,
+//				screen.getHeight() / height + fontRegularMetrics.getHeight()
+//						* 4);
+//		drawCenteredRegularString(screen, accuracyString, screen.getHeight()
+//				/ height + fontRegularMetrics.getHeight() * 6);
+//		backBufferGraphics.setColor(Color.YELLOW);
+//		drawCenteredRegularString(screen, coinsEarnedString, screen.getHeight()
+//				/ height + fontRegularMetrics.getHeight() * 9);
+//	}
 
-		int height = isNewRecord ? 4 : 2;
-
-		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, scoreString, screen.getHeight()
-				/ height);
-		drawCenteredRegularString(screen, livesRemainingString,
-				screen.getHeight() / height + fontRegularMetrics.getHeight()
-						* 2);
-		drawCenteredRegularString(screen, shipsDestroyedString,
-				screen.getHeight() / height + fontRegularMetrics.getHeight()
-						* 4);
-		drawCenteredRegularString(screen, accuracyString, screen.getHeight()
-				/ height + fontRegularMetrics.getHeight() * 6);
-		backBufferGraphics.setColor(Color.YELLOW);
-		drawCenteredRegularString(screen, coinsEarnedString, screen.getHeight()
-				/ height + fontRegularMetrics.getHeight() * 9);
-	}
-
-	/**
-	 * Draws basic content of game over screen.
-	 * 
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param acceptsInput
-	 *            If the screen accepts input.
-	 * @param isNewRecord
-	 *            If the score is a new high score.
-	 */
-	public void drawGameOver(final Screen screen, final boolean acceptsInput,
-			final boolean isNewRecord) {
-		String gameOverString = "Game Over";
-		String continueOrExitString =
-				"Press Space to play again, Escape to exit";
-
-		int height = isNewRecord ? 4 : 2;
-
-		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, gameOverString, screen.getHeight()
-				/ height - fontBigMetrics.getHeight() * 2);
-
-		if (acceptsInput)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.GRAY);
-		drawCenteredRegularString(screen, continueOrExitString,
-				screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10);
-	}
+//	/**
+//	 * Draws basic content of game over screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param acceptsInput
+//	 *            If the screen accepts input.
+//	 * @param isNewRecord
+//	 *            If the score is a new high score.
+//	 */
+//	public void drawGameOver(final Screen screen, final boolean acceptsInput,
+//			final boolean isNewRecord) {
+//		String gameOverString = "Game Over";
+//		String continueOrExitString =
+//				"Press Space to play again, Escape to exit";
+//
+//		int height = isNewRecord ? 4 : 2;
+//
+//		backBufferGraphics.setColor(Color.GREEN);
+//		drawCenteredBigString(screen, gameOverString, screen.getHeight()
+//				/ height - fontBigMetrics.getHeight() * 2);
+//
+//		if (acceptsInput)
+//			backBufferGraphics.setColor(Color.GREEN);
+//		else
+//			backBufferGraphics.setColor(Color.GRAY);
+//		drawCenteredRegularString(screen, continueOrExitString,
+//				screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10);
+//	}
 
 
-	/**
-	 * Draws game over for 2player mode
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param height
-	 *            Height of the drawing.
-	 * @param threadNumber
-	 *            Thread number for two player mode
-	 */
-	public void drawInGameOver(final Screen screen,
-							 final int height, final int threadNumber) {
-		String gameOverString = "Game Over";
-
-		int rectWidth = screen.getWidth();
-		int rectHeight = screen.getHeight() / 6;
-		threadBufferGraphics[threadNumber].setColor(Color.BLACK);
-		threadBufferGraphics[threadNumber].fillRect(0, screen.getHeight() / 2 - rectHeight / 2, rectWidth, rectHeight);
-		threadBufferGraphics[threadNumber].setColor(Color.GREEN);
-
-		drawCenteredBigString(screen, gameOverString,
-				screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3, threadNumber);
-
-	}
+//	/**
+//	 * Draws game over for 2player mode
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param height
+//	 *            Height of the drawing.
+//	 * @param threadNumber
+//	 *            Thread number for two player mode
+//	 */
+//	public void drawInGameOver(final Screen screen,
+//							 final int height, final int threadNumber) {
+//		String gameOverString = "Game Over";
+//
+//		int rectWidth = screen.getWidth();
+//		int rectHeight = screen.getHeight() / 6;
+//		threadBufferGraphics[threadNumber].setColor(Color.BLACK);
+//		threadBufferGraphics[threadNumber].fillRect(0, screen.getHeight() / 2 - rectHeight / 2, rectWidth, rectHeight);
+//		threadBufferGraphics[threadNumber].setColor(Color.GREEN);
+//
+//		drawCenteredBigString(screen, gameOverString,
+//				screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3, threadNumber);
+//
+//	}
 
 //	/**
 //	 * Draws achievement screen title and instructions.
@@ -1403,8 +1403,8 @@ public class DrawManager {
 	 * @param threadNumber
 	 *            Thread number for two player mode
 	 */
-	public void drawCenteredBigString(final Screen screen, final String string,
-									  final int height, final int threadNumber) {
+	public static void drawCenteredBigString(final Screen screen, final String string,
+                                             final int height, final int threadNumber) {
 		threadBufferGraphics[threadNumber].setFont(fontBig);
 		threadBufferGraphics[threadNumber].drawString(string, screen.getWidth() / 2
 				- fontBigMetrics.stringWidth(string) / 2, height);
@@ -1423,380 +1423,380 @@ public class DrawManager {
 	 *            Checks if a bonus life is received.
 	 */
 
-	public void drawCountDown(final Screen screen, final int level,
-			final int number, final boolean bonusLife) {
-		int rectWidth = screen.getWidth();
-		int rectHeight = screen.getHeight() / 6;
-		backBufferGraphics.setColor(Color.BLACK);
-		backBufferGraphics.fillRect(0, screen.getHeight() / 2 - rectHeight / 2,
-				rectWidth, rectHeight);
-		backBufferGraphics.setColor(Color.GREEN);
-		if (number >= 4)
-			if (!bonusLife) {
-				drawCenteredBigString(screen, "Level " + level,
-						screen.getHeight() / 2
-						+ fontBigMetrics.getHeight() / 3);
-			} else {
-				drawCenteredBigString(screen, "Level " + level
-						+ " - Bonus life!",
-						screen.getHeight() / 2
-						+ fontBigMetrics.getHeight() / 3);
-			}
-		else if (number != 0)
-			drawCenteredBigString(screen, Integer.toString(number),
-					screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3);
-		else
-			drawCenteredBigString(screen, "GO!", screen.getHeight() / 2
-					+ fontBigMetrics.getHeight() / 3);
-	}
-   /**
-	 * Draws recorded highscores on screen.
-	 *
-	 * @param highScores
-	 *            Recorded highscores.
-   */
+//	public void drawCountDown(final Screen screen, final int level,
+//			final int number, final boolean bonusLife) {
+//		int rectWidth = screen.getWidth();
+//		int rectHeight = screen.getHeight() / 6;
+//		backBufferGraphics.setColor(Color.BLACK);
+//		backBufferGraphics.fillRect(0, screen.getHeight() / 2 - rectHeight / 2,
+//				rectWidth, rectHeight);
+//		backBufferGraphics.setColor(Color.GREEN);
+//		if (number >= 4)
+//			if (!bonusLife) {
+//				drawCenteredBigString(screen, "Level " + level,
+//						screen.getHeight() / 2
+//						+ fontBigMetrics.getHeight() / 3);
+//			} else {
+//				drawCenteredBigString(screen, "Level " + level
+//						+ " - Bonus life!",
+//						screen.getHeight() / 2
+//						+ fontBigMetrics.getHeight() / 3);
+//			}
+//		else if (number != 0)
+//			drawCenteredBigString(screen, Integer.toString(number),
+//					screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3);
+//		else
+//			drawCenteredBigString(screen, "GO!", screen.getHeight() / 2
+//					+ fontBigMetrics.getHeight() / 3);
+//	}
+//   /**
+//	 * Draws recorded highscores on screen.
+//	 *
+//	 * @param highScores
+//	 *            Recorded highscores.
+//   */
+//
+//	public void drawRecord(List<Score> highScores, final Screen screen) {
+//
+//		//add variable for highest score
+//		int highestScore = -1;
+//		String highestPlayer = "";
+//
+//		// find the highest score from highScores list
+//		for (Score entry : highScores) {
+//			if (entry.getScore() > highestScore) {
+//				highestScore = entry.getScore();
+//				highestPlayer = entry.getName();
+//			}
+//		}
+//
+//
+//		backBufferGraphics.setFont(fontRegular);
+//		backBufferGraphics.setColor(Color.LIGHT_GRAY);
+//		FontMetrics metrics = backBufferGraphics.getFontMetrics(fontRegular);
+//		String highScoreDisplay = highestPlayer + " " + highestScore;
+//
+//		backBufferGraphics.drawString(highScoreDisplay,
+//				screen.getWidth() - metrics.stringWidth(highScoreDisplay) - 76, 25);
+//	}
+//	/**
+//	 * Draws recorded highscores on screen.
+//	 *
+//	 * @param highScores
+//	 *            Recorded highscores.
+//	 * @param threadNumber
+//	 *            Thread number for two player mode
+//	 */
+//
+//	public void drawRecord(List<Score> highScores, final Screen screen, final int threadNumber) {
+//
+//		//add variable for highest score
+//		int highestScore = -1;
+//		String highestPlayer = "";
+//
+//		// find the highest score from highScores list
+//		for (Score entry : highScores) {
+//			if (entry.getScore() > highestScore) {
+//				highestScore = entry.getScore();
+//				highestPlayer = entry.getName();
+//			}
+//		}
+//
+//
+//		threadBufferGraphics[threadNumber].setFont(fontRegular);
+//		threadBufferGraphics[threadNumber].setColor(Color.LIGHT_GRAY);
+//		FontMetrics metrics = threadBufferGraphics[threadNumber].getFontMetrics(fontRegular);
+//		String highScoreDisplay = highestPlayer + " " + highestScore;
+//
+//		threadBufferGraphics[threadNumber].drawString(highScoreDisplay,
+//				screen.getWidth() - metrics.stringWidth(highScoreDisplay) - 76, 25);
+//	}
+//	/**
+//	 * Draws ReloadTimer on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param ship
+//	 *            player's ship.
+//     * @param remainingTime
+//	 *            remaining reload time.
+//	 */
+//	public void drawReloadTimer(final Screen screen,final Ship ship,final long remainingTime) {
+//		backBufferGraphics.setFont(fontRegular);
+//		backBufferGraphics.setColor(Color.WHITE);
+//		if(remainingTime > 0){
+//
+//			int shipX = ship.getPositionX();
+//			int shipY = ship.getPositionY();
+//			int shipWidth = ship.getWidth();
+//			int circleSize = 16;
+//			int startAngle = 90;
+//			int endAngle = 0;
+//			switch(Core.BASE_SHIP){
+//				case Ship.ShipType.VoidReaper:
+//					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
+//				    break;
+//				case Ship.ShipType.CosmicCruiser:
+//					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
+//				    break;
+//				case Ship.ShipType.StarDefender:
+//					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
+//					break;
+//				case Ship.ShipType.GalacticGuardian:
+//					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
+//					break;
+//
+//
+//			}
+//
+//			backBufferGraphics.fillArc(shipX + shipWidth/2 - circleSize/2, shipY - 3*circleSize/2,
+//					circleSize, circleSize, startAngle, endAngle);
+//		}
+//	}
+//	/**
+//	 * Draws ReloadTimer on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param ship
+//	 *            player's ship.
+//	 * @param remainingTime
+//	 *            remaining reload time.
+//	 * @param threadNumber
+//	 *            Thread number for two player mode
+//	 */
+//	public void drawReloadTimer(final Screen screen,final Ship ship,final long remainingTime, final int threadNumber) {
+//		threadBufferGraphics[threadNumber].setFont(fontRegular);
+//		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
+//		if(remainingTime > 0){
+//
+//			int shipX = ship.getPositionX();
+//			int shipY = ship.getPositionY();
+//			int shipWidth = ship.getWidth();
+//			int circleSize = 16;
+//			int startAngle = 90;
+//			int endAngle = 0;
+//			switch(Core.BASE_SHIP){
+//				case Ship.ShipType.VoidReaper:
+//					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
+//					break;
+//				case Ship.ShipType.CosmicCruiser:
+//					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
+//					break;
+//				case Ship.ShipType.StarDefender:
+//					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
+//					break;
+//				case Ship.ShipType.GalacticGuardian:
+//					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
+//					break;
+//			}
+//			threadBufferGraphics[threadNumber].fillArc(shipX + shipWidth/2 - circleSize/2, shipY - 3*circleSize/2,
+//					circleSize, circleSize, startAngle, endAngle);
+//		}
+//	}
 
-	public void drawRecord(List<Score> highScores, final Screen screen) {
+//  /**
+//	 * Draws Combo on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param combo
+//	 *            Number of enemies killed in a row.
+//	 */
+//	public void drawCombo(final Screen screen, final int combo) {
+//		backBufferGraphics.setFont(fontRegular);
+//		backBufferGraphics.setColor(Color.WHITE);
+//		if (combo >= 2) {
+//			String comboString = String.format("Combo %03d", combo);
+//			backBufferGraphics.drawString(comboString, screen.getWidth() - 100, 85);
+//		}
+//	}
+//	/**
+//	 * Draws Combo on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param combo
+//	 *            Number of enemies killed in a row.
+//	 * @param threadNumber
+//	 * 			  Thread number for two player mode
+//	 */
+//	public void drawCombo(final Screen screen, final int combo, final int threadNumber) {
+//		threadBufferGraphics[threadNumber].setFont(fontRegular);
+//		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
+//		if (combo >= 2) {
+//			String comboString = String.format("Combo %03d", combo);
+//			threadBufferGraphics[threadNumber].drawString(comboString, screen.getWidth() - 100, 85);
+//		}
+//	}
 
-		//add variable for highest score
-		int highestScore = -1;
-		String highestPlayer = "";
+//	/**
+//	 * Countdown to game start.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param level
+//	 *            Game difficulty level.
+//	 * @param number
+//	 *            Countdown number.
+//	 * @param bonusLife
+//	 *            Checks if a bonus life is received.
+//	 * @param threadNumber
+//	 *            Thread number for two player mode
+//	 */
+//	public void drawCountDown(final Screen screen, final int level,
+//							  final int number, final boolean bonusLife, final int threadNumber) {
+//		int rectWidth = screen.getWidth();
+//		int rectHeight = screen.getHeight() / 6;
+//		threadBufferGraphics[threadNumber].setColor(Color.BLACK);
+//		threadBufferGraphics[threadNumber].fillRect(0, screen.getHeight() / 2 - rectHeight / 2,
+//				rectWidth, rectHeight);
+//		threadBufferGraphics[threadNumber].setColor(Color.GREEN);
+//		if (number >= 4)
+//			if (!bonusLife) {
+//				drawCenteredBigString(screen, "Level " + level,
+//						screen.getHeight() / 2
+//								+ fontBigMetrics.getHeight() / 3, threadNumber);
+//			} else {
+//				drawCenteredBigString(screen, "Level " + level
+//								+ " - Bonus life!",
+//						screen.getHeight() / 2
+//								+ fontBigMetrics.getHeight() / 3, threadNumber);
+//			}
+//		else if (number != 0)
+//			drawCenteredBigString(screen, Integer.toString(number),
+//					screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3, threadNumber);
+//		else
+//			drawCenteredBigString(screen, "GO!", screen.getHeight() / 2
+//					+ fontBigMetrics.getHeight() / 3, threadNumber);
+//	}
 
-		// find the highest score from highScores list
-		for (Score entry : highScores) {
-			if (entry.getScore() > highestScore) {
-				highestScore = entry.getScore();
-				highestPlayer = entry.getName();
-			}
-		}
+//	/**
+//	 * Draws intermediate aggregation on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param maxCombo
+//	 *            Value of maxCombo.
+//	 * @param elapsedTime
+//	 *            Value of elapsedTime.
+//	 * @param lapTime
+//	 *            Value of lapTime/prevTime.
+//	 * @param score
+//	 *            Value of score/prevScore.
+//	 * @param tempScore
+//	 *            Value of tempScore.
+//	 */
+//	public void interAggre(final Screen screen, final int level, final int maxCombo,
+//						   final int elapsedTime, final int lapTime,
+//						   final int score, final int tempScore) {
+//
+//		int prevTime = elapsedTime - lapTime;
+//		int prevScore = score - tempScore;
+//
+//		int pcent = (prevTime % 1000)/10;
+//		int pseconds = prevTime / 1000;
+//		int psec = pseconds % 60;
+//		int pmin = pseconds / 60;
+//
+//		String timeString;
+//		if (pmin < 1){
+//			timeString = String.format("Elapsed Time: %d.%02d", psec, pcent);
+//		} else {
+//			timeString = String.format("Elapsed Time: %d:%02d.%02d", pmin, psec, pcent);
+//		}
+//
+//		String levelString = String.format("Statistics at Level %d", level);
+//		String comboString = String.format("MAX COMBO: %03d", maxCombo);
+//		String scoreString = String.format("Scores earned: %04d", prevScore);
+//
+//		backBufferGraphics.setFont(fontRegular);
+//		backBufferGraphics.setColor(Color.GREEN);
+//		backBufferGraphics.drawString(levelString,
+//				(screen.getWidth() - fontRegularMetrics.stringWidth(levelString))/2,
+//				5*screen.getHeight()/7);
+//		backBufferGraphics.setColor(Color.WHITE);
+//		backBufferGraphics.drawString(comboString,
+//			(screen.getWidth() - fontRegularMetrics.stringWidth(comboString))/2,
+//				5*screen.getHeight()/7 + 21);
+//		backBufferGraphics.drawString(timeString,
+//						(screen.getWidth() - fontRegularMetrics.stringWidth(timeString))/2,
+//				5*screen.getHeight()/7 + 42);
+//		backBufferGraphics.drawString(scoreString,
+//				(screen.getWidth() - fontRegularMetrics.stringWidth(scoreString))/2,
+//				5*screen.getHeight()/7 + 63);
+//		}
 
+//	/**
+//	 * Draws intermediate aggregation on screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param maxCombo
+//	 *            Value of maxCombo.
+//	 * @param elapsedTime
+//	 *            Value of elapsedTime.
+//	 * @param lapTime
+//	 *            Value of lapTime/prevTime.
+//	 * @param score
+//	 *            Value of score/prevScore.
+//	 * @param tempScore
+//	 *            Value of tempScore.
+//	 * @param threadNumber
+//	 * 			  Thread number for two player mode
+//	 */
+//	public void interAggre(final Screen screen, final int level, final int maxCombo,
+//						   final int elapsedTime, final int lapTime,
+//						   final int score, final int tempScore, final int threadNumber) {
+//
+//		int prevTime = elapsedTime - lapTime;
+//		int prevScore = score - tempScore;
+//
+//		int pcent = (prevTime % 1000)/10;
+//		int pseconds = prevTime / 1000;
+//		int psec = pseconds % 60;
+//		int pmin = pseconds / 60;
+//
+//		String timeString;
+//		if (pmin < 1){
+//			timeString = String.format("Elapsed Time: %d.%02d", psec, pcent);
+//		} else {
+//			timeString = String.format("Elapsed Time: %d:%02d.%02d", pmin, psec, pcent);
+//		}
+//
+//		String levelString = String.format("Statistics at Level %d", level);
+//		String comboString = String.format("MAX COMBO: %03d", maxCombo);
+//		String scoreString = String.format("Scores earned: %04d", prevScore);
+//
+//		threadBufferGraphics[threadNumber].setFont(fontRegular);
+//		threadBufferGraphics[threadNumber].setColor(Color.GREEN);
+//		threadBufferGraphics[threadNumber].drawString(levelString,
+//				(screen.getWidth() - fontRegularMetrics.stringWidth(levelString))/2,
+//				5*screen.getHeight()/7);
+//		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
+//		threadBufferGraphics[threadNumber].drawString(comboString,
+//				(screen.getWidth() - fontRegularMetrics.stringWidth(comboString))/2,
+//				5*screen.getHeight()/7 + 21);
+//		threadBufferGraphics[threadNumber].drawString(timeString,
+//				(screen.getWidth() - fontRegularMetrics.stringWidth(timeString))/2,
+//				5*screen.getHeight()/7 + 42);
+//		threadBufferGraphics[threadNumber].drawString(scoreString,
+//				(screen.getWidth() - fontRegularMetrics.stringWidth(scoreString))/2,
+//				5*screen.getHeight()/7 + 63);
+//	}
 
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.setColor(Color.LIGHT_GRAY);
-		FontMetrics metrics = backBufferGraphics.getFontMetrics(fontRegular);
-		String highScoreDisplay = highestPlayer + " " + highestScore;
-
-		backBufferGraphics.drawString(highScoreDisplay,
-				screen.getWidth() - metrics.stringWidth(highScoreDisplay) - 76, 25);
-	}
-	/**
-	 * Draws recorded highscores on screen.
-	 *
-	 * @param highScores
-	 *            Recorded highscores.
-	 * @param threadNumber
-	 *            Thread number for two player mode
-	 */
-
-	public void drawRecord(List<Score> highScores, final Screen screen, final int threadNumber) {
-
-		//add variable for highest score
-		int highestScore = -1;
-		String highestPlayer = "";
-
-		// find the highest score from highScores list
-		for (Score entry : highScores) {
-			if (entry.getScore() > highestScore) {
-				highestScore = entry.getScore();
-				highestPlayer = entry.getName();
-			}
-		}
-
-
-		threadBufferGraphics[threadNumber].setFont(fontRegular);
-		threadBufferGraphics[threadNumber].setColor(Color.LIGHT_GRAY);
-		FontMetrics metrics = threadBufferGraphics[threadNumber].getFontMetrics(fontRegular);
-		String highScoreDisplay = highestPlayer + " " + highestScore;
-
-		threadBufferGraphics[threadNumber].drawString(highScoreDisplay,
-				screen.getWidth() - metrics.stringWidth(highScoreDisplay) - 76, 25);
-	}
-	/**
-	 * Draws ReloadTimer on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param ship
-	 *            player's ship.
-     * @param remainingTime
-	 *            remaining reload time.
-	 */
-	public void drawReloadTimer(final Screen screen,final Ship ship,final long remainingTime) {
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.setColor(Color.WHITE);
-		if(remainingTime > 0){
-
-			int shipX = ship.getPositionX();
-			int shipY = ship.getPositionY();
-			int shipWidth = ship.getWidth();
-			int circleSize = 16;
-			int startAngle = 90;
-			int endAngle = 0;
-			switch(Core.BASE_SHIP){
-				case Ship.ShipType.VoidReaper:
-					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
-				    break;
-				case Ship.ShipType.CosmicCruiser:
-					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
-				    break;
-				case Ship.ShipType.StarDefender:
-					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
-					break;
-				case Ship.ShipType.GalacticGuardian:
-					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
-					break;
-
-
-			}
-
-			backBufferGraphics.fillArc(shipX + shipWidth/2 - circleSize/2, shipY - 3*circleSize/2,
-					circleSize, circleSize, startAngle, endAngle);
-		}
-	}
-	/**
-	 * Draws ReloadTimer on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param ship
-	 *            player's ship.
-	 * @param remainingTime
-	 *            remaining reload time.
-	 * @param threadNumber
-	 *            Thread number for two player mode
-	 */
-	public void drawReloadTimer(final Screen screen,final Ship ship,final long remainingTime, final int threadNumber) {
-		threadBufferGraphics[threadNumber].setFont(fontRegular);
-		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
-		if(remainingTime > 0){
-
-			int shipX = ship.getPositionX();
-			int shipY = ship.getPositionY();
-			int shipWidth = ship.getWidth();
-			int circleSize = 16;
-			int startAngle = 90;
-			int endAngle = 0;
-			switch(Core.BASE_SHIP){
-				case Ship.ShipType.VoidReaper:
-					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
-					break;
-				case Ship.ShipType.CosmicCruiser:
-					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
-					break;
-				case Ship.ShipType.StarDefender:
-					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
-					break;
-				case Ship.ShipType.GalacticGuardian:
-					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
-					break;
-			}
-			threadBufferGraphics[threadNumber].fillArc(shipX + shipWidth/2 - circleSize/2, shipY - 3*circleSize/2,
-					circleSize, circleSize, startAngle, endAngle);
-		}
-	}
-
-  /**
-	 * Draws Combo on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param combo
-	 *            Number of enemies killed in a row.
-	 */
-	public void drawCombo(final Screen screen, final int combo) {
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.setColor(Color.WHITE);
-		if (combo >= 2) {
-			String comboString = String.format("Combo %03d", combo);
-			backBufferGraphics.drawString(comboString, screen.getWidth() - 100, 85);
-		}
-	}
-	/**
-	 * Draws Combo on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param combo
-	 *            Number of enemies killed in a row.
-	 * @param threadNumber
-	 * 			  Thread number for two player mode
-	 */
-	public void drawCombo(final Screen screen, final int combo, final int threadNumber) {
-		threadBufferGraphics[threadNumber].setFont(fontRegular);
-		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
-		if (combo >= 2) {
-			String comboString = String.format("Combo %03d", combo);
-			threadBufferGraphics[threadNumber].drawString(comboString, screen.getWidth() - 100, 85);
-		}
-	}
-
-	/**
-	 * Countdown to game start.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param level
-	 *            Game difficulty level.
-	 * @param number
-	 *            Countdown number.
-	 * @param bonusLife
-	 *            Checks if a bonus life is received.
-	 * @param threadNumber
-	 *            Thread number for two player mode
-	 */
-	public void drawCountDown(final Screen screen, final int level,
-							  final int number, final boolean bonusLife, final int threadNumber) {
-		int rectWidth = screen.getWidth();
-		int rectHeight = screen.getHeight() / 6;
-		threadBufferGraphics[threadNumber].setColor(Color.BLACK);
-		threadBufferGraphics[threadNumber].fillRect(0, screen.getHeight() / 2 - rectHeight / 2,
-				rectWidth, rectHeight);
-		threadBufferGraphics[threadNumber].setColor(Color.GREEN);
-		if (number >= 4)
-			if (!bonusLife) {
-				drawCenteredBigString(screen, "Level " + level,
-						screen.getHeight() / 2
-								+ fontBigMetrics.getHeight() / 3, threadNumber);
-			} else {
-				drawCenteredBigString(screen, "Level " + level
-								+ " - Bonus life!",
-						screen.getHeight() / 2
-								+ fontBigMetrics.getHeight() / 3, threadNumber);
-			}
-		else if (number != 0)
-			drawCenteredBigString(screen, Integer.toString(number),
-					screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3, threadNumber);
-		else
-			drawCenteredBigString(screen, "GO!", screen.getHeight() / 2
-					+ fontBigMetrics.getHeight() / 3, threadNumber);
-	}
-
-	/**
-	 * Draws intermediate aggregation on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param maxCombo
-	 *            Value of maxCombo.
-	 * @param elapsedTime
-	 *            Value of elapsedTime.
-	 * @param lapTime
-	 *            Value of lapTime/prevTime.
-	 * @param score
-	 *            Value of score/prevScore.
-	 * @param tempScore
-	 *            Value of tempScore.
-	 */
-	public void interAggre(final Screen screen, final int level, final int maxCombo,
-						   final int elapsedTime, final int lapTime,
-						   final int score, final int tempScore) {
-
-		int prevTime = elapsedTime - lapTime;
-		int prevScore = score - tempScore;
-
-		int pcent = (prevTime % 1000)/10;
-		int pseconds = prevTime / 1000;
-		int psec = pseconds % 60;
-		int pmin = pseconds / 60;
-
-		String timeString;
-		if (pmin < 1){
-			timeString = String.format("Elapsed Time: %d.%02d", psec, pcent);
-		} else {
-			timeString = String.format("Elapsed Time: %d:%02d.%02d", pmin, psec, pcent);
-		}
-
-		String levelString = String.format("Statistics at Level %d", level);
-		String comboString = String.format("MAX COMBO: %03d", maxCombo);
-		String scoreString = String.format("Scores earned: %04d", prevScore);
-
-		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.setColor(Color.GREEN);
-		backBufferGraphics.drawString(levelString,
-				(screen.getWidth() - fontRegularMetrics.stringWidth(levelString))/2,
-				5*screen.getHeight()/7);
-		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString(comboString,
-			(screen.getWidth() - fontRegularMetrics.stringWidth(comboString))/2,
-				5*screen.getHeight()/7 + 21);
-		backBufferGraphics.drawString(timeString,
-						(screen.getWidth() - fontRegularMetrics.stringWidth(timeString))/2,
-				5*screen.getHeight()/7 + 42);
-		backBufferGraphics.drawString(scoreString,
-				(screen.getWidth() - fontRegularMetrics.stringWidth(scoreString))/2,
-				5*screen.getHeight()/7 + 63);
-		}
-
-	/**
-	 * Draws intermediate aggregation on screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param maxCombo
-	 *            Value of maxCombo.
-	 * @param elapsedTime
-	 *            Value of elapsedTime.
-	 * @param lapTime
-	 *            Value of lapTime/prevTime.
-	 * @param score
-	 *            Value of score/prevScore.
-	 * @param tempScore
-	 *            Value of tempScore.
-	 * @param threadNumber
-	 * 			  Thread number for two player mode
-	 */
-	public void interAggre(final Screen screen, final int level, final int maxCombo,
-						   final int elapsedTime, final int lapTime,
-						   final int score, final int tempScore, final int threadNumber) {
-
-		int prevTime = elapsedTime - lapTime;
-		int prevScore = score - tempScore;
-
-		int pcent = (prevTime % 1000)/10;
-		int pseconds = prevTime / 1000;
-		int psec = pseconds % 60;
-		int pmin = pseconds / 60;
-
-		String timeString;
-		if (pmin < 1){
-			timeString = String.format("Elapsed Time: %d.%02d", psec, pcent);
-		} else {
-			timeString = String.format("Elapsed Time: %d:%02d.%02d", pmin, psec, pcent);
-		}
-
-		String levelString = String.format("Statistics at Level %d", level);
-		String comboString = String.format("MAX COMBO: %03d", maxCombo);
-		String scoreString = String.format("Scores earned: %04d", prevScore);
-
-		threadBufferGraphics[threadNumber].setFont(fontRegular);
-		threadBufferGraphics[threadNumber].setColor(Color.GREEN);
-		threadBufferGraphics[threadNumber].drawString(levelString,
-				(screen.getWidth() - fontRegularMetrics.stringWidth(levelString))/2,
-				5*screen.getHeight()/7);
-		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
-		threadBufferGraphics[threadNumber].drawString(comboString,
-				(screen.getWidth() - fontRegularMetrics.stringWidth(comboString))/2,
-				5*screen.getHeight()/7 + 21);
-		threadBufferGraphics[threadNumber].drawString(timeString,
-				(screen.getWidth() - fontRegularMetrics.stringWidth(timeString))/2,
-				5*screen.getHeight()/7 + 42);
-		threadBufferGraphics[threadNumber].drawString(scoreString,
-				(screen.getWidth() - fontRegularMetrics.stringWidth(scoreString))/2,
-				5*screen.getHeight()/7 + 63);
-	}
-
-	/**
-	 * Draws the game setting screen.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 */
-	public void drawGameSetting(final Screen screen) {
-		String titleString = "Game Setting";
-
-		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, titleString, screen.getHeight() / 100 * 25);
-	}
+//	/**
+//	 * Draws the game setting screen.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 */
+//	public void drawGameSetting(final Screen screen) {
+//		String titleString = "Game Setting";
+//
+//		backBufferGraphics.setColor(Color.GREEN);
+//		drawCenteredBigString(screen, titleString, screen.getHeight() / 100 * 25);
+//	}
 
 //	public void drawSettingsScreen(final Screen screen) {
 //		String settingsTitle = "Settings"; // 타이틀
@@ -1873,94 +1873,94 @@ public class DrawManager {
 
 
 
-	/**
-	 * Draws the game setting row.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param selectedRow
-	 *            Selected row.
-	 *
-	 * @author <a href="mailto:dayeon.dev@gmail.com">Dayeon Oh</a>
-	 *
-	 */
-	public void drawGameSettingRow(final Screen screen, final int selectedRow) {
-		int y = 0;
-		int height = 0;
-		int screenHeight = screen.getHeight();
+//	/**
+//	 * Draws the game setting row.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param selectedRow
+//	 *            Selected row.
+//	 *
+//	 * @author <a href="mailto:dayeon.dev@gmail.com">Dayeon Oh</a>
+//	 *
+//	 */
+//	public void drawGameSettingRow(final Screen screen, final int selectedRow) {
+//		int y = 0;
+//		int height = 0;
+//		int screenHeight = screen.getHeight();
+//
+//		if (selectedRow == 0) {
+//			y = screenHeight / 100 * 35;
+//			height = screen.getHeight() / 100 * 28;
+//		} else if (selectedRow == 1) {
+//			y = screenHeight / 100 * 63;
+//			height = screen.getHeight() / 100 * 18;
+//		} else if (selectedRow == 2) {
+//			y = screenHeight / 100 * 92;
+//			height = screen.getHeight() / 100 * 10;
+//		}
+//
+//		backBufferGraphics.setColor(Color.DARK_GRAY);
+//		backBufferGraphics.fillRect(0, y, screen.getWidth(), height);
+//	}
 
-		if (selectedRow == 0) {
-			y = screenHeight / 100 * 35;
-			height = screen.getHeight() / 100 * 28;
-		} else if (selectedRow == 1) {
-			y = screenHeight / 100 * 63;
-			height = screen.getHeight() / 100 * 18;
-		} else if (selectedRow == 2) {
-			y = screenHeight / 100 * 92;
-			height = screen.getHeight() / 100 * 10;
-		}
-
-		backBufferGraphics.setColor(Color.DARK_GRAY);
-		backBufferGraphics.fillRect(0, y, screen.getWidth(), height);
-	}
-
-	/**
-	 * Draws the game setting elements.
-	 *
-	 * @param screen
-	 *            Screen to draw on.
-	 * @param selectedRow
-	 *            Selected row.
-	 * @param isMultiPlayer
-	 *            If the game is multiplayer.
-	 * @param name1
-	 *            Player 1 name.
-	 * @param name2
-	 *            Player 2 name.
-	 * @param difficultyLevel
-	 *            Difficulty level.
-	 *
-	 * @author <a href="mailto:dayeon.dev@gmail.com">Dayeon Oh</a>
-	 *
-	 */
-	public void drawGameSettingElements(final Screen screen, final int selectedRow,
-		final boolean isMultiPlayer, final String name1, final String name2, final int difficultyLevel) {
-		String spaceString = " ";
-		String player1String = "1 Player";
-		String player2String = "2 Player";
-		String levelEasyString = "Easy";
-		String levelNormalString = "Normal";
-		String levelHardString = "Hard";
-		String startString = "Start";
-
-		if (!isMultiPlayer) backBufferGraphics.setColor(Color.GREEN);
-		else backBufferGraphics.setColor(Color.WHITE);
-
-		drawCenteredRegularString(screen, player1String + spaceString.repeat(40), screen.getHeight() / 100 * 43);
-		drawCenteredRegularString(screen, name1 + spaceString.repeat(40), screen.getHeight() / 100 * 58);
-
-		if (!isMultiPlayer) backBufferGraphics.setColor(Color.WHITE);
-		else backBufferGraphics.setColor(Color.GREEN);
-
-		drawCenteredRegularString(screen, spaceString.repeat(40) + player2String, screen.getHeight() / 100 * 43);
-		drawCenteredRegularString(screen, spaceString.repeat(40) + name2, screen.getHeight() / 100 * 58);
-
-		if (difficultyLevel==0) backBufferGraphics.setColor(Color.GREEN);
-		else backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, levelEasyString + spaceString.repeat(60), screen.getHeight() / 100 * 73);
-
-		if (difficultyLevel==1) backBufferGraphics.setColor(Color.GREEN);
-		else backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, levelNormalString, screen.getHeight() / 100 * 73);
-
-		if (difficultyLevel==2) backBufferGraphics.setColor(Color.GREEN);
-		else backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, spaceString.repeat(60) + levelHardString, screen.getHeight() / 100 * 73);
-
-		if (selectedRow == 2) backBufferGraphics.setColor(Color.GREEN);
-		else backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, startString, screen.getHeight() / 100 * 98);
-	}
+//	/**
+//	 * Draws the game setting elements.
+//	 *
+//	 * @param screen
+//	 *            Screen to draw on.
+//	 * @param selectedRow
+//	 *            Selected row.
+//	 * @param isMultiPlayer
+//	 *            If the game is multiplayer.
+//	 * @param name1
+//	 *            Player 1 name.
+//	 * @param name2
+//	 *            Player 2 name.
+//	 * @param difficultyLevel
+//	 *            Difficulty level.
+//	 *
+//	 * @author <a href="mailto:dayeon.dev@gmail.com">Dayeon Oh</a>
+//	 *
+//	 */
+//	public void drawGameSettingElements(final Screen screen, final int selectedRow,
+//		final boolean isMultiPlayer, final String name1, final String name2, final int difficultyLevel) {
+//		String spaceString = " ";
+//		String player1String = "1 Player";
+//		String player2String = "2 Player";
+//		String levelEasyString = "Easy";
+//		String levelNormalString = "Normal";
+//		String levelHardString = "Hard";
+//		String startString = "Start";
+//
+//		if (!isMultiPlayer) backBufferGraphics.setColor(Color.GREEN);
+//		else backBufferGraphics.setColor(Color.WHITE);
+//
+//		drawCenteredRegularString(screen, player1String + spaceString.repeat(40), screen.getHeight() / 100 * 43);
+//		drawCenteredRegularString(screen, name1 + spaceString.repeat(40), screen.getHeight() / 100 * 58);
+//
+//		if (!isMultiPlayer) backBufferGraphics.setColor(Color.WHITE);
+//		else backBufferGraphics.setColor(Color.GREEN);
+//
+//		drawCenteredRegularString(screen, spaceString.repeat(40) + player2String, screen.getHeight() / 100 * 43);
+//		drawCenteredRegularString(screen, spaceString.repeat(40) + name2, screen.getHeight() / 100 * 58);
+//
+//		if (difficultyLevel==0) backBufferGraphics.setColor(Color.GREEN);
+//		else backBufferGraphics.setColor(Color.WHITE);
+//		drawCenteredRegularString(screen, levelEasyString + spaceString.repeat(60), screen.getHeight() / 100 * 73);
+//
+//		if (difficultyLevel==1) backBufferGraphics.setColor(Color.GREEN);
+//		else backBufferGraphics.setColor(Color.WHITE);
+//		drawCenteredRegularString(screen, levelNormalString, screen.getHeight() / 100 * 73);
+//
+//		if (difficultyLevel==2) backBufferGraphics.setColor(Color.GREEN);
+//		else backBufferGraphics.setColor(Color.WHITE);
+//		drawCenteredRegularString(screen, spaceString.repeat(60) + levelHardString, screen.getHeight() / 100 * 73);
+//
+//		if (selectedRow == 2) backBufferGraphics.setColor(Color.GREEN);
+//		else backBufferGraphics.setColor(Color.WHITE);
+//		drawCenteredRegularString(screen, startString, screen.getHeight() / 100 * 98);
+//	}
 
 //	/**
 //	 *  draw shop

@@ -3,6 +3,7 @@ package screen;
 import engine.Core;
 import engine.GameSettings;
 import engine.GameState;
+import engine.drawmanager.TwoPlayerDrawManager;
 import entity.Wallet;
 
 import java.util.concurrent.ExecutorService;
@@ -88,8 +89,8 @@ public class TwoPlayerScreen extends Screen {
      */
     private void draw() {
         drawManager.initDrawing(this);
-        drawManager.mergeDrawing(this);
-        drawManager.drawVerticalLine(this);
+        TwoPlayerDrawManager.mergeDrawing(this);
+        TwoPlayerDrawManager.drawVerticalLine(this);
         drawManager.completeDrawing(this);
     }
 
