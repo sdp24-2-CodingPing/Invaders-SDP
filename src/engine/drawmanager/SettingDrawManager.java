@@ -7,7 +7,7 @@ import screen.Screen;
 import java.awt.*;
 
 /**
- * Manages drawing for the Setting screen.
+ * Manages drawing for the Setting Screen.
  */
 public class SettingDrawManager extends DrawManager {
 

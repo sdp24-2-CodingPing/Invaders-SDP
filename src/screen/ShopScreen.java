@@ -163,7 +163,6 @@ public class ShopScreen extends Screen {
     private void draw() {
         drawManager.initDrawing(this);
 
-
         ShopDrawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown);
 
         drawManager.completeDrawing(this);

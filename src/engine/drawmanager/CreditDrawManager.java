@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * Manages drawing for the Credit screen.
+ * Manages drawing for the Credit Screen.
  */
 public class CreditDrawManager extends DrawManager {
 

@@ -6,7 +6,7 @@ import screen.Screen;
 import java.awt.*;
 
 /**
- * Manages drawing for the Stop screen.
+ * Manages drawing for the Stop Screen.
  */
 public class StopDrawManager extends DrawManager {
 

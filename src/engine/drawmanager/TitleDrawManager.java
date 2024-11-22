@@ -6,7 +6,7 @@ import screen.Screen;
 import java.awt.*;
 
 /**
- * Manages drawing for the Title screen.
+ * Manages drawing for the Title Screen.
  */
 public class TitleDrawManager extends DrawManager {
 

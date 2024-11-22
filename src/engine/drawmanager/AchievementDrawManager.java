@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * Manages drawing for the Achievement screen.
+ * Manages drawing for the Achievement Screen.
  */
 public class AchievementDrawManager extends DrawManager {
 

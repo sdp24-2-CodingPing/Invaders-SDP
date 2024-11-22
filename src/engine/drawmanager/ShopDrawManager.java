@@ -12,11 +12,11 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Manages drawing for the Shop screen.
+ * Manages drawing for the Shop Screen.
  */
 public class ShopDrawManager extends DrawManager {
 
-    /** For Shopscreen image */
+    /** For ShopScreen image */
     private static BufferedImage img_additionallife;
     private static BufferedImage img_bulletspeed;
     private static BufferedImage img_coin;
@@ -36,6 +36,7 @@ public class ShopDrawManager extends DrawManager {
         } catch (IOException e) {
             logger.info("Shop image loading failed");
         }
+
     }
 
 
@@ -56,7 +57,6 @@ public class ShopDrawManager extends DrawManager {
 
         String shopString = "Shop";
         int shopStringY = Math.round(screen.getHeight() * 0.15f);
-
 
         String coinString = ":  " + wallet.getCoin();
         String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
