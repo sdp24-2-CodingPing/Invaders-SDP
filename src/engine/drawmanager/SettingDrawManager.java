@@ -1,7 +1,6 @@
 package engine.drawmanager;
 
 import engine.DrawManager;
-import entity.Ship;
 import entity.player.PlayerShip;
 import screen.Screen;
 
