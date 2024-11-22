@@ -12,9 +12,6 @@ import java.util.List;
  */
 public class AchievementDrawManager extends DrawManager {
 
-    public AchievementDrawManager() {
-        super();
-    }
 
     /**
      * Draws achievement screen title and instructions.
