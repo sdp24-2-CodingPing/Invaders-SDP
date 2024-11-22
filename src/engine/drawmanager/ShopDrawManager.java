@@ -26,7 +26,7 @@ public class ShopDrawManager extends DrawManager {
      * @param max_alertcooldown
      * 				cooldown for max level alert
      */
-    public void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown) {
+    public static void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown) {
 
         String shopString = "Shop";
         int shopStringY = Math.round(screen.getHeight() * 0.15f);

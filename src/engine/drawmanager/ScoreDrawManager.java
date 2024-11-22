@@ -17,8 +17,8 @@ public class ScoreDrawManager extends DrawManager {
      * @param isNewRecord
      *            If the score is a new high score.
      */
-    public void drawGameOver(final Screen screen, final boolean acceptsInput,
-                             final boolean isNewRecord) {
+    public static void drawGameOver(final Screen screen, final boolean acceptsInput,
+                                    final boolean isNewRecord) {
         String gameOverString = "Game Over";
         String continueOrExitString =
                 "Press Space to play again, Escape to exit";
@@ -53,9 +53,9 @@ public class ScoreDrawManager extends DrawManager {
      * @param isNewRecord
      *            If the score is a new high score.
      */
-    public void drawResults(final Screen screen, final int score,
-                            final int playerHp, final int shipsDestroyed,
-                            final double accuracy, final boolean isNewRecord, final int coinsEarned) {
+    public static void drawResults(final Screen screen, final int score,
+                                   final int playerHp, final int shipsDestroyed,
+                                   final double accuracy, final boolean isNewRecord, final int coinsEarned) {
         String scoreString = String.format("score %04d", score);
         String playerHpString = "lives remaining " + playerHp;
         String shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
