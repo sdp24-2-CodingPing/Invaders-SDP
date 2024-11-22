@@ -13,7 +13,7 @@ public class GameSettingDrawManager extends DrawManager {
      * @param screen
      *            Screen to draw on.
      */
-    public static void drawGameSetting(final Screen screen) {
+    public void drawGameSetting(final Screen screen) {
         String titleString = "Game Setting";
 
         backBufferGraphics.setColor(Color.GREEN);
@@ -31,7 +31,7 @@ public class GameSettingDrawManager extends DrawManager {
      * @author <a href="mailto:dayeon.dev@gmail.com">Dayeon Oh</a>
      *
      */
-    public static void drawGameSettingRow(final Screen screen, final int selectedRow) {
+    public void drawGameSettingRow(final Screen screen, final int selectedRow) {
         int y = 0;
         int height = 0;
         int screenHeight = screen.getHeight();
@@ -70,8 +70,8 @@ public class GameSettingDrawManager extends DrawManager {
      * @author <a href="mailto:dayeon.dev@gmail.com">Dayeon Oh</a>
      *
      */
-    public static void drawGameSettingElements(final Screen screen, final int selectedRow,
-                                               final boolean isMultiPlayer, final String name1, final String name2, final int difficultyLevel) {
+    public void drawGameSettingElements(final Screen screen, final int selectedRow,
+                                        final boolean isMultiPlayer, final String name1, final String name2, final int difficultyLevel) {
         String spaceString = " ";
         String player1String = "1 Player";
         String player2String = "2 Player";
