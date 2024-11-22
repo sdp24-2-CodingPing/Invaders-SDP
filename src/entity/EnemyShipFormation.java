@@ -451,33 +451,33 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		this.shipCount--;
 	}
 
-	public final void healthManageDestroy(final EnemyShip shotEnemy, final float balance) {
+	public final void applyDamageToEnemy(int damage, final EnemyShip damagedEnemy, final float balance) {
 		for (List<EnemyShip> column : this.enemyShips)
 			for (int i = 0; i < column.size(); i++)
-				if (column.get(i) != null && column.get(i).equals(shotEnemy)) {
+				if (column.get(i) != null && column.get(i).equals(damagedEnemy)) {
+					column.get(i).applyDamageToEnemy(damage, balance); //Todo: 데미지에 따라 적군의 체력이 깎이도록 수정 필요
 					//If health is 0, number of remaining enemy ships--, score awarded, number of destroyed ships++
-					if(shotEnemy.getHealth() <= 0){
+					if(damagedEnemy.getHealth() <= 0){
 						this.shipCount--;
 						this.logger.info("Destroyed ship in ("
 								+ this.enemyShips.indexOf(column) + "," + i + ")");
-						pointValue = shotEnemy.getPointValue();
-						expValue = shotEnemy.getExpValue(); //죽은 enemy에 대한 exp
+						pointValue = damagedEnemy.getPointValue();
+						expValue = damagedEnemy.getExpValue(); //죽은 enemy에 대한 exp
 						distroyedship = 1;
 					}else{
 						pointValue = 0;
 						expValue = 0;
 						distroyedship = 0;
 					}
-					column.get(i).HealthManageDestroy(balance);
 				}
 
 		// Updates the list of ships that can shoot the player.
-		if (this.shooters.contains(shotEnemy)) {
-			int destroyedShipIndex = this.shooters.indexOf(shotEnemy);
+		if (this.shooters.contains(damagedEnemy)) {
+			int destroyedShipIndex = this.shooters.indexOf(damagedEnemy);
 			int destroyedShipColumnIndex = -1;
 
 			for (List<EnemyShip> column : this.enemyShips)
-				if (column.contains(shotEnemy)) {
+				if (column.contains(damagedEnemy)) {
 					destroyedShipColumnIndex = this.enemyShips.indexOf(column);
 					break;
 				}
