@@ -1,0 +1,50 @@
+name: Java CI with Gradle
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+      - chore/TestAutomation
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build and run tests
+        run: ./gradlew clean test -Dorg.gradle.jvmargs="-Xmx1g -XX:MaxMetaspaceSize=512m"
+
+      - name: Post test results as comment
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: Test Results
+          message: |
+            **Test Status**: ${{ job.status }}
+            ```
+            ${{ steps.build-and-test.outputs }}
+            ```
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: build/reports/tests/test/
