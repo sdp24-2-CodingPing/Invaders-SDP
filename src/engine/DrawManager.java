@@ -6,12 +6,15 @@ import java.awt.FontFormatException;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import screen.Screen;
+
+import javax.imageio.ImageIO;
 
 /**
  * Manages screen drawing.
@@ -55,6 +58,13 @@ public class DrawManager {
 
 	/** Sprite types mapped to their images. */
 	public static Map<SpriteType, boolean[][]> spriteMap;
+
+	/** For ShopScreen image */
+	protected static BufferedImage img_additionallife;
+	protected static BufferedImage img_bulletspeed;
+	protected static BufferedImage img_coin;
+	protected static BufferedImage img_coingain;
+	protected static BufferedImage img_shotinterval;
 
 
 	/** Sprite types. */
@@ -164,6 +174,17 @@ public class DrawManager {
 			logger.warning("Loading failed.");
 		} catch (FontFormatException e) {
 			logger.warning("Font formating failed.");
+		}
+
+		/** Shop image load*/
+		try{
+			img_additionallife = ImageIO.read(new File("res/image/additional life.jpg"));
+			img_bulletspeed = ImageIO.read(new File("res/image/bullet speed.jpg"));
+			img_coin = ImageIO.read(new File("res/image/coin.jpg"));
+			img_coingain = ImageIO.read(new File("res/image/coin gain.jpg"));
+			img_shotinterval = ImageIO.read(new File("res/image/shot interval.jpg"));
+		} catch (IOException e) {
+			logger.info("Shop image loading failed");
 		}
 	}
 

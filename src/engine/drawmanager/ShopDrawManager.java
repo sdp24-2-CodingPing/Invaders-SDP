@@ -5,40 +5,13 @@ import engine.DrawManager;
 import entity.Wallet;
 import screen.Screen;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Manages drawing for the Shop Screen.
  */
 public class ShopDrawManager extends DrawManager {
-
-    /** For ShopScreen image */
-    private static BufferedImage img_additionallife;
-    private static BufferedImage img_bulletspeed;
-    private static BufferedImage img_coin;
-    private static BufferedImage img_coingain;
-    private static BufferedImage img_shotinterval;
-
-    public ShopDrawManager(){
-        super();
-
-        /** Shop image load*/
-        try{
-            img_additionallife = ImageIO.read(new File("res/image/additional life.jpg"));
-            img_bulletspeed = ImageIO.read(new File("res/image/bullet speed.jpg"));
-            img_coin = ImageIO.read(new File("res/image/coin.jpg"));
-            img_coingain = ImageIO.read(new File("res/image/coin gain.jpg"));
-            img_shotinterval = ImageIO.read(new File("res/image/shot interval.jpg"));
-        } catch (IOException e) {
-            logger.info("Shop image loading failed");
-        }
-
-    }
-
 
     /**
      *  draw shop
