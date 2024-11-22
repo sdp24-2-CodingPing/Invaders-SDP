@@ -17,8 +17,8 @@ public class ScoreDrawManager extends DrawManager {
      * @param isNewRecord
      *            If the score is a new high score.
      */
-    public static void drawGameOver(final Screen screen, final boolean acceptsInput,
-                                    final boolean isNewRecord) {
+    public void drawGameOver(final Screen screen, final boolean acceptsInput,
+                             final boolean isNewRecord) {
         String gameOverString = "Game Over";
         String continueOrExitString =
                 "Press Space to play again, Escape to exit";
@@ -44,7 +44,7 @@ public class ScoreDrawManager extends DrawManager {
      *            Screen to draw on.
      * @param score
      *            Score obtained.
-     * @param livesRemaining
+     * @param playerHp
      *            Lives remaining when finished.
      * @param shipsDestroyed
      *            Total ships destroyed.
@@ -53,11 +53,11 @@ public class ScoreDrawManager extends DrawManager {
      * @param isNewRecord
      *            If the score is a new high score.
      */
-    public static void drawResults(final Screen screen, final int score,
-                                   final int livesRemaining, final int shipsDestroyed,
-                                   final double accuracy, final boolean isNewRecord, final int coinsEarned) {
+    public void drawResults(final Screen screen, final int score,
+                            final int playerHp, final int shipsDestroyed,
+                            final double accuracy, final boolean isNewRecord, final int coinsEarned) {
         String scoreString = String.format("score %04d", score);
-        String livesRemainingString = "lives remaining " + livesRemaining;
+        String playerHpString = "lives remaining " + playerHp;
         String shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
         String accuracyString = String
                 .format("accuracy %.2f%%", accuracy);
@@ -68,7 +68,7 @@ public class ScoreDrawManager extends DrawManager {
         backBufferGraphics.setColor(Color.WHITE);
         drawCenteredRegularString(screen, scoreString, screen.getHeight()
                 / height);
-        drawCenteredRegularString(screen, livesRemainingString,
+        drawCenteredRegularString(screen, playerHpString,
                 screen.getHeight() / height + fontRegularMetrics.getHeight()
                         * 2);
         drawCenteredRegularString(screen, shipsDestroyedString,
