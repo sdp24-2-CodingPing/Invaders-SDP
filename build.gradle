@@ -8,6 +8,7 @@ repositories {
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
+    testImplementation sourceSets.main.output
 }
 
 sourceSets {
@@ -28,5 +29,7 @@ sourceSets {
 
 test {
     useJUnitPlatform()
+    maxHeapSize = "1g"
+    jvmArgs '-XX:MaxMetaspaceSize=512m'
 }
 
