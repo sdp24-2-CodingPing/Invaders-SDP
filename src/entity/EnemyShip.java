@@ -88,36 +88,31 @@ public class EnemyShip extends Entity {
 		this.animationCooldown = Core.getCooldown(500);
 		this.isDestroyed = false;
 		initializeHealth(gameState, this.enemyType);
+		initializeExp(gameState, this.enemyType);
 
 		switch (this.spriteType) {
 		case EnemyShipA1:
 		case EnemyShipA2:
 			this.pointValue = (int) (A_TYPE_POINTS+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
-			this.expValue = (int) (A_TYPE_EXP+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
 			break;
 		case EnemyShipB1:
 		case EnemyShipB2:
 			this.pointValue = (int) (B_TYPE_POINTS+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
-			this.expValue = (int) (B_TYPE_EXP+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
 			break;
 		case EnemyShipC1:
 		case EnemyShipC2:
 			this.pointValue = (int) (C_TYPE_POINTS+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
-			this.expValue = (int) (C_TYPE_EXP+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
 			break;
 		case EnemyShipD1:
 		case EnemyShipD2:
 			this.pointValue = D_TYPE_POINTS;
-			this.expValue = (int) (D_TYPE_EXP+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
 			break;
 		case EnemyShipE1:
 		case EnemyShipE2:
 			this.pointValue = E_TYPE_POINTS;
-			this.expValue = (int) (E_TYPE_EXP+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
 			break;
 		case EnemyShipF1:
 			this.pointValue = F_TYPE_POINTS;
-			this.expValue = (int) (F_TYPE_EXP+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
 			break;
 		default:
 			this.pointValue = 0;
@@ -137,6 +132,11 @@ public class EnemyShip extends Entity {
 		this.health = baseHealth * levelMultiplier;
 	}
 
+	/**
+	 * Assign base exp for each enemy types, considering level scaling.
+	 * @param gameState gameState instance
+	 * @param enemyType enemy type
+	 * */
 	private void initializeExp(GameState gameState, EnemyType enemyType) {
 		// base exp for enemies.
 		// index 0: GRUNT, index 1: ELITE, index 2: CHAMPION
