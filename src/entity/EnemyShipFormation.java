@@ -455,6 +455,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		for (List<EnemyShip> column : this.enemyShips)
 			for (int i = 0; i < column.size(); i++)
 				if (column.get(i) != null && column.get(i).equals(damagedEnemy)) {
+					column.get(i).applyDamageToEnemy(damage, balance); //Todo: 데미지에 따라 적군의 체력이 깎이도록 수정 필요
 					//If health is 0, number of remaining enemy ships--, score awarded, number of destroyed ships++
 					if(damagedEnemy.getHealth() <= 0){
 						this.shipCount--;
@@ -468,7 +469,6 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 						expValue = 0;
 						distroyedship = 0;
 					}
-					column.get(i).applyDamageToEnemy(damage, balance); //Todo: 데미지에 따라 적군의 체력이 깎이도록 수정 필요
 				}
 
 		// Updates the list of ships that can shoot the player.
