@@ -4,8 +4,8 @@ import engine.Core;
 import engine.DrawManager;
 import engine.Score;
 import entity.Entity;
-import entity.Ship;
 import entity.ShipFactory;
+import entity.player.PlayerShip;
 import screen.Screen;
 
 import java.awt.*;
@@ -15,19 +15,22 @@ import java.util.List;
 
 public class GameDrawManager extends DrawManager {
 
-    public static void drawGameTitle(final Screen screen) {
+    public GameDrawManager() {super();}
+
+    public void drawGameTitle(final Screen screen) {
         String titleString = "Invaders";
         backBufferGraphics.setColor(Color.DARK_GRAY);
         drawCenteredBigString(screen, titleString, screen.getHeight() / 2);
     }
 
-    public static void drawGameTitle(final Screen screen, final int threadNumber) {
+    public void drawGameTitle(final Screen screen, final int threadNumber) {
         String titleString = "Invaders";
         threadBufferGraphics[threadNumber].setColor(Color.DARK_GRAY);
         drawCenteredBigString(screen, titleString, screen.getHeight() / 2, threadNumber);
     }
 
     /**
+
      * Draws alert message on screen.
      *
      * @param screen
@@ -35,7 +38,7 @@ public class GameDrawManager extends DrawManager {
      * @param alertMessage
      *            Alert message.
      */
-    public static void drawAlertMessage(final Screen screen, final String alertMessage) {
+    public void drawAlertMessage(final Screen screen, final String alertMessage) {
         backBufferGraphics.setFont(fontRegular);
         backBufferGraphics.setColor(Color.RED);
         backBufferGraphics.drawString(alertMessage,
@@ -43,6 +46,7 @@ public class GameDrawManager extends DrawManager {
     }
 
     /**
+
      * Draws alert message on screen.
      *
      * @param screen
@@ -52,7 +56,7 @@ public class GameDrawManager extends DrawManager {
      * @param threadNumber
      *            Thread number for two player mode
      */
-    public static void drawAlertMessage(final Screen screen, final String alertMessage, final int threadNumber) {
+    public void drawAlertMessage(final Screen screen, final String alertMessage, final int threadNumber) {
         threadBufferGraphics[threadNumber].setFont(fontRegular);
         threadBufferGraphics[threadNumber].setColor(Color.RED);
         threadBufferGraphics[threadNumber].drawString(alertMessage,
@@ -60,6 +64,7 @@ public class GameDrawManager extends DrawManager {
     }
 
     /**
+
      * Draws number of remaining lives on screen.
      *
      * @param screen
@@ -67,13 +72,13 @@ public class GameDrawManager extends DrawManager {
      * @param lives
      *            Current lives.
      */
-    public void drawLives(final Screen screen, final int lives, final Ship.ShipType shipType) {
+    public void drawLives(final Screen screen, final int lives, final PlayerShip.ShipType shipType) {
         backBufferGraphics.setFont(fontRegular);
         backBufferGraphics.setColor(Color.WHITE);
         backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
-        Ship dummyShip = ShipFactory.create(shipType, 0, 0);
+        PlayerShip dummyPlayerShip = ShipFactory.create(shipType, 0, 0);
         for (int i = 0; i < lives; i++)
-            drawEntity(dummyShip, 40 + 35 * i, 10);
+            drawEntity(dummyPlayerShip, 40 + 35 * i, 10);
     }
 
     /**
@@ -86,13 +91,13 @@ public class GameDrawManager extends DrawManager {
      * @param threadNumber
      *            Thread number for two player mode
      */
-    public static void drawLives(final Screen screen, final int lives, final Ship.ShipType shipType, final int threadNumber) {
+    public void drawLives(final Screen screen, final int lives, final PlayerShip.ShipType shipType, final int threadNumber) {
         threadBufferGraphics[threadNumber].setFont(fontRegular);
         threadBufferGraphics[threadNumber].setColor(Color.WHITE);
         threadBufferGraphics[threadNumber].drawString(Integer.toString(lives), 20, 25);
-        Ship dummyShip = ShipFactory.create(shipType, 0, 0);
+        PlayerShip dummyPlayerShip = ShipFactory.create(shipType, 0, 0);
         for (int i = 0; i < lives; i++)
-            drawEntity(dummyShip, 40 + 35 * i, 10, threadNumber);
+            drawEntity(dummyPlayerShip, 40 + 35 * i, 10, threadNumber);
     }
 
     /**
@@ -103,13 +108,12 @@ public class GameDrawManager extends DrawManager {
      * @param level
      *            Current level.
      */
-    public static void drawLevel(final Screen screen, final int level) {
+    public void drawLevel(final Screen screen, final int level) {
         backBufferGraphics.setFont(fontRegular);
         backBufferGraphics.setColor(Color.WHITE);
         String scoreString = String.format("lv.%d", level);
         backBufferGraphics.drawString(scoreString, 20, 25);
     }
-
     /**
      * Draws level on screen.
      *
@@ -120,7 +124,7 @@ public class GameDrawManager extends DrawManager {
      * @param threadNumber
      *            Thread number for two player mode
      */
-    public static void drawLevel(final Screen screen, final int level, final int threadNumber) {
+    public void drawLevel(final Screen screen, final int level, final int threadNumber) {
         threadBufferGraphics[threadNumber].setFont(fontRegular);
         threadBufferGraphics[threadNumber].setColor(Color.WHITE);
         String scoreString = String.format("lv.%d", level);
@@ -135,7 +139,7 @@ public class GameDrawManager extends DrawManager {
      * @param score
      *            Current score.
      */
-    public static void drawScore(final Screen screen, final int score) {
+    public void drawScore(final Screen screen, final int score) {
         backBufferGraphics.setFont(fontRegular);
         backBufferGraphics.setColor(Color.WHITE);
         String scoreString = String.format("%04d", score);
@@ -152,7 +156,7 @@ public class GameDrawManager extends DrawManager {
      * @param threadNumber
      *            Thread number for two player mode
      */
-    public static void drawScore(final Screen screen, final int score, final int threadNumber) {
+    public void drawScore(final Screen screen, final int score, final int threadNumber) {
         threadBufferGraphics[threadNumber].setFont(fontRegular);
         threadBufferGraphics[threadNumber].setColor(Color.WHITE);
         String scoreString = String.format("%04d", score);
@@ -167,7 +171,7 @@ public class GameDrawManager extends DrawManager {
      * @param combo
      *            Number of enemies killed in a row.
      */
-    public static void drawCombo(final Screen screen, final int combo) {
+    public void drawCombo(final Screen screen, final int combo) {
         backBufferGraphics.setFont(fontRegular);
         backBufferGraphics.setColor(Color.WHITE);
         if (combo >= 2) {
@@ -185,7 +189,7 @@ public class GameDrawManager extends DrawManager {
      * @param threadNumber
      * 			  Thread number for two player mode
      */
-    public static void drawCombo(final Screen screen, final int combo, final int threadNumber) {
+    public void drawCombo(final Screen screen, final int combo, final int threadNumber) {
         threadBufferGraphics[threadNumber].setFont(fontRegular);
         threadBufferGraphics[threadNumber].setColor(Color.WHITE);
         if (combo >= 2) {
@@ -199,33 +203,33 @@ public class GameDrawManager extends DrawManager {
      *
      * @param screen
      *            Screen to draw on.
-     * @param ship
+     * @param playerShip
      *            player's ship.
      * @param remainingTime
      *            remaining reload time.
      */
-    public static void drawReloadTimer(final Screen screen, final Ship ship, final long remainingTime) {
+    public void drawReloadTimer(final Screen screen, final PlayerShip playerShip, final long remainingTime) {
         backBufferGraphics.setFont(fontRegular);
         backBufferGraphics.setColor(Color.WHITE);
         if(remainingTime > 0){
 
-            int shipX = ship.getPositionX();
-            int shipY = ship.getPositionY();
-            int shipWidth = ship.getWidth();
+            int shipX = playerShip.getPositionX();
+            int shipY = playerShip.getPositionY();
+            int shipWidth = playerShip.getWidth();
             int circleSize = 16;
             int startAngle = 90;
             int endAngle = 0;
             switch(Core.BASE_SHIP){
-                case Ship.ShipType.VoidReaper:
+                case PlayerShip.ShipType.VoidReaper:
                     endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
                     break;
-                case Ship.ShipType.CosmicCruiser:
+                case PlayerShip.ShipType.CosmicCruiser:
                     endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
                     break;
-                case Ship.ShipType.StarDefender:
+                case PlayerShip.ShipType.StarDefender:
                     endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
                     break;
-                case Ship.ShipType.GalacticGuardian:
+                case PlayerShip.ShipType.GalacticGuardian:
                     endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
                     break;
 
@@ -236,40 +240,41 @@ public class GameDrawManager extends DrawManager {
                     circleSize, circleSize, startAngle, endAngle);
         }
     }
+
     /**
      * Draws ReloadTimer on screen.
      *
      * @param screen
      *            Screen to draw on.
-     * @param ship
+     * @param playerShip
      *            player's ship.
      * @param remainingTime
      *            remaining reload time.
      * @param threadNumber
      *            Thread number for two player mode
      */
-    public static void drawReloadTimer(final Screen screen, final Ship ship, final long remainingTime, final int threadNumber) {
+    public void drawReloadTimer(final Screen screen, final PlayerShip playerShip, final long remainingTime, final int threadNumber) {
         threadBufferGraphics[threadNumber].setFont(fontRegular);
         threadBufferGraphics[threadNumber].setColor(Color.WHITE);
         if(remainingTime > 0){
 
-            int shipX = ship.getPositionX();
-            int shipY = ship.getPositionY();
-            int shipWidth = ship.getWidth();
+            int shipX = playerShip.getPositionX();
+            int shipY = playerShip.getPositionY();
+            int shipWidth = playerShip.getWidth();
             int circleSize = 16;
             int startAngle = 90;
             int endAngle = 0;
             switch(Core.BASE_SHIP){
-                case Ship.ShipType.VoidReaper:
+                case PlayerShip.ShipType.VoidReaper:
                     endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
                     break;
-                case Ship.ShipType.CosmicCruiser:
+                case PlayerShip.ShipType.CosmicCruiser:
                     endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
                     break;
-                case Ship.ShipType.StarDefender:
+                case PlayerShip.ShipType.StarDefender:
                     endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
                     break;
-                case Ship.ShipType.GalacticGuardian:
+                case PlayerShip.ShipType.GalacticGuardian:
                     endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
                     break;
             }
@@ -286,7 +291,7 @@ public class GameDrawManager extends DrawManager {
      * @param elapsedTime
      *            Elapsed time.
      */
-    public static void drawElapsedTime(final Screen screen, final int elapsedTime) {
+    public void drawElapsedTime(final Screen screen, final int elapsedTime) {
         backBufferGraphics.setFont(fontRegular);
         backBufferGraphics.setColor(Color.LIGHT_GRAY);
 
@@ -314,7 +319,7 @@ public class GameDrawManager extends DrawManager {
      * @param threadNumber
      *            Thread number for two player mode
      */
-    public static void drawElapsedTime(final Screen screen, final int elapsedTime, final int threadNumber) {
+    public void drawElapsedTime(final Screen screen, final int elapsedTime, final int threadNumber) {
         threadBufferGraphics[threadNumber].setFont(fontRegular);
         threadBufferGraphics[threadNumber].setColor(Color.LIGHT_GRAY);
 
@@ -423,7 +428,7 @@ public class GameDrawManager extends DrawManager {
      *            X coordinate of the line.
      */
 
-    public static void drawLaunchTrajectory(final Screen screen, final int positionX) {
+    public void drawLaunchTrajectory(final Screen screen, final int positionX) {
         backBufferGraphics.setColor(Color.DARK_GRAY);
         for (int i = 0; i < screen.getHeight() - 140; i += 20){
             backBufferGraphics.drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
@@ -437,8 +442,8 @@ public class GameDrawManager extends DrawManager {
      * @param positionX
      *            X coordinate of the line.
      */
-    public static void drawLaunchTrajectory(final Screen screen, final int positionX,
-                                            final int threadNumber) {
+    public void drawLaunchTrajectory(final Screen screen, final int positionX,
+                                     final int threadNumber) {
         threadBufferGraphics[threadNumber].setColor(Color.DARK_GRAY);
         for (int i = 0; i < screen.getHeight() - 140; i += 20){
             threadBufferGraphics[threadNumber].drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
@@ -453,7 +458,7 @@ public class GameDrawManager extends DrawManager {
      * @param positionY
      *            Y coordinate of the line.
      */
-    public static void drawHorizontalLine(final Screen screen, final int positionY) {
+    public void drawHorizontalLine(final Screen screen, final int positionY) {
         backBufferGraphics.setColor(Color.GREEN);
         backBufferGraphics.drawLine(0, positionY, screen.getWidth(), positionY);
         backBufferGraphics.drawLine(0, positionY + 1, screen.getWidth(),
@@ -470,7 +475,7 @@ public class GameDrawManager extends DrawManager {
      * @param threadNumber
      *            Thread number for two player mode
      */
-    public static void drawHorizontalLine(final Screen screen, final int positionY, final int threadNumber) {
+    public void drawHorizontalLine(final Screen screen, final int positionY, final int threadNumber) {
         threadBufferGraphics[threadNumber].setColor(Color.GREEN);
         threadBufferGraphics[threadNumber].drawLine(0, positionY, screen.getWidth(), positionY);
         threadBufferGraphics[threadNumber].drawLine(0, positionY + 1, screen.getWidth(),
@@ -488,7 +493,7 @@ public class GameDrawManager extends DrawManager {
      * @param maximumValue  Maximum value (total number of boxes).
      * @param color         Color of the filled boxes.
      */
-    public static void drawSegmentedBar(int x, int y, int w, int h, int currentValue, int maximumValue, Color color) {
+    public void drawSegmentedBar(int x, int y, int w, int h, int currentValue, int maximumValue, Color color) {
         int basicWidth = w / maximumValue; // Basic width of each box
         int remainingWidth = w % maximumValue; // Remaining width to be distributed
 
@@ -521,7 +526,7 @@ public class GameDrawManager extends DrawManager {
      * @param h         Height of the inner box.
      * @param thickness Thickness of the outer box.
      */
-    public static void drawThickBox(final Screen screen, final int x, final int y, final int w, final int h, final int thickness) {
+    public void drawThickBox(final Screen screen, final int x, final int y, final int w, final int h, final int thickness) {
         // Ensure thickness is not greater than the width or height
         if (thickness * 2 > w || thickness * 2 > h) {
             throw new IllegalArgumentException("Thickness is too large for the given width or height");
@@ -542,12 +547,10 @@ public class GameDrawManager extends DrawManager {
      *            Game difficulty level.
      * @param number
      *            Countdown number.
-     * @param bonusLife
-     *            Checks if a bonus life is received.
      */
 
-    public static void drawCountDown(final Screen screen, final int level,
-                                     final int number, final boolean bonusLife) {
+    public void drawCountDown(final Screen screen, final int level,
+                              final int number) {
         int rectWidth = screen.getWidth();
         int rectHeight = screen.getHeight() / 6;
         backBufferGraphics.setColor(Color.BLACK);
@@ -555,16 +558,9 @@ public class GameDrawManager extends DrawManager {
                 rectWidth, rectHeight);
         backBufferGraphics.setColor(Color.GREEN);
         if (number >= 4)
-            if (!bonusLife) {
-                drawCenteredBigString(screen, "Level " + level,
-                        screen.getHeight() / 2
-                                + fontBigMetrics.getHeight() / 3);
-            } else {
-                drawCenteredBigString(screen, "Level " + level
-                                + " - Bonus life!",
-                        screen.getHeight() / 2
-                                + fontBigMetrics.getHeight() / 3);
-            }
+            drawCenteredBigString(screen, "Level " + level,
+                    screen.getHeight() / 2
+                            + fontBigMetrics.getHeight() / 3);
         else if (number != 0)
             drawCenteredBigString(screen, Integer.toString(number),
                     screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3);
@@ -582,13 +578,11 @@ public class GameDrawManager extends DrawManager {
      *            Game difficulty level.
      * @param number
      *            Countdown number.
-     * @param bonusLife
-     *            Checks if a bonus life is received.
      * @param threadNumber
      *            Thread number for two player mode
      */
-    public static void drawCountDown(final Screen screen, final int level,
-                                     final int number, final boolean bonusLife, final int threadNumber) {
+    public void drawCountDown(final Screen screen, final int level,
+                              final int number, final int threadNumber) {
         int rectWidth = screen.getWidth();
         int rectHeight = screen.getHeight() / 6;
         threadBufferGraphics[threadNumber].setColor(Color.BLACK);
@@ -596,16 +590,9 @@ public class GameDrawManager extends DrawManager {
                 rectWidth, rectHeight);
         threadBufferGraphics[threadNumber].setColor(Color.GREEN);
         if (number >= 4)
-            if (!bonusLife) {
-                drawCenteredBigString(screen, "Level " + level,
-                        screen.getHeight() / 2
-                                + fontBigMetrics.getHeight() / 3, threadNumber);
-            } else {
-                drawCenteredBigString(screen, "Level " + level
-                                + " - Bonus life!",
-                        screen.getHeight() / 2
-                                + fontBigMetrics.getHeight() / 3, threadNumber);
-            }
+            drawCenteredBigString(screen, "Level " + level,
+                    screen.getHeight() / 2
+                            + fontBigMetrics.getHeight() / 3, threadNumber);
         else if (number != 0)
             drawCenteredBigString(screen, Integer.toString(number),
                     screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3, threadNumber);
@@ -624,8 +611,8 @@ public class GameDrawManager extends DrawManager {
      * @param threadNumber
      *            Thread number for two player mode
      */
-    public static void drawInGameOver(final Screen screen,
-                                      final int height, final int threadNumber) {
+    public void drawInGameOver(final Screen screen,
+                               final int height, final int threadNumber) {
         String gameOverString = "Game Over";
 
         int rectWidth = screen.getWidth();
@@ -646,7 +633,7 @@ public class GameDrawManager extends DrawManager {
      *            Recorded highscores.
      */
 
-    public static void drawRecord(List<Score> highScores, final Screen screen) {
+    public void drawRecord(List<Score> highScores, final Screen screen) {
 
         //add variable for highest score
         int highestScore = -1;
@@ -669,6 +656,7 @@ public class GameDrawManager extends DrawManager {
         backBufferGraphics.drawString(highScoreDisplay,
                 screen.getWidth() - metrics.stringWidth(highScoreDisplay) - 76, 25);
     }
+
     /**
      * Draws recorded highscores on screen.
      *
@@ -678,7 +666,7 @@ public class GameDrawManager extends DrawManager {
      *            Thread number for two player mode
      */
 
-    public static void drawRecord(List<Score> highScores, final Screen screen, final int threadNumber) {
+    public void drawRecord(List<Score> highScores, final Screen screen, final int threadNumber) {
 
         //add variable for highest score
         int highestScore = -1;
@@ -776,9 +764,9 @@ public class GameDrawManager extends DrawManager {
      * @param threadNumber
      * 			  Thread number for two player mode
      */
-    public static void interAggre(final Screen screen, final int level, final int maxCombo,
-                                  final int elapsedTime, final int lapTime,
-                                  final int score, final int tempScore, final int threadNumber) {
+    public void interAggre(final Screen screen, final int level, final int maxCombo,
+                           final int elapsedTime, final int lapTime,
+                           final int score, final int tempScore, final int threadNumber) {
 
         int prevTime = elapsedTime - lapTime;
         int prevScore = score - tempScore;
