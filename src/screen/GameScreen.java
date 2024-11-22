@@ -963,9 +963,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				// only in case of bomb item, itemResult is not null
 				if (itemResult != null) {
 					this.gameState.setScore(this.gameState.getScore() + itemResult.getFirst());
-//							this.gameState.setExp(this.gameState.getExp() + itemResult.get(1));
 					this.gameState.getPlayerShip().increasePlayerExp(itemResult.get(1));
-					logger.info("You got this exp by bomb: " + this.gameState.getExp());
 					this.gameState.setShipsDestroyed(this.gameState.getShipsDestroyed() + itemResult.getLast());
 				}
 			}
@@ -1012,7 +1010,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		// if the enemy dies, both the combo and score increase.
 		this.gameState.setScore(this.gameState.getScore() + Score.comboScore(this.enemyShipFormation.getPointValue(), this.gameState.getCombo()));
 		this.gameState.getPlayerShip().increasePlayerExp(this.enemyShipFormation.getExpValue());
-		logger.info("You got this exp by shooing bullets: " + this.gameState.getExp());
 		this.gameState.setShipsDestroyed(this.gameState.getShipsDestroyed() + this.enemyShipFormation.getDistroyedship());
 		this.gameState.setCombo(this.gameState.getCombo() + 1);
 		this.gameState.setHitBullets(this.gameState.getHitBullets() + 1);

@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Random;
 
 import engine.Cooldown;
@@ -134,6 +135,22 @@ public class EnemyShip extends Entity {
 
 		double levelMultiplier = Math.pow(1.05, gameState.getGameLevel() - 1);
 		this.health = baseHealth * levelMultiplier;
+	}
+
+	private void initializeExp(GameState gameState, EnemyType enemyType) {
+		// base exp for enemies.
+		// index 0: GRUNT, index 1: ELITE, index 2: CHAMPION
+		final int[] BASE_EXP = {10,20,30};
+
+		double levelMultiplier = Math.pow(1.05, gameState.getGameLevel() - 1);
+		switch (enemyType){
+			case GRUNT: this.expValue = BASE_EXP[0] * (int)levelMultiplier;
+				break;
+			case ELITE: this.expValue = BASE_EXP[1] * (int)levelMultiplier;
+				break;
+			case CHAMPION: this.expValue = BASE_EXP[2] * (int)levelMultiplier;
+				break;
+		}
 	}
 
 	/**
