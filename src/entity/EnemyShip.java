@@ -2,9 +2,6 @@ package entity;
 
 import java.awt.Color;
 import java.util.Random;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import engine.Cooldown;
 import engine.Core;
@@ -261,7 +258,8 @@ public class EnemyShip extends Entity {
         soundManager.playSound(Sound.ALIEN_HIT, balance);
 	}
 
-    public final void HealthManageDestroy(final float balance) { //Determine whether to destroy the enemy ship based on its health
+	//Todo: 데미지에 따라 적군의 체력이 깎이도록 수정 필요
+    public final void applyDamageToEnemy(int damage, final float balance) { //Determine whether to destroy the enemy ship based on its health
 		health --;
 		if(this.health <= 0){
             this.isDestroyed = true;

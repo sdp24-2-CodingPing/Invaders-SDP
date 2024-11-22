@@ -7,7 +7,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import entity.Ship;
+import entity.player.PlayerShip;
 import entity.Wallet;
 import screen.*;
 
@@ -27,7 +27,7 @@ public final class Core {
 	private static final int FPS = 60;
 
 	/** Base ship type. */
-	public static Ship.ShipType BASE_SHIP = Ship.ShipType.StarDefender;
+	public static PlayerShip.ShipType BASE_SHIP = PlayerShip.ShipType.StarDefender;
 	/** Max lives. */
 	public static int MAX_LIVES;
 	/** Levels between extra life. */
@@ -90,9 +90,8 @@ public final class Core {
 		int returnCode = 1;
 		do {
 			MAX_LIVES = wallet.getLives_lv()+2;
-			GameState gameState = new GameState(1, 1, 0, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
+			GameState gameState = new GameState(1, 0, 0, BASE_SHIP, 0, 0, 0, 0, 0, 0 ,0, 0);
 			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
-			ShipLevelManager levelManager = new ShipLevelManager(0, 0);
 			achievementManager = new AchievementManager();
 
 			switch (returnCode) {
@@ -109,65 +108,60 @@ public final class Core {
 				do {
 					// One extra live every few levels.
 					startTime = System.currentTimeMillis();
-					boolean bonusLife = gameState.getGameLevel()
-							% EXTRA_LIFE_FRECUENCY == 0
-							&& gameState.getLivesRemaining() < MAX_LIVES;
 					LOGGER.info("difficulty is " + DifficultySetting);
 					//add variation
 					gameSetting = gameSetting.levelSettings(gameSetting.getFormationWidth(),
 							gameSetting.getFormationHeight(),
 							gameSetting.getBaseSpeed(),
-							gameSetting.getShootingFrecuency(),
+							gameSetting.getShootingFrequency(),
 							gameState.getGameLevel(), DifficultySetting);
 
 					currentScreen = new GameScreen(gameState,
-							gameSetting, levelManager,
-							bonusLife, width, height, FPS, wallet);
+							gameSetting, width, height, FPS, wallet);
 					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-
 								+ " game screen at " + FPS + " fps.");
-						frame.setScreen(currentScreen);
-						LOGGER.info("Closing game screen.");
+					frame.setScreen(currentScreen);
+					LOGGER.info("Closing game screen.");
 
-						if (((GameScreen) currentScreen).getIsGotoMainMenu()) {
-							if (gameState.getLivesRemaining() > 0) {
-								isGotoMainMenu = true;
-								break;
-							}
-						}
-
-						gameState = ((GameScreen) currentScreen).getGameState();
-
-						// 게임 오버 시 ScoreScreen으로 전환
-						if (gameState.getLivesRemaining() > 0) {
-							// 다음 레벨 진행
-							gameState = new GameState(gameState, gameState.getGameLevel() + 1);
-							endTime = System.currentTimeMillis();
-							achievementManager.updatePlaying(gameState.getMaxCombo(), (int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getLivesRemaining(), gameState.getGameLevel() - 1);
-						} else {
-							// ScoreScreen으로 전환하여 게임오버 화면 표시
-							currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);
-							returnCode = frame.setScreen(currentScreen);
-							LOGGER.info("Closing score screen.");
+					if (((GameScreen) currentScreen).getIsGotoMainMenu()) {
+						if (!gameState.getPlayerShip().isDestroyed()) {
+							isGotoMainMenu = true;
 							break;
 						}
-					} while (gameState.getLivesRemaining() > 0);
+					}
 
+					gameState = ((GameScreen) currentScreen).getGameState();
 
-					if (isGotoMainMenu){
-						returnCode = 1;
+					// 게임 오버 시 ScoreScreen으로 전환
+					if (!gameState.getPlayerShip().isDestroyed()) {
+						// 다음 레벨 진행
+						gameState = new GameState(gameState, gameState.getGameLevel() + 1);
+						endTime = System.currentTimeMillis();
+						achievementManager.updatePlaying(gameState.getMaxCombo(), (int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getPlayerShip().getPlayerHP(), gameState.getGameLevel() - 1);
+					} else {
+						// ScoreScreen으로 전환하여 게임오버 화면 표시
+						currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);
+						returnCode = frame.setScreen(currentScreen);
+						LOGGER.info("Closing score screen.");
 						break;
 					}
-					achievementManager.updatePlayed(gameState.getAccuracy(), gameState.getScore());
-					achievementManager.updateAllAchievements();
-					LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-							+ " score screen at " + FPS + " fps, with a score of "
-							+ gameState.getScore() + ", "
-							+ gameState.getShipType().toString() + " ship, "
-							+ gameState.getLivesRemaining() + " lives remaining, "
-							+ gameState.getBulletsShot() + " bullets shot and "
-							+ gameState.getShipsDestroyed() + " ships destroyed.");
-					currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);
+				} while (!gameState.getPlayerShip().isDestroyed());
+
+
+				if (isGotoMainMenu){
+					returnCode = 1;
+					break;
+				}
+				achievementManager.updatePlayed(gameState.getAccuracy(), gameState.getScore());
+				achievementManager.updateAllAchievements();
+				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+						+ " score screen at " + FPS + " fps, with a score of "
+						+ gameState.getScore() + ", "
+						+ gameState.getShipType().toString() + " ship, "
+						+ gameState.getPlayerShip().getPlayerHP() + " player hp, "
+						+ gameState.getBulletsShot() + " bullets shot and "
+						+ gameState.getShipsDestroyed() + " ships destroyed.");
+				currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);
 
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing score screen.");
@@ -237,7 +231,7 @@ public final class Core {
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " score screen at " + FPS + " fps, with a score of "
 						+ gameState.getScore() + ", "
-						+ gameState.getLivesRemaining() + " lives remaining, "
+						+ gameState.getPlayerShip().getPlayerHP() + " player hp, "
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
 				DrawManager.getInstance().setFrame(frame);

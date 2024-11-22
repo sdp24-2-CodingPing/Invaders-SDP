@@ -1,13 +1,12 @@
-package entity;
+package entity.player;
 
 import java.awt.Color;
 import java.util.Set;
+import java.util.logging.Logger;
 
-import engine.Cooldown;
-import engine.Core;
+import engine.*;
 import engine.DrawManager.SpriteType;
-import engine.Sound;
-import engine.SoundManager;
+import entity.*;
 
 /**
  * Implements a ship, to be controlled by the player.
@@ -15,7 +14,10 @@ import engine.SoundManager;
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  * 
  */
-public abstract class Ship extends Entity {
+public abstract class PlayerShip extends Entity {
+
+	/** Application logger. */
+	protected Logger logger;
 
 	/** Time between shots. */
 	private static int SHOOTING_INTERVAL = 750;
@@ -43,6 +45,10 @@ public abstract class Ship extends Entity {
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
 
+	/** Player HP */
+	private int playerHP;
+	/** Player level and exp */
+	private PlayerLevel playerLevel;
 
 	private long lastShootTime;
 	private boolean threadWeb = false;
@@ -67,10 +73,14 @@ public abstract class Ship extends Entity {
 	 * 		      Type of sprite to be drawn.
 	 * 		      @see SpriteType
 	 */
-	protected Ship(final int positionX, final int positionY,
-				   final String name, final ShipMultipliers multipliers,
-				   final SpriteType spriteType) {
+	protected PlayerShip(final int positionX, final int positionY,
+						 final String name, final ShipMultipliers multipliers,
+						 final SpriteType spriteType) {
 		super(positionX, positionY, 13 * 2, 8 * 2, Color.GREEN);
+
+		this.logger = Core.getLogger();
+		this.playerHP = 3;
+		this.playerLevel = new PlayerLevel(0, 1);
 
 		this.name = name;
 		this.multipliers = multipliers;
@@ -195,11 +205,59 @@ public abstract class Ship extends Entity {
 	}
 
 	/**
-	 * Switches the ship to its destroyed state.
+	 * Get Player HP
+	 *
+	 * @return player HP
 	 */
-	public final void destroy(float balance) {
+	public final int getPlayerHP() {
+		return this.playerHP;
+	}
+
+	/**
+	 * Player HP decrease by received damage
+	 * @param damage
+	 * 			received damage value
+	 * @param balance
+	 * 			sound balance (for two player mode)
+	 */
+	public final void receiveDamage(int damage, float balance) {
 		this.destructionCooldown.reset();
+		this.playerHP = Math.max(this.playerHP - damage, 0);
 		soundManager.playSound(Sound.PLAYER_HIT, balance);
+		this.logger.info("Hit on player ship, " + getPlayerHP() + " HP remaining.");
+	}
+
+	/**
+	 * Checks if the ship can receive damage.
+	 *
+	 * @return True if the ship is currently receive damage
+	 */
+	public final boolean isReceiveDamagePossible() {
+		return !this.destructionCooldown.checkFinished();
+	}
+
+	/**
+	 * Checks if the player ship can level up
+	 *
+	 * @return True if the player ship is level up
+	 */
+	public final boolean isPlayerLevelUpPossible() {
+		return this.playerLevel.isLevelUpPossible();
+	}
+
+	public final void increasePlayerExp(int exp) {
+		this.playerLevel.setExp(this.playerLevel.getExp() + exp);
+		logger.info("you get the " + exp + "exp, your current exp: " + this.playerLevel.getExp());
+	}
+
+	/**
+	 * Player levelup logic
+	 */
+	public final void managePlayerLevelUp () {
+		while (playerLevel.isLevelUpPossible()) {
+			playerLevel.levelUp();
+			playerLevel.selectLevelUpCard();
+		}
 	}
 
 	/**
@@ -208,7 +266,16 @@ public abstract class Ship extends Entity {
 	 * @return True if the ship is currently destroyed.
 	 */
 	public final boolean isDestroyed() {
-		return !this.destructionCooldown.checkFinished();
+		return getPlayerHP() <= 0;
+	}
+
+	/**
+	 * Get player level
+	 *
+	 * @return player level
+	 */
+	public final PlayerLevel getPlayerLevel() {
+		return this.playerLevel;
 	}
 
 	/**
@@ -222,6 +289,7 @@ public abstract class Ship extends Entity {
 
 	/**
 	 * Getter for the ship's bullet speed.
+	 *
 	 * @return Speed of the bullets.
 	 */
 	public final int getBulletSpeed() {
@@ -230,6 +298,7 @@ public abstract class Ship extends Entity {
 
 	/**
 	 * Getter for the ship's shooting interval.
+	 *
 	 * @return Time between shots.
 	 */
 	public final int getShootingInterval() {
@@ -244,7 +313,7 @@ public abstract class Ship extends Entity {
 	}
 
 
-	public void applyItem(Wallet wallet){
+	public void applyShopItem(Wallet wallet){
 		int bulletLv = wallet.getBullet_lv();
 		switch (bulletLv){
 			case 1:

@@ -124,9 +124,9 @@ public class AchievementManager {
         FileManager.getInstance().saveAchievement(achievement);
     }
 
-    public void updatePlaying(int maxCombo ,int playtime, int max_lives, int LivesRemaining, int level ) throws IOException{
+    public void updatePlaying(int maxCombo ,int playtime, int max_lives, int playerHp, int level ) throws IOException{
         updateTotalPlayTime(playtime);
-        updatePerfect(max_lives,LivesRemaining,level);
+        updatePerfect(max_lives,playerHp,level);
         updateMaxCombo(maxCombo);
     }
 

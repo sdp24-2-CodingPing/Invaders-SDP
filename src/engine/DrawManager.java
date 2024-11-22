@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import entity.*;
-import screen.GameSettingScreen;
+import entity.player.PlayerShip;
 import screen.Screen;
 
 /**
@@ -639,13 +639,13 @@ public final class DrawManager {
 	 * @param lives
 	 *            Current lives.
 	 */
-	public void drawLives(final Screen screen, final int lives, final Ship.ShipType shipType) {
+	public void drawLives(final Screen screen, final int lives, final PlayerShip.ShipType shipType) {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
 		backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
-		Ship dummyShip = ShipFactory.create(shipType, 0, 0);
+		PlayerShip dummyPlayerShip = ShipFactory.create(shipType, 0, 0);
 		for (int i = 0; i < lives; i++)
-			drawEntity(dummyShip, 40 + 35 * i, 10);
+			drawEntity(dummyPlayerShip, 40 + 35 * i, 10);
 	}
 
 
@@ -659,13 +659,13 @@ public final class DrawManager {
 	 * @param threadNumber
 	 *            Thread number for two player mode
 	 */
-	public void drawLives(final Screen screen, final int lives, final Ship.ShipType shipType, final int threadNumber) {
+	public void drawLives(final Screen screen, final int lives, final PlayerShip.ShipType shipType, final int threadNumber) {
 		threadBufferGraphics[threadNumber].setFont(fontRegular);
 		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
 		threadBufferGraphics[threadNumber].drawString(Integer.toString(lives), 20, 25);
-		Ship dummyShip = ShipFactory.create(shipType, 0, 0);
+		PlayerShip dummyPlayerShip = ShipFactory.create(shipType, 0, 0);
 		for (int i = 0; i < lives; i++)
-			drawEntity(dummyShip, 40 + 35 * i, 10, threadNumber);
+			drawEntity(dummyPlayerShip, 40 + 35 * i, 10, threadNumber);
 	}
 
 	/**
@@ -878,7 +878,7 @@ public final class DrawManager {
 	 *            Screen to draw on.
 	 * @param score
 	 *            Score obtained.
-	 * @param livesRemaining
+	 * @param playerHp
 	 *            Lives remaining when finished.
 	 * @param shipsDestroyed
 	 *            Total ships destroyed.
@@ -888,10 +888,10 @@ public final class DrawManager {
 	 *            If the score is a new high score.
 	 */
 	public void drawResults(final Screen screen, final int score,
-			final int livesRemaining, final int shipsDestroyed,
+			final int playerHp, final int shipsDestroyed,
 			final double accuracy, final boolean isNewRecord, final int coinsEarned) {
 		String scoreString = String.format("score %04d", score);
-		String livesRemainingString = "lives remaining " + livesRemaining;
+		String playerHpString = "lives remaining " + playerHp;
 		String shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
 		String accuracyString = String
 				.format("accuracy %.2f%%", accuracy);
@@ -902,7 +902,7 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, scoreString, screen.getHeight()
 				/ height);
-		drawCenteredRegularString(screen, livesRemainingString,
+		drawCenteredRegularString(screen, playerHpString,
 				screen.getHeight() / height + fontRegularMetrics.getHeight()
 						* 2);
 		drawCenteredRegularString(screen, shipsDestroyedString,
@@ -1457,12 +1457,10 @@ public final class DrawManager {
 	 *            Game difficulty level.
 	 * @param number
 	 *            Countdown number.
-	 * @param bonusLife
-	 *            Checks if a bonus life is received.
 	 */
 
 	public void drawCountDown(final Screen screen, final int level,
-			final int number, final boolean bonusLife) {
+			final int number) {
 		int rectWidth = screen.getWidth();
 		int rectHeight = screen.getHeight() / 6;
 		backBufferGraphics.setColor(Color.BLACK);
@@ -1470,16 +1468,9 @@ public final class DrawManager {
 				rectWidth, rectHeight);
 		backBufferGraphics.setColor(Color.GREEN);
 		if (number >= 4)
-			if (!bonusLife) {
-				drawCenteredBigString(screen, "Level " + level,
-						screen.getHeight() / 2
-						+ fontBigMetrics.getHeight() / 3);
-			} else {
-				drawCenteredBigString(screen, "Level " + level
-						+ " - Bonus life!",
-						screen.getHeight() / 2
-						+ fontBigMetrics.getHeight() / 3);
-			}
+			drawCenteredBigString(screen, "Level " + level,
+					screen.getHeight() / 2
+					+ fontBigMetrics.getHeight() / 3);
 		else if (number != 0)
 			drawCenteredBigString(screen, Integer.toString(number),
 					screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3);
@@ -1554,33 +1545,33 @@ public final class DrawManager {
 	 *
 	 * @param screen
 	 *            Screen to draw on.
-	 * @param ship
+	 * @param playerShip
 	 *            player's ship.
      * @param remainingTime
 	 *            remaining reload time.
 	 */
-	public void drawReloadTimer(final Screen screen,final Ship ship,final long remainingTime) {
+	public void drawReloadTimer(final Screen screen, final PlayerShip playerShip, final long remainingTime) {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.setColor(Color.WHITE);
 		if(remainingTime > 0){
 
-			int shipX = ship.getPositionX();
-			int shipY = ship.getPositionY();
-			int shipWidth = ship.getWidth();
+			int shipX = playerShip.getPositionX();
+			int shipY = playerShip.getPositionY();
+			int shipWidth = playerShip.getWidth();
 			int circleSize = 16;
 			int startAngle = 90;
 			int endAngle = 0;
 			switch(Core.BASE_SHIP){
-				case Ship.ShipType.VoidReaper:
+				case PlayerShip.ShipType.VoidReaper:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
 				    break;
-				case Ship.ShipType.CosmicCruiser:
+				case PlayerShip.ShipType.CosmicCruiser:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
 				    break;
-				case Ship.ShipType.StarDefender:
+				case PlayerShip.ShipType.StarDefender:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
 					break;
-				case Ship.ShipType.GalacticGuardian:
+				case PlayerShip.ShipType.GalacticGuardian:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
 					break;
 
@@ -1596,35 +1587,35 @@ public final class DrawManager {
 	 *
 	 * @param screen
 	 *            Screen to draw on.
-	 * @param ship
+	 * @param playerShip
 	 *            player's ship.
 	 * @param remainingTime
 	 *            remaining reload time.
 	 * @param threadNumber
 	 *            Thread number for two player mode
 	 */
-	public void drawReloadTimer(final Screen screen,final Ship ship,final long remainingTime, final int threadNumber) {
+	public void drawReloadTimer(final Screen screen, final PlayerShip playerShip, final long remainingTime, final int threadNumber) {
 		threadBufferGraphics[threadNumber].setFont(fontRegular);
 		threadBufferGraphics[threadNumber].setColor(Color.WHITE);
 		if(remainingTime > 0){
 
-			int shipX = ship.getPositionX();
-			int shipY = ship.getPositionY();
-			int shipWidth = ship.getWidth();
+			int shipX = playerShip.getPositionX();
+			int shipY = playerShip.getPositionY();
+			int shipWidth = playerShip.getWidth();
 			int circleSize = 16;
 			int startAngle = 90;
 			int endAngle = 0;
 			switch(Core.BASE_SHIP){
-				case Ship.ShipType.VoidReaper:
+				case PlayerShip.ShipType.VoidReaper:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
 					break;
-				case Ship.ShipType.CosmicCruiser:
+				case PlayerShip.ShipType.CosmicCruiser:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
 					break;
-				case Ship.ShipType.StarDefender:
+				case PlayerShip.ShipType.StarDefender:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
 					break;
-				case Ship.ShipType.GalacticGuardian:
+				case PlayerShip.ShipType.GalacticGuardian:
 					endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
 					break;
 			}
@@ -1677,13 +1668,11 @@ public final class DrawManager {
 	 *            Game difficulty level.
 	 * @param number
 	 *            Countdown number.
-	 * @param bonusLife
-	 *            Checks if a bonus life is received.
 	 * @param threadNumber
 	 *            Thread number for two player mode
 	 */
 	public void drawCountDown(final Screen screen, final int level,
-							  final int number, final boolean bonusLife, final int threadNumber) {
+							  final int number, final int threadNumber) {
 		int rectWidth = screen.getWidth();
 		int rectHeight = screen.getHeight() / 6;
 		threadBufferGraphics[threadNumber].setColor(Color.BLACK);
@@ -1691,16 +1680,9 @@ public final class DrawManager {
 				rectWidth, rectHeight);
 		threadBufferGraphics[threadNumber].setColor(Color.GREEN);
 		if (number >= 4)
-			if (!bonusLife) {
-				drawCenteredBigString(screen, "Level " + level,
-						screen.getHeight() / 2
-								+ fontBigMetrics.getHeight() / 3, threadNumber);
-			} else {
-				drawCenteredBigString(screen, "Level " + level
-								+ " - Bonus life!",
-						screen.getHeight() / 2
-								+ fontBigMetrics.getHeight() / 3, threadNumber);
-			}
+			drawCenteredBigString(screen, "Level " + level,
+					screen.getHeight() / 2
+							+ fontBigMetrics.getHeight() / 3, threadNumber);
 		else if (number != 0)
 			drawCenteredBigString(screen, Integer.toString(number),
 					screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3, threadNumber);
@@ -1873,7 +1855,7 @@ public final class DrawManager {
 			backBufferGraphics.fillRect(x + index*60, y+index*20, (isSelected ? 10 : 0), 10);
 			// Ship name
 			backBufferGraphics.setFont(fontRegular);
-			backBufferGraphics.drawString(Ship.ShipType.values()[index].name(), x + index*60 + 15, y+index*20);
+			backBufferGraphics.drawString(PlayerShip.ShipType.values()[index].name(), x + index*60 + 15, y+index*20);
 		} else {
 			// Ship box
 			backBufferGraphics.setColor(isSelected ? Color.GREEN : Color.WHITE);
@@ -1882,7 +1864,7 @@ public final class DrawManager {
 			backBufferGraphics.fillRect(x + index*60, y+index*20, (isSelected ? 10 : 0), 10);
 			// Ship name
 			backBufferGraphics.setFont(fontRegular);
-			backBufferGraphics.drawString(Ship.ShipType.values()[index].name(), x + index*60 + 15, y + index*20);
+			backBufferGraphics.drawString(PlayerShip.ShipType.values()[index].name(), x + index*60 + 15, y + index*20);
 		}
 
 	}
