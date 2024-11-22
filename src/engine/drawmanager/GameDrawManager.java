@@ -15,8 +15,6 @@ import java.util.List;
 
 public class GameDrawManager extends DrawManager {
 
-    public GameDrawManager() {super();}
-
     public static void drawGameTitle(final Screen screen) {
         String titleString = "Invaders";
         backBufferGraphics.setColor(Color.DARK_GRAY);
@@ -27,6 +25,38 @@ public class GameDrawManager extends DrawManager {
         String titleString = "Invaders";
         threadBufferGraphics[threadNumber].setColor(Color.DARK_GRAY);
         drawCenteredBigString(screen, titleString, screen.getHeight() / 2, threadNumber);
+    }
+
+    /**
+     * Draws alert message on screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     * @param alertMessage
+     *            Alert message.
+     */
+    public static void drawAlertMessage(final Screen screen, final String alertMessage) {
+        backBufferGraphics.setFont(fontRegular);
+        backBufferGraphics.setColor(Color.RED);
+        backBufferGraphics.drawString(alertMessage,
+                (screen.getWidth() - fontRegularMetrics.stringWidth(alertMessage))/2, 65);
+    }
+
+    /**
+     * Draws alert message on screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     * @param alertMessage
+     *            Alert message.
+     * @param threadNumber
+     *            Thread number for two player mode
+     */
+    public static void drawAlertMessage(final Screen screen, final String alertMessage, final int threadNumber) {
+        threadBufferGraphics[threadNumber].setFont(fontRegular);
+        threadBufferGraphics[threadNumber].setColor(Color.RED);
+        threadBufferGraphics[threadNumber].drawString(alertMessage,
+                (screen.getWidth() - fontRegularMetrics.stringWidth(alertMessage))/2, 65);
     }
 
     /**
@@ -63,37 +93,6 @@ public class GameDrawManager extends DrawManager {
         Ship dummyShip = ShipFactory.create(shipType, 0, 0);
         for (int i = 0; i < lives; i++)
             drawEntity(dummyShip, 40 + 35 * i, 10, threadNumber);
-    }
-
-    /**
-     * Draws launch trajectory on screen.
-     *
-     * @param screen
-     *            Screen to draw on.
-     * @param positionX
-     *            X coordinate of the line.
-     */
-
-    public static void drawLaunchTrajectory(final Screen screen, final int positionX) {
-        backBufferGraphics.setColor(Color.DARK_GRAY);
-        for (int i = 0; i < screen.getHeight() - 140; i += 20){
-            backBufferGraphics.drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
-        }
-    }
-    /**
-     * Draws launch trajectory on screen.
-     *
-     * @param screen
-     *            Screen to draw on.
-     * @param positionX
-     *            X coordinate of the line.
-     */
-    public static void drawLaunchTrajectory(final Screen screen, final int positionX,
-                                            final int threadNumber) {
-        threadBufferGraphics[threadNumber].setColor(Color.DARK_GRAY);
-        for (int i = 0; i < screen.getHeight() - 140; i += 20){
-            threadBufferGraphics[threadNumber].drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
-        }
     }
 
     /**
@@ -158,6 +157,324 @@ public class GameDrawManager extends DrawManager {
         threadBufferGraphics[threadNumber].setColor(Color.WHITE);
         String scoreString = String.format("%04d", score);
         threadBufferGraphics[threadNumber].drawString(scoreString, screen.getWidth() - 60, 25);
+    }
+
+    /**
+     * Draws Combo on screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     * @param combo
+     *            Number of enemies killed in a row.
+     */
+    public static void drawCombo(final Screen screen, final int combo) {
+        backBufferGraphics.setFont(fontRegular);
+        backBufferGraphics.setColor(Color.WHITE);
+        if (combo >= 2) {
+            String comboString = String.format("Combo %03d", combo);
+            backBufferGraphics.drawString(comboString, screen.getWidth() - 100, 85);
+        }
+    }
+    /**
+     * Draws Combo on screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     * @param combo
+     *            Number of enemies killed in a row.
+     * @param threadNumber
+     * 			  Thread number for two player mode
+     */
+    public static void drawCombo(final Screen screen, final int combo, final int threadNumber) {
+        threadBufferGraphics[threadNumber].setFont(fontRegular);
+        threadBufferGraphics[threadNumber].setColor(Color.WHITE);
+        if (combo >= 2) {
+            String comboString = String.format("Combo %03d", combo);
+            threadBufferGraphics[threadNumber].drawString(comboString, screen.getWidth() - 100, 85);
+        }
+    }
+
+    /**
+     * Draws ReloadTimer on screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     * @param ship
+     *            player's ship.
+     * @param remainingTime
+     *            remaining reload time.
+     */
+    public static void drawReloadTimer(final Screen screen, final Ship ship, final long remainingTime) {
+        backBufferGraphics.setFont(fontRegular);
+        backBufferGraphics.setColor(Color.WHITE);
+        if(remainingTime > 0){
+
+            int shipX = ship.getPositionX();
+            int shipY = ship.getPositionY();
+            int shipWidth = ship.getWidth();
+            int circleSize = 16;
+            int startAngle = 90;
+            int endAngle = 0;
+            switch(Core.BASE_SHIP){
+                case Ship.ShipType.VoidReaper:
+                    endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
+                    break;
+                case Ship.ShipType.CosmicCruiser:
+                    endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
+                    break;
+                case Ship.ShipType.StarDefender:
+                    endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
+                    break;
+                case Ship.ShipType.GalacticGuardian:
+                    endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
+                    break;
+
+
+            }
+
+            backBufferGraphics.fillArc(shipX + shipWidth/2 - circleSize/2, shipY - 3*circleSize/2,
+                    circleSize, circleSize, startAngle, endAngle);
+        }
+    }
+    /**
+     * Draws ReloadTimer on screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     * @param ship
+     *            player's ship.
+     * @param remainingTime
+     *            remaining reload time.
+     * @param threadNumber
+     *            Thread number for two player mode
+     */
+    public static void drawReloadTimer(final Screen screen, final Ship ship, final long remainingTime, final int threadNumber) {
+        threadBufferGraphics[threadNumber].setFont(fontRegular);
+        threadBufferGraphics[threadNumber].setColor(Color.WHITE);
+        if(remainingTime > 0){
+
+            int shipX = ship.getPositionX();
+            int shipY = ship.getPositionY();
+            int shipWidth = ship.getWidth();
+            int circleSize = 16;
+            int startAngle = 90;
+            int endAngle = 0;
+            switch(Core.BASE_SHIP){
+                case Ship.ShipType.VoidReaper:
+                    endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
+                    break;
+                case Ship.ShipType.CosmicCruiser:
+                    endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
+                    break;
+                case Ship.ShipType.StarDefender:
+                    endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
+                    break;
+                case Ship.ShipType.GalacticGuardian:
+                    endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
+                    break;
+            }
+            threadBufferGraphics[threadNumber].fillArc(shipX + shipWidth/2 - circleSize/2, shipY - 3*circleSize/2,
+                    circleSize, circleSize, startAngle, endAngle);
+        }
+    }
+
+    /**
+     * Draws elapsed time on screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     * @param elapsedTime
+     *            Elapsed time.
+     */
+    public static void drawElapsedTime(final Screen screen, final int elapsedTime) {
+        backBufferGraphics.setFont(fontRegular);
+        backBufferGraphics.setColor(Color.LIGHT_GRAY);
+
+        int cent = (elapsedTime % 1000)/10;
+        int seconds = elapsedTime / 1000;
+        int sec = seconds % 60;
+        int min = seconds / 60;
+
+        String elapsedTimeString;
+        if (min < 1){
+            elapsedTimeString = String.format("%d.%02d", sec, cent);
+        } else {
+            elapsedTimeString = String.format("%d:%02d.%02d", min, sec, cent);
+        }
+        backBufferGraphics.drawString(elapsedTimeString, 80, 25);
+    }
+
+    /**
+     * Draws elapsed time on screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     * @param elapsedTime
+     *            Elapsed time.
+     * @param threadNumber
+     *            Thread number for two player mode
+     */
+    public static void drawElapsedTime(final Screen screen, final int elapsedTime, final int threadNumber) {
+        threadBufferGraphics[threadNumber].setFont(fontRegular);
+        threadBufferGraphics[threadNumber].setColor(Color.LIGHT_GRAY);
+
+        int cent = (elapsedTime % 1000)/10;
+        int seconds = elapsedTime / 1000;
+        int sec = seconds % 60;
+        int min = seconds / 60;
+
+        String elapsedTimeString;
+        if (min < 1){
+            elapsedTimeString = String.format("%d.%02d", sec, cent);
+        } else {
+            elapsedTimeString = String.format("%d:%02d.%02d", min, sec, cent);
+        }
+        threadBufferGraphics[threadNumber].drawString(elapsedTimeString, 80, 25);
+    }
+
+    /**
+     * Draws an entity, using the appropriate image.
+     *
+     * @param entity
+     *            Entity to be drawn.
+     * @param positionX
+     *            Coordinates for the left side of the image.
+     * @param positionY
+     *            Coordinates for the upper side of the image.
+     */
+    public static void drawEntity(final Entity entity, final int positionX,
+                                  final int positionY) {
+        boolean[][] image = spriteMap.get(entity.getSpriteType());
+
+        backBufferGraphics.setColor(entity.getColor());
+        for (int i = 0; i < image.length; i++)
+            for (int j = 0; j < image[i].length; j++)
+                if (image[i][j])
+                    backBufferGraphics.drawRect(positionX + i * 2, positionY
+                            + j * 2, 1, 1);
+    }
+
+    /**
+     * Draws an entity, using the appropriate image.
+     *
+     * @param entity
+     *            Entity to be drawn.
+     * @param positionX
+     *            Coordinates for the left side of the image.
+     * @param positionY
+     *            Coordinates for the upper side of the image.
+     * @param threadNumber
+     *            Thread number for two player mode
+     */
+    public static void drawEntity(final Entity entity, final int positionX,
+                                  final int positionY, final int threadNumber) {
+        boolean[][] image = spriteMap.get(entity.getSpriteType());
+
+        threadBufferGraphics[threadNumber].setColor(entity.getColor());
+        for (int i = 0; i < image.length; i++)
+            for (int j = 0; j < image[i].length; j++)
+                if (image[i][j])
+                    threadBufferGraphics[threadNumber].drawRect(positionX + i * 2, positionY
+                            + j * 2, 1, 1);
+    }
+
+    //Drawing an Entity (Blocker) that requires angle setting
+    public static void drawRotatedEntity(Entity entity, int x, int y, double angle) {
+        Graphics2D g2d = (Graphics2D) backBufferGraphics; // Convert to Graphics2D
+        AffineTransform oldTransform = g2d.getTransform(); // Save previous conversion
+
+        //Set center point to rotate
+        int centerX = x + entity.getWidth() / 2;
+        int centerY = y + entity.getHeight() / 2;
+
+        //rotate by a given angle
+        g2d.rotate(Math.toRadians(angle), centerX, centerY);
+
+        //Drawing entities
+        drawEntity(entity, x, y);
+
+        g2d.setTransform(oldTransform); // Restore to original conversion state
+    }
+
+    //Drawing an Entity (Blocker) that requires angle setting
+    public static void drawRotatedEntity(Entity entity, int x, int y, double angle, final int threadNumber) {
+        Graphics2D g2d = (Graphics2D) threadBufferGraphics[threadNumber]; // Convert to Graphics2D
+        AffineTransform oldTransform = g2d.getTransform(); // Save previous conversion
+
+        //Set center point to rotate
+        int centerX = x + entity.getWidth() / 2;
+        int centerY = y + entity.getHeight() / 2;
+
+        //rotate by a given angle
+        g2d.rotate(Math.toRadians(angle), centerX, centerY);
+
+        //Drawing entities
+        drawEntity(entity, x, y, threadNumber);
+
+        g2d.setTransform(oldTransform); // Restore to original conversion state
+    }
+
+    /**
+     * Draws launch trajectory on screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     * @param positionX
+     *            X coordinate of the line.
+     */
+
+    public static void drawLaunchTrajectory(final Screen screen, final int positionX) {
+        backBufferGraphics.setColor(Color.DARK_GRAY);
+        for (int i = 0; i < screen.getHeight() - 140; i += 20){
+            backBufferGraphics.drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
+        }
+    }
+    /**
+     * Draws launch trajectory on screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     * @param positionX
+     *            X coordinate of the line.
+     */
+    public static void drawLaunchTrajectory(final Screen screen, final int positionX,
+                                            final int threadNumber) {
+        threadBufferGraphics[threadNumber].setColor(Color.DARK_GRAY);
+        for (int i = 0; i < screen.getHeight() - 140; i += 20){
+            threadBufferGraphics[threadNumber].drawRect(positionX + 13, screen.getHeight() - 150 - i,1,10);
+        }
+    }
+
+    /**
+     * Draws a thick line from side to side of the screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     * @param positionY
+     *            Y coordinate of the line.
+     */
+    public static void drawHorizontalLine(final Screen screen, final int positionY) {
+        backBufferGraphics.setColor(Color.GREEN);
+        backBufferGraphics.drawLine(0, positionY, screen.getWidth(), positionY);
+        backBufferGraphics.drawLine(0, positionY + 1, screen.getWidth(),
+                positionY + 1);
+    }
+
+    /**
+     * Draws a thick line from side to side of the screen.
+     *
+     * @param screen
+     *            Screen to draw on.
+     * @param positionY
+     *            Y coordinate of the line.
+     * @param threadNumber
+     *            Thread number for two player mode
+     */
+    public static void drawHorizontalLine(final Screen screen, final int positionY, final int threadNumber) {
+        threadBufferGraphics[threadNumber].setColor(Color.GREEN);
+        threadBufferGraphics[threadNumber].drawLine(0, positionY, screen.getWidth(), positionY);
+        threadBufferGraphics[threadNumber].drawLine(0, positionY + 1, screen.getWidth(),
+                positionY + 1);
     }
 
     /**
@@ -256,8 +573,6 @@ public class GameDrawManager extends DrawManager {
                     + fontBigMetrics.getHeight() / 3);
     }
 
-
-
     /**
      * Countdown to game start.
      *
@@ -297,208 +612,6 @@ public class GameDrawManager extends DrawManager {
         else
             drawCenteredBigString(screen, "GO!", screen.getHeight() / 2
                     + fontBigMetrics.getHeight() / 3, threadNumber);
-    }
-
-    /**
-     * Draws an entity, using the appropriate image.
-     *
-     * @param entity
-     *            Entity to be drawn.
-     * @param positionX
-     *            Coordinates for the left side of the image.
-     * @param positionY
-     *            Coordinates for the upper side of the image.
-     */
-    public static void drawEntity(final Entity entity, final int positionX,
-                                  final int positionY) {
-        boolean[][] image = spriteMap.get(entity.getSpriteType());
-
-        backBufferGraphics.setColor(entity.getColor());
-        for (int i = 0; i < image.length; i++)
-            for (int j = 0; j < image[i].length; j++)
-                if (image[i][j])
-                    backBufferGraphics.drawRect(positionX + i * 2, positionY
-                            + j * 2, 1, 1);
-    }
-
-    /**
-     * Draws an entity, using the appropriate image.
-     *
-     * @param entity
-     *            Entity to be drawn.
-     * @param positionX
-     *            Coordinates for the left side of the image.
-     * @param positionY
-     *            Coordinates for the upper side of the image.
-     * @param threadNumber
-     *            Thread number for two player mode
-     */
-    public static void drawEntity(final Entity entity, final int positionX,
-                                  final int positionY, final int threadNumber) {
-        boolean[][] image = spriteMap.get(entity.getSpriteType());
-
-        threadBufferGraphics[threadNumber].setColor(entity.getColor());
-        for (int i = 0; i < image.length; i++)
-            for (int j = 0; j < image[i].length; j++)
-                if (image[i][j])
-                    threadBufferGraphics[threadNumber].drawRect(positionX + i * 2, positionY
-                            + j * 2, 1, 1);
-    }
-
-    /**
-     * Draws elapsed time on screen.
-     *
-     * @param screen
-     *            Screen to draw on.
-     * @param elapsedTime
-     *            Elapsed time.
-     */
-    public static void drawElapsedTime(final Screen screen, final int elapsedTime) {
-        backBufferGraphics.setFont(fontRegular);
-        backBufferGraphics.setColor(Color.LIGHT_GRAY);
-
-        int cent = (elapsedTime % 1000)/10;
-        int seconds = elapsedTime / 1000;
-        int sec = seconds % 60;
-        int min = seconds / 60;
-
-        String elapsedTimeString;
-        if (min < 1){
-            elapsedTimeString = String.format("%d.%02d", sec, cent);
-        } else {
-            elapsedTimeString = String.format("%d:%02d.%02d", min, sec, cent);
-        }
-        backBufferGraphics.drawString(elapsedTimeString, 80, 25);
-    }
-
-    /**
-     * Draws elapsed time on screen.
-     *
-     * @param screen
-     *            Screen to draw on.
-     * @param elapsedTime
-     *            Elapsed time.
-     * @param threadNumber
-     *            Thread number for two player mode
-     */
-    public static void drawElapsedTime(final Screen screen, final int elapsedTime, final int threadNumber) {
-        threadBufferGraphics[threadNumber].setFont(fontRegular);
-        threadBufferGraphics[threadNumber].setColor(Color.LIGHT_GRAY);
-
-        int cent = (elapsedTime % 1000)/10;
-        int seconds = elapsedTime / 1000;
-        int sec = seconds % 60;
-        int min = seconds / 60;
-
-        String elapsedTimeString;
-        if (min < 1){
-            elapsedTimeString = String.format("%d.%02d", sec, cent);
-        } else {
-            elapsedTimeString = String.format("%d:%02d.%02d", min, sec, cent);
-        }
-        threadBufferGraphics[threadNumber].drawString(elapsedTimeString, 80, 25);
-    }
-
-    /**
-
-     * Draws alert message on screen.
-     *
-     * @param screen
-     *            Screen to draw on.
-     * @param alertMessage
-     *            Alert message.
-     */
-    public static void drawAlertMessage(final Screen screen, final String alertMessage) {
-        backBufferGraphics.setFont(fontRegular);
-        backBufferGraphics.setColor(Color.RED);
-        backBufferGraphics.drawString(alertMessage,
-                (screen.getWidth() - fontRegularMetrics.stringWidth(alertMessage))/2, 65);
-    }
-
-    /**
-
-     * Draws alert message on screen.
-     *
-     * @param screen
-     *            Screen to draw on.
-     * @param alertMessage
-     *            Alert message.
-     * @param threadNumber
-     *            Thread number for two player mode
-     */
-    public static void drawAlertMessage(final Screen screen, final String alertMessage, final int threadNumber) {
-        threadBufferGraphics[threadNumber].setFont(fontRegular);
-        threadBufferGraphics[threadNumber].setColor(Color.RED);
-        threadBufferGraphics[threadNumber].drawString(alertMessage,
-                (screen.getWidth() - fontRegularMetrics.stringWidth(alertMessage))/2, 65);
-    }
-
-    //Drawing an Entity (Blocker) that requires angle setting
-    public static void drawRotatedEntity(Entity entity, int x, int y, double angle) {
-        Graphics2D g2d = (Graphics2D) backBufferGraphics; // Convert to Graphics2D
-        AffineTransform oldTransform = g2d.getTransform(); // Save previous conversion
-
-        //Set center point to rotate
-        int centerX = x + entity.getWidth() / 2;
-        int centerY = y + entity.getHeight() / 2;
-
-        //rotate by a given angle
-        g2d.rotate(Math.toRadians(angle), centerX, centerY);
-
-        //Drawing entities
-        drawEntity(entity, x, y);
-
-        g2d.setTransform(oldTransform); // Restore to original conversion state
-    }
-
-    //Drawing an Entity (Blocker) that requires angle setting
-    public static void drawRotatedEntity(Entity entity, int x, int y, double angle, final int threadNumber) {
-        Graphics2D g2d = (Graphics2D) threadBufferGraphics[threadNumber]; // Convert to Graphics2D
-        AffineTransform oldTransform = g2d.getTransform(); // Save previous conversion
-
-        //Set center point to rotate
-        int centerX = x + entity.getWidth() / 2;
-        int centerY = y + entity.getHeight() / 2;
-
-        //rotate by a given angle
-        g2d.rotate(Math.toRadians(angle), centerX, centerY);
-
-        //Drawing entities
-        drawEntity(entity, x, y, threadNumber);
-
-        g2d.setTransform(oldTransform); // Restore to original conversion state
-    }
-
-    /**
-     * Draws a thick line from side to side of the screen.
-     *
-     * @param screen
-     *            Screen to draw on.
-     * @param positionY
-     *            Y coordinate of the line.
-     */
-    public static void drawHorizontalLine(final Screen screen, final int positionY) {
-        backBufferGraphics.setColor(Color.GREEN);
-        backBufferGraphics.drawLine(0, positionY, screen.getWidth(), positionY);
-        backBufferGraphics.drawLine(0, positionY + 1, screen.getWidth(),
-                positionY + 1);
-    }
-
-    /**
-     * Draws a thick line from side to side of the screen.
-     *
-     * @param screen
-     *            Screen to draw on.
-     * @param positionY
-     *            Y coordinate of the line.
-     * @param threadNumber
-     *            Thread number for two player mode
-     */
-    public static void drawHorizontalLine(final Screen screen, final int positionY, final int threadNumber) {
-        threadBufferGraphics[threadNumber].setColor(Color.GREEN);
-        threadBufferGraphics[threadNumber].drawLine(0, positionY, screen.getWidth(), positionY);
-        threadBufferGraphics[threadNumber].drawLine(0, positionY + 1, screen.getWidth(),
-                positionY + 1);
     }
 
     /**
@@ -587,125 +700,6 @@ public class GameDrawManager extends DrawManager {
 
         threadBufferGraphics[threadNumber].drawString(highScoreDisplay,
                 screen.getWidth() - metrics.stringWidth(highScoreDisplay) - 76, 25);
-    }
-
-    /**
-     * Draws ReloadTimer on screen.
-     *
-     * @param screen
-     *            Screen to draw on.
-     * @param ship
-     *            player's ship.
-     * @param remainingTime
-     *            remaining reload time.
-     */
-    public static void drawReloadTimer(final Screen screen, final Ship ship, final long remainingTime) {
-        backBufferGraphics.setFont(fontRegular);
-        backBufferGraphics.setColor(Color.WHITE);
-        if(remainingTime > 0){
-
-            int shipX = ship.getPositionX();
-            int shipY = ship.getPositionY();
-            int shipWidth = ship.getWidth();
-            int circleSize = 16;
-            int startAngle = 90;
-            int endAngle = 0;
-            switch(Core.BASE_SHIP){
-                case Ship.ShipType.VoidReaper:
-                    endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
-                    break;
-                case Ship.ShipType.CosmicCruiser:
-                    endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
-                    break;
-                case Ship.ShipType.StarDefender:
-                    endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
-                    break;
-                case Ship.ShipType.GalacticGuardian:
-                    endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
-                    break;
-
-
-            }
-
-            backBufferGraphics.fillArc(shipX + shipWidth/2 - circleSize/2, shipY - 3*circleSize/2,
-                    circleSize, circleSize, startAngle, endAngle);
-        }
-    }
-    /**
-     * Draws ReloadTimer on screen.
-     *
-     * @param screen
-     *            Screen to draw on.
-     * @param ship
-     *            player's ship.
-     * @param remainingTime
-     *            remaining reload time.
-     * @param threadNumber
-     *            Thread number for two player mode
-     */
-    public static void drawReloadTimer(final Screen screen, final Ship ship, final long remainingTime, final int threadNumber) {
-        threadBufferGraphics[threadNumber].setFont(fontRegular);
-        threadBufferGraphics[threadNumber].setColor(Color.WHITE);
-        if(remainingTime > 0){
-
-            int shipX = ship.getPositionX();
-            int shipY = ship.getPositionY();
-            int shipWidth = ship.getWidth();
-            int circleSize = 16;
-            int startAngle = 90;
-            int endAngle = 0;
-            switch(Core.BASE_SHIP){
-                case Ship.ShipType.VoidReaper:
-                    endAngle = 360 * (int)remainingTime / (int)(750 * 0.4);
-                    break;
-                case Ship.ShipType.CosmicCruiser:
-                    endAngle = 360 * (int)remainingTime / (int)(750 * 1.6);
-                    break;
-                case Ship.ShipType.StarDefender:
-                    endAngle = 360 * (int)remainingTime / (int)(750 * 1.0);
-                    break;
-                case Ship.ShipType.GalacticGuardian:
-                    endAngle = 360 * (int)remainingTime / (int)(750 * 1.2);
-                    break;
-            }
-            threadBufferGraphics[threadNumber].fillArc(shipX + shipWidth/2 - circleSize/2, shipY - 3*circleSize/2,
-                    circleSize, circleSize, startAngle, endAngle);
-        }
-    }
-
-    /**
-     * Draws Combo on screen.
-     *
-     * @param screen
-     *            Screen to draw on.
-     * @param combo
-     *            Number of enemies killed in a row.
-     */
-    public static void drawCombo(final Screen screen, final int combo) {
-        backBufferGraphics.setFont(fontRegular);
-        backBufferGraphics.setColor(Color.WHITE);
-        if (combo >= 2) {
-            String comboString = String.format("Combo %03d", combo);
-            backBufferGraphics.drawString(comboString, screen.getWidth() - 100, 85);
-        }
-    }
-    /**
-     * Draws Combo on screen.
-     *
-     * @param screen
-     *            Screen to draw on.
-     * @param combo
-     *            Number of enemies killed in a row.
-     * @param threadNumber
-     * 			  Thread number for two player mode
-     */
-    public static void drawCombo(final Screen screen, final int combo, final int threadNumber) {
-        threadBufferGraphics[threadNumber].setFont(fontRegular);
-        threadBufferGraphics[threadNumber].setColor(Color.WHITE);
-        if (combo >= 2) {
-            String comboString = String.format("Combo %03d", combo);
-            threadBufferGraphics[threadNumber].drawString(comboString, screen.getWidth() - 100, 85);
-        }
     }
 
     /**
@@ -836,50 +830,6 @@ public class GameDrawManager extends DrawManager {
 
         threadGraphic.drawImage(threadBuffers[threadNumber], 0, 0, frame);
         threadBuffers[threadNumber + 2] = threadBuffer;
-    }
-
-    /**
-     * First part of the drawing process in thread. Initializes buffers each thread, draws the
-     * background and prepares the images.
-     *
-     * @param screen
-     *            Screen to draw in.
-     * @param threadNumber
-     * 			  Thread number for two player mode
-     */
-
-    public void initThreadDrawing(final Screen screen, final int threadNumber) {
-        BufferedImage threadBuffer = new BufferedImage(screen.getWidth(),screen.getHeight(), BufferedImage.TYPE_INT_RGB);
-        Graphics threadGraphic = threadBuffer.getGraphics();
-
-        threadBuffers[threadNumber] = threadBuffer;
-        threadBufferGraphics[threadNumber] = threadGraphic;
-    }
-
-    /**
-     * First part of the drawing process. Initializes buffers, draws the
-     * background and prepares the images.
-     *
-     * @param screen
-     *            Screen to draw in.
-     */
-    public void initDrawing(final Screen screen) {
-        backBuffer = new BufferedImage(screen.getWidth(), screen.getHeight(),
-                BufferedImage.TYPE_INT_RGB);
-
-        graphics = frame.getGraphics();
-        backBufferGraphics = backBuffer.getGraphics();
-
-        backBufferGraphics.setColor(Color.BLACK);
-        backBufferGraphics
-                .fillRect(0, 0, screen.getWidth(), screen.getHeight());
-
-        fontSmallMetrics = backBufferGraphics.getFontMetrics(fontSmall);
-        fontRegularMetrics = backBufferGraphics.getFontMetrics(fontRegular);
-        fontBigMetrics = backBufferGraphics.getFontMetrics(fontBig);
-
-        //drawBorders(screen);
-        //drawGrid(screen);
     }
 
 }
