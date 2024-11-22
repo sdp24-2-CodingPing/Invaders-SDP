@@ -2,14 +2,12 @@ package engine;
 
 import entity.EnemyShip;
 import entity.EnemyShipFormation;
-import entity.Ship;
+import entity.player.PlayerShip;
 import entity.Barrier;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -40,7 +38,7 @@ public class ItemManager {
     /** Random generator. */
     private final Random rand;
     /** Player's ship. */
-    private final Ship ship;
+    private final PlayerShip playerShip;
     /** Formation of enemy ships. */
     private final EnemyShipFormation enemyShipFormation;
     /** Set of Barriers in game screen. */
@@ -74,16 +72,16 @@ public class ItemManager {
     /**
      * Constructor, sets the initial conditions.
      *
-     * @param ship Player's ship.
+     * @param playerShip Player's ship.
      * @param enemyShipFormation Formation of enemy ships.
      * @param barriers Set of barriers in game screen.
      * @param balance 1p -1.0, 2p 1.0, both 0.0
      *
      */
-    public ItemManager(Ship ship, EnemyShipFormation enemyShipFormation, Set<Barrier> barriers, float balance) {
+    public ItemManager(PlayerShip playerShip, EnemyShipFormation enemyShipFormation, Set<Barrier> barriers, float balance) {
         this.shotNum = 1;
         this.rand = new Random();
-        this.ship = ship;
+        this.playerShip = playerShip;
         this.enemyShipFormation = enemyShipFormation;
         this.barriers = barriers;
         this.logger = Core.getLogger();
@@ -119,7 +117,7 @@ public class ItemManager {
      * @return If the item is offensive, returns the score to add and the number of ships destroyed.
      *         If the item is non-offensive, returns null.
      */
-    public Entry<Integer, Integer> useItem() {
+    public List<Integer> useItem() {
         ItemType itemType = selectItemType();
         logger.info(itemType + " used");
 
@@ -136,12 +134,13 @@ public class ItemManager {
     /**
      * Operate Bomb item.
      *
-     * @return The score to add and the number of ships destroyed.
+     * @return The score and exp to add and the number of ships destroyed.
      */
-    private Entry<Integer, Integer> operateBomb() {
+    private List<Integer> operateBomb() {
         this.soundManager.playSound(Sound.ITEM_BOMB, balance);
 
         int addScore = 0;
+        int addExp = 0;
         int addShipsDestroyed = 0;
 
         List<List<EnemyShip>> enemyships = this.enemyShipFormation.getEnemyShips();
@@ -193,23 +192,25 @@ public class ItemManager {
         if (!targetEnemyShips.isEmpty()) {
             for (EnemyShip destroyedShip : targetEnemyShips) {
                 addScore += destroyedShip.getPointValue();
+                addExp += destroyedShip.getExpValue();
                 addShipsDestroyed++;
                 enemyShipFormation.destroy(destroyedShip, balance);
             }
         }
 
-        return new SimpleEntry<>(addScore, addShipsDestroyed);
+        return List.of(addScore, addExp, addShipsDestroyed);
     }
 
     /**
      * Operate Line-bomb item.
      *
-     * @return The score to add and the number of ships destroyed.
+     * @return The score and exp to add and the number of ships destroyed.
      */
-    private Entry<Integer, Integer> operateLineBomb() {
+    private List<Integer> operateLineBomb() {
         this.soundManager.playSound(Sound.ITEM_BOMB, balance);
 
         int addScore = 0;
+        int addExp = 0;
         int addShipsDestroyed = 0;
 
         List<List<EnemyShip>> enemyships = this.enemyShipFormation.getEnemyShips();
@@ -236,13 +237,14 @@ public class ItemManager {
             for (EnemyShip destroyedShip : destroyList) {
                 if (destroyedShip != null && !destroyedShip.isDestroyed()) {
                     addScore += destroyedShip.getPointValue();
+                    addExp += destroyedShip.getExpValue();
                     addShipsDestroyed++;
                     enemyShipFormation.destroy(destroyedShip, balance);
                 }
             }
         }
 
-        return new SimpleEntry<>(addScore, addShipsDestroyed);
+        return List.of(addScore, addExp, addShipsDestroyed);
     }
 
     /**
@@ -250,7 +252,7 @@ public class ItemManager {
      *
      * @return null
      */
-    private Entry<Integer, Integer> operateBarrier() {
+    private List<Integer> operateBarrier() {
         this.soundManager.playSound(Sound.ITEM_BARRIER_ON, balance);
 
         int middle = WIDTH / 2 - 39;
@@ -269,10 +271,10 @@ public class ItemManager {
      *
      * @return null
      */
-    private Entry<Integer, Integer> operateGhost() {
+    private List<Integer> operateGhost() {
         this.soundManager.playSound(Sound.ITEM_GHOST, balance);
 
-        this.ship.setColor(Color.DARK_GRAY);
+        this.playerShip.setColor(Color.DARK_GRAY);
         this.ghost_cooldown = Core.getCooldown(GHOST_COOLDOWN);
         this.ghost_cooldown.reset();
 
@@ -284,7 +286,7 @@ public class ItemManager {
      *
      * @return null
      */
-    private Entry<Integer, Integer> operateTimeStop() {
+    private List<Integer> operateTimeStop() {
         this.soundManager.playSound(Sound.ITEM_TIMESTOP_ON, balance);
 
         this.timeStop_cooldown = Core.getCooldown(TIMESTOP_COOLDOWN);
@@ -298,7 +300,7 @@ public class ItemManager {
      *
      * @return null
      */
-    private Entry<Integer, Integer> operateMultiShot() {
+    private List<Integer> operateMultiShot() {
         if (this.shotNum < 3) {
             this.shotNum++;
             if (this.shotNum == 3) {

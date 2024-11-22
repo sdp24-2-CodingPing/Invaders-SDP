@@ -1,5 +1,6 @@
 package entity;
 
+import entity.player.PlayerShip;
 import entity.ship.*;
 
 /**
@@ -14,7 +15,7 @@ public class ShipFactory {
      * @param positionY The initial position of the ship in the Y axis.
      * @return A new ship of the specified type.
      */
-    public static Ship create(Ship.ShipType type, final int positionX, final int positionY) {
+    public static PlayerShip create(PlayerShip.ShipType type, final int positionX, final int positionY) {
         return switch (type) {
             case StarDefender -> new StarDefender(positionX, positionY);
             case VoidReaper -> new VoidReaper(positionX, positionY);

@@ -17,6 +17,7 @@ public class TwoPlayerScreen extends Screen {
     private final ExecutorService executor;
     /** Game difficulty settings each player **/
     private final GameSettings[] gameSettings = new GameSettings[2];
+
     /** Current game wallet **/
     private final Wallet wallet;
 
@@ -101,12 +102,12 @@ public class TwoPlayerScreen extends Screen {
         try {
             if (players[PLAYER1_NUMBER].isDone()) {
                 gameStates[PLAYER1_NUMBER] = players[PLAYER1_NUMBER].get();
-                gameStates[PLAYER1_NUMBER] = new GameState(gameStates[PLAYER1_NUMBER], gameStates[PLAYER1_NUMBER].getLevel() + 1);
+                gameStates[PLAYER1_NUMBER] = new GameState(gameStates[PLAYER1_NUMBER], gameStates[PLAYER1_NUMBER].getGameLevel() + 1);
                 runGameScreen(PLAYER1_NUMBER);
             }
             if (players[PLAYER2_NUMBER].isDone()) {
                 gameStates[PLAYER2_NUMBER] = players[PLAYER2_NUMBER].get();
-                gameStates[PLAYER2_NUMBER] = new GameState(gameStates[PLAYER2_NUMBER], gameStates[PLAYER2_NUMBER].getLevel() + 1);
+                gameStates[PLAYER2_NUMBER] = new GameState(gameStates[PLAYER2_NUMBER], gameStates[PLAYER2_NUMBER].getGameLevel() + 1);
                 runGameScreen(PLAYER2_NUMBER);
             }
 
@@ -126,19 +127,16 @@ public class TwoPlayerScreen extends Screen {
     private void runGameScreen(int playerNumber){
         GameState gameState = playerNumber == 0 ? gameStates[PLAYER1_NUMBER] : gameStates[PLAYER2_NUMBER];
 
-        if (gameState.getLivesRemaining() > 0) {
-            boolean bonusLife = gameState.getLevel()
-                    % Core.EXTRA_LIFE_FRECUENCY == 0
-                    && gameState.getLivesRemaining() < Core.MAX_LIVES;
-            GameScreen gameScreen = new GameScreen(gameState, gameSettings[playerNumber].LevelSettings(
+        if (!gameState.getPlayerShip().isDestroyed()) {
+            GameScreen gameScreen = new GameScreen(gameState,
+                gameSettings[playerNumber].levelSettings(
                 gameSettings[playerNumber].getFormationWidth(),
                 gameSettings[playerNumber].getFormationHeight(),
                 gameSettings[playerNumber].getBaseSpeed(),
-                gameSettings[playerNumber].getShootingFrecuency(),
-                gameState.getLevel(),
+                gameSettings[playerNumber].getShootingFrequency(),
+                gameState.getGameLevel(),
                 Core.getLevelSetting()
-            ),
-                    bonusLife, width / 2, height, fps / 2, wallet, playerNumber);
+            ), width / 2, height, fps / 2, wallet, playerNumber);
             gameScreen.initialize();
             players[playerNumber] = executor.submit(gameScreen);
         }
