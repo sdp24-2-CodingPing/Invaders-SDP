@@ -1,6 +1,9 @@
 name: Java CI with Gradle
 
 on:
+  push:
+    branches:
+      - chore/TestAutomationValid
   pull_request:
     branches:
       - main
