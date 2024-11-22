@@ -2,6 +2,7 @@ package engine.drawmanager;
 
 import engine.DrawManager;
 import entity.Ship;
+import entity.player.PlayerShip;
 import screen.Screen;
 
 import java.awt.*;
@@ -48,7 +49,7 @@ public class SettingDrawManager extends DrawManager {
             backBufferGraphics.fillRect(x + index*60, y+index*20, (isSelected ? 10 : 0), 10);
             // Ship name
             backBufferGraphics.setFont(fontRegular);
-            backBufferGraphics.drawString(Ship.ShipType.values()[index].name(), x + index*60 + 15, y+index*20);
+            backBufferGraphics.drawString(PlayerShip.ShipType.values()[index].name(), x + index*60 + 15, y+index*20);
         } else {
             // Ship box
             backBufferGraphics.setColor(isSelected ? Color.GREEN : Color.WHITE);
@@ -57,7 +58,7 @@ public class SettingDrawManager extends DrawManager {
             backBufferGraphics.fillRect(x + index*60, y+index*20, (isSelected ? 10 : 0), 10);
             // Ship name
             backBufferGraphics.setFont(fontRegular);
-            backBufferGraphics.drawString(Ship.ShipType.values()[index].name(), x + index*60 + 15, y + index*20);
+            backBufferGraphics.drawString(PlayerShip.ShipType.values()[index].name(), x + index*60 + 15, y + index*20);
         }
 
     }

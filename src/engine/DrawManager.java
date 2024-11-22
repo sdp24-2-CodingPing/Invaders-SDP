@@ -392,22 +392,6 @@ public class DrawManager {
 				/ 7 * 4 + fontRegularMetrics.getHeight() * 9);
 	}
 
-	public void drawPauseOverlay(Screen screen, int yOffset) {
-		Graphics2D g = (Graphics2D) backBufferGraphics;
-
-		// 화면 전체를 반투명한 검은색으로 채우기
-		g.setColor(new Color(0, 0, 0, 150));  // RGB (0, 0, 0), 알파 값 150으로 반투명하게 설정
-		g.fillRect(0, 0, screen.getWidth(), screen.getHeight());
-
-		// "PAUSED" 문자열 그리기
-		g.setColor(Color.WHITE);
-		g.setFont(fontBig);  // 큰 글씨체로 설정
-		String pauseText = "PAUSED";
-		int textWidth = g.getFontMetrics().stringWidth(pauseText);
-		int textX = (screen.getWidth() - textWidth) / 2;
-		int textY = yOffset;
-		g.drawString(pauseText, textX, textY);
-	}
 
 	/**
 	 * Draws a centered string on small font.
@@ -477,79 +461,5 @@ public class DrawManager {
 		threadBufferGraphics[threadNumber].drawString(string, screen.getWidth() / 2
 				- fontBigMetrics.stringWidth(string) / 2, height);
 	}
-
-	public void drawSettingsScreen(final Screen screen) {
-		String settingsTitle = "Settings"; // 타이틀
-
-		// 타이틀을 초록색으로 중앙에 그리기
-		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, settingsTitle, screen.getHeight() / 8);
-	}
-
-	/** 볼륨 바를 그리는 메서드 */
-	public void drawVolumeBar(Screen screen, int x, int y, int totalWidth, int filledWidth, boolean isSelected) {
-		// 선택된 경우 초록색, 그렇지 않으면 흰색으로 표시
-		backBufferGraphics.setColor(isSelected ? Color.GREEN : Color.WHITE);
-		backBufferGraphics.fillRect(x, y, filledWidth, 10); // 채워진 부분
-
-		// 나머지 부분은 회색으로 표시
-		backBufferGraphics.setColor(Color.GRAY);
-		backBufferGraphics.fillRect(x + filledWidth, y, totalWidth - filledWidth, 10); // 바의 나머지 부분
-	}
-
-	/** 퍼센트 값을 그리는 메서드 */
-	public void drawVolumePercentage(Screen screen, int x, int y, int volume, boolean isSelected) {
-		String volumeText = volume + "%";
-		// 선택된 경우 초록색, 그렇지 않으면 흰색으로 표시
-		backBufferGraphics.setColor(isSelected ? Color.GREEN : Color.WHITE);
-		drawCenteredRegularString(screen, volumeText, y); // 퍼센트 값을 중앙에 표시
-	}
-
-	/** Almost same function as drawVolumeBar to draw a bar to select the ship*/
-	public void drawShipBoxes(Screen screen, int x, int y, boolean isSelected, int index, boolean current) {
-		if(current){
-			// Ship box
-			backBufferGraphics.setColor(isSelected ? Color.GREEN : Color.WHITE);
-			backBufferGraphics.fillRect(x + index*60, y+index*20, isSelected ? 0 : 10, 10);
-			backBufferGraphics.setColor(Color.GREEN);
-			backBufferGraphics.fillRect(x + index*60, y+index*20, (isSelected ? 10 : 0), 10);
-			// Ship name
-			backBufferGraphics.setFont(fontRegular);
-			backBufferGraphics.drawString(PlayerShip.ShipType.values()[index].name(), x + index*60 + 15, y+index*20);
-		} else {
-			// Ship box
-			backBufferGraphics.setColor(isSelected ? Color.GREEN : Color.WHITE);
-			backBufferGraphics.fillRect(x + index*60, y+index*20, isSelected ? 0 : 10, 10);
-			backBufferGraphics.setColor(Color.GRAY);
-			backBufferGraphics.fillRect(x + index*60, y+index*20, (isSelected ? 10 : 0), 10);
-			// Ship name
-			backBufferGraphics.setFont(fontRegular);
-			backBufferGraphics.drawString(PlayerShip.ShipType.values()[index].name(), x + index*60 + 15, y + index*20);
-		}
-
-	}
-
-	public void drawCenteredRegularString(final Screen screen,
-										  final String string, final int height, boolean isSelected) {
-		backBufferGraphics.setFont(fontRegular);
-		// 선택된 경우 초록색, 그렇지 않으면 흰색으로 표시
-		backBufferGraphics.setColor(isSelected ? Color.GREEN : Color.WHITE);
-		backBufferGraphics.drawString(string, screen.getWidth() / 2
-				- fontRegularMetrics.stringWidth(string) / 2, height);
-	}
-
-	public void drawLeftAlignedRegularString(Screen screen, String text, int x, int y, boolean isSelected) {
-		Graphics2D g = (Graphics2D) backBufferGraphics;
-
-		if (isSelected) {
-			g.setColor(Color.GREEN); // 색상 선택: 선택된 옵션일 때
-		} else {
-			g.setColor(Color.WHITE); // 색상 선택: 선택되지 않은 옵션일 때
-		}
-
-		g.setFont(fontRegular);
-		g.drawString(text, x, y);
-	}
-
 
 }
