@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import engine.*;
 import engine.DrawManager.SpriteType;
+import engine.drawmanager.GameDrawManager;
 import screen.Screen;
 
 /**
@@ -196,7 +197,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		for (List<EnemyShip> column : this.enemyShips)
 			for (EnemyShip enemyShip : column)
 				if (enemyShip != null)
-				    drawManager.drawEntity(enemyShip, enemyShip.getPositionX(), enemyShip.getPositionY());
+				    GameDrawManager.drawEntity(enemyShip, enemyShip.getPositionX(), enemyShip.getPositionY());
 	}
 
 	/**
@@ -206,7 +207,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		for (List<EnemyShip> column : this.enemyShips)
 			for (EnemyShip enemyShip : column)
 				if (enemyShip != null)
-					drawManager.drawEntity(enemyShip, enemyShip.getPositionX(),
+					GameDrawManager.drawEntity(enemyShip, enemyShip.getPositionX(),
 							enemyShip.getPositionY(), playerNumber);
 	}
 

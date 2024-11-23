@@ -7,6 +7,7 @@ import engine.Core;
 import engine.Sound;
 import engine.SoundManager;
 import entity.Wallet;
+import engine.drawmanager.ShopDrawManager;
 
 public class ShopScreen extends Screen {
 
@@ -162,8 +163,7 @@ public class ShopScreen extends Screen {
     private void draw() {
         drawManager.initDrawing(this);
 
-
-        drawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown);
+        ShopDrawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown);
 
         drawManager.completeDrawing(this);
     }

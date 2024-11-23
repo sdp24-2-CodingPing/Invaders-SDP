@@ -5,6 +5,7 @@ import engine.Core;
 import engine.GameSettings;
 import engine.InputManager;
 import engine.*;
+import engine.drawmanager.GameSettingDrawManager;
 
 import java.awt.event.KeyEvent;
 
@@ -205,11 +206,11 @@ public class GameSettingScreen extends Screen {
 	private void draw() {
 		drawManager.initDrawing(this);
 
-		drawManager.drawGameSetting(this);
+		GameSettingDrawManager.drawGameSetting(this);
 
-		drawManager.drawGameSettingRow(this, this.selectedRow);
+		GameSettingDrawManager.drawGameSettingRow(this, this.selectedRow);
 
-		drawManager.drawGameSettingElements(this, this.selectedRow, isMultiplayer, name1, name2,this.difficultyLevel);
+		GameSettingDrawManager.drawGameSettingElements(this, this.selectedRow, isMultiplayer, name1, name2,this.difficultyLevel);
 
 		drawManager.completeDrawing(this);
 

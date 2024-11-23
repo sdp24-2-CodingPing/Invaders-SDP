@@ -6,6 +6,7 @@ import engine.Sound;
 import engine.SoundManager;
 import entity.Card;
 import entity.Wallet;
+import engine.drawmanager.CardSelectDrawManager;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -119,8 +120,8 @@ public class CardSelectScreen extends Screen {
 	private void draw() {
 		drawManager.initDrawing(this);
 
-		drawManager.drawCardSelectTitle(this);
-		drawManager.drawCardList(this, this.cardList, this.returnCode);
+		CardSelectDrawManager.drawCardSelectTitle(this);
+		CardSelectDrawManager.drawCardList(this, this.cardList, this.returnCode);
 
 		drawManager.completeDrawing(this);
 	}

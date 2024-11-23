@@ -5,6 +5,7 @@ import engine.Core;
 import engine.InputManager;
 import engine.Sound;
 import engine.SoundManager;
+import engine.drawmanager.StopDrawManager;
 
 import java.awt.event.KeyEvent;
 
@@ -104,11 +105,11 @@ public class StopScreen extends Screen {
     private void draw() {
         drawManager.initDrawing(this);
 
-        drawManager.drawPauseOverlay(this, this.getHeight() / 4);
+        StopDrawManager.drawPauseOverlay(this, this.getHeight() / 4);
 
         for (int i = 0; i < options.length; i++) {
             boolean isSelected = (i == selectedOption);
-            drawManager.drawLeftAlignedRegularString(this, options[i], 200, this.getHeight() / 2 + i * 50, isSelected);
+            StopDrawManager.drawLeftAlignedRegularString(this, options[i], 200, this.getHeight() / 2 + i * 50, isSelected);
         }
 
         drawManager.completeDrawing(this);

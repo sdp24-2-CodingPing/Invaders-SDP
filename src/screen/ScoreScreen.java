@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import engine.*;
+import engine.drawmanager.ScoreDrawManager;
 import entity.Wallet;
 
 /**
@@ -184,9 +185,9 @@ public class ScoreScreen extends Screen {
 	private void draw() {
 		drawManager.initDrawing(this);
 
-		drawManager.drawGameOver(this, this.inputDelay.checkFinished(),
+		ScoreDrawManager.drawGameOver(this, this.inputDelay.checkFinished(),
 				this.isNewRecord);
-		drawManager.drawResults(this, this.score, this.playerHp,
+		ScoreDrawManager.drawResults(this, this.score, this.playerHp,
 				this.shipsDestroyed, this.accuracy, this.isNewRecord, this.coinsEarned);
 
 		drawManager.completeDrawing(this);
