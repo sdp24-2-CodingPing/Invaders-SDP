@@ -7,6 +7,7 @@ import entity.player.PlayerActionManager;
 import entity.player.PlayerShip;
 import entity.skill.LaserStrike;
 import entity.skill.Skill;
+import entity.player.PlayerLevel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -661,10 +662,14 @@ public class GameScreen extends Screen implements Callable<GameState> {
       GameDrawManager.drawEntity(skills[i], offsetX + 2, HUD_Y + HUD_MARGIN_TOP + 2); // 스킬 아이콘 그리기
     }
 
-    // Draw HP & EXP
-    GameDrawManager.drawSegmentedBar(220, HUD_Y + HUD_MARGIN_TOP + 7, 350, 12, 10, 15, Color.GREEN);
-    GameDrawManager.drawSegmentedBar(
-        220, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 350, 12, 12, 20, Color.YELLOW);
+		// Draw HP & EXP
+		int currentHP = PlayerShip.getPlayerHP(); // Current HP of the player
+		int maxHP = 3; // Maximum HP of the player
+		int currentEXP = PlayerLevel.getExp(); // Current EXP of the player
+		int maxEXP = PlayerLevel.getRequiredExpForLevelUp(PlayerLevel.level); // Maximum EXP required for level up
+		GameDrawManager.drawSegmentedBar(220, HUD_Y + HUD_MARGIN_TOP + 7, 350, 12, currentHP, maxHP, Color.GREEN);
+		GameDrawManager.drawSegmentedBar(220, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 350, 12, currentEXP, maxEXP, Color.YELLOW);
+
 
     // Countdown to game start.
     if (!this.inputDelay.checkFinished()) {

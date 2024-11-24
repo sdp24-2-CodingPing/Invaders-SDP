@@ -19,7 +19,7 @@ public class PlayerLevel {
   /** Application logger. */
   private final Logger logger;
 
-  // 현제 레벨에서 레벨업 시 필요한 경험치를 저장하는 배열 (예: level 1 -> 100 exp, level 2 -> 200 exp)
+  // 현재 레벨에서 레벨업 시 필요한 경험치를 저장하는 배열 (예: level 1 -> 100 exp, level 2 -> 200 exp)
   private static final int[] EXP_REQUIRED = {0, 100, 200, 400, 800, 1600, 3200, 6400, 12800};
 
   /** constructor */
@@ -72,7 +72,7 @@ public class PlayerLevel {
    * @param level player ship current level
    * @return int EXP required to current level for level up
    */
-  public int getRequiredExpForLevelUp(int level) {
+  public static int getRequiredExpForLevelUp(int level) {
     return 100 * (int) (Math.pow(1.2, level - 1));
     //        if (level < EXP_REQUIRED.length) {
     //            return EXP_REQUIRED[level];
@@ -81,11 +81,11 @@ public class PlayerLevel {
     //        }
   }
 
-  public int getLevel() {
+  public static int getLevel() {
     return level;
   }
 
-  public int getExp() {
+  public static int getExp() {
     return exp;
   }
 
