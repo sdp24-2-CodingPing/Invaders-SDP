@@ -60,7 +60,7 @@ public abstract class PlayerShip extends Entity {
   private int playerMaxHP;
 
   /** Player HP */
-  private int playerHP;
+  private static int playerHP;
 
   /** Player level and exp */
   private PlayerLevel playerLevel;
