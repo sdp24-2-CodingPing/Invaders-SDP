@@ -46,7 +46,7 @@ public abstract class PlayerShip extends Entity {
 	private final SoundManager soundManager = SoundManager.getInstance();
 
 	/** Player HP */
-	private int playerHP;
+	private static int playerHP;
 	/** Player level and exp */
 	private PlayerLevel playerLevel;
 
@@ -209,8 +209,8 @@ public abstract class PlayerShip extends Entity {
 	 *
 	 * @return player HP
 	 */
-	public final int getPlayerHP() {
-		return this.playerHP;
+	public static final int getPlayerHP() {
+		return playerHP;
 	}
 
 	/**
