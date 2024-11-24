@@ -171,3 +171,6 @@ log*
 .checkstyle
 .idea/
 *.iml
+
+# Ignore Gradle project-specific cache directory
+.gradle
