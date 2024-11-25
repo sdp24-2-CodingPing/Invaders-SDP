@@ -275,9 +275,15 @@ public class EnemyShip extends Entity {
         soundManager.playSound(Sound.ALIEN_HIT, balance);
 	}
 
-	//Todo: 데미지에 따라 적군의 체력이 깎이도록 수정 필요
+	/**
+	 * Applies damage to the enemy and determines if it is destroyed.
+	 *
+	 * @param damage  Amount of damage dealt to the enemy.
+	 * @param balance Sound balance (-1.0 for player1, 1.0 for player2).
+	 */
     public final void applyDamageToEnemy(int damage, final float balance) { //Determine whether to destroy the enemy ship based on its health
-		health --;
+		this.health -= damage;
+
 		if(this.health <= 0){
             this.isDestroyed = true;
             this.spriteType = SpriteType.Explosion;
