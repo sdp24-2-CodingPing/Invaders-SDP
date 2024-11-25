@@ -312,6 +312,23 @@ public abstract class PlayerShip extends Entity {
 		return remainingTime > 0 ? remainingTime : 0;
 	}
 
+	/**
+	 * Calculates and returns the player's attack power.
+	 * The attack power can depend on player's level, upgrades, or items.
+	 *
+	 * @return The calculated attack power.
+	 */
+	public final int getAttackPower() {
+		int baseAttackPower = 10; // basic attack power
+		int levelMultiplier = this.playerLevel.getLevel(); // multiplier based on the player's level
+
+		// final attack power calculation
+		int attackPower = baseAttackPower + (levelMultiplier * 2);
+
+		this.logger.info("Player attack power: " + attackPower);
+		return attackPower;
+	}
+
 
 	public void applyShopItem(Wallet wallet){
 		int bulletLv = wallet.getBullet_lv();
