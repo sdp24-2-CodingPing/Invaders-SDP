@@ -360,10 +360,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 * check current level is finished or not.
 	 * */
 	private void checkLevelCompletion() {
+		this.enemyShipFormation.update();
 		if ((this.enemyShipFormation.isEmpty() || this.playerShip.isDestroyed()) && !this.levelFinished) {
 			this.levelFinished = true;
 			this.screenFinishedCooldown.reset();
-
 			if (this.playerShip.isDestroyed()) { // 게임 오버
 				this.isGameOver = true;
 				soundManager.playSound(Sound.GAME_END);

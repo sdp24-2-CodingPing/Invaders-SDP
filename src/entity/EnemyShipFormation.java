@@ -283,16 +283,19 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 			positionY += movementY;
 
 			// Cleans explosions.
-			for (int i = 0; i < this.enemyShips.size(); i++)
-				for (int j = 0; j < this.enemyShips.get(i).size(); j++)
-					if (this.enemyShips.get(i).get(j) != null && this.enemyShips.get(i).get(j).isDestroyed()) {
-						this.logger.info("Removed enemy " + j + " from column " + i);
-						this.enemyShips.get(i).set(j, null);
-						if (shipCount > 0) {
-							this.shipCount--;
-							this.distroyedship++;
+			for (int i = 0; i < this.enemyShips.size(); i++) {
+				for (int j = 0; j < this.enemyShips.get(i).size(); j++) {
+					EnemyShip ship = this.enemyShips.get(i).get(j);
+					if (ship != null && ship.isDestroyed()) {
+						this.enemyShips.get(i).set(j, null); // 적 제거
+						if (this.shipCount > 0) {
+							this.shipCount--; // 남은 적 수 감소
+							this.distroyedship++; // 파괴된 적 수 증가
 						}
 					}
+				}
+			}
+
 
 			for (List<EnemyShip> column : this.enemyShips)
 				for (EnemyShip enemyShip : column)
@@ -453,48 +456,45 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	}
 
 	public final void applyDamageToEnemy(int damage, final EnemyShip damagedEnemy, final float balance) {
-		for (List<EnemyShip> column : this.enemyShips)
-			for (int i = 0; i < column.size(); i++)
-				if (column.get(i) != null && column.get(i).equals(damagedEnemy)) {
-					column.get(i).applyDamageToEnemy(damage, balance); //Todo: 데미지에 따라 적군의 체력이 깎이도록 수정 필요
-					//If health is 0, number of remaining enemy ships--, score awarded, number of destroyed ships++
-					if(damagedEnemy.getHealth() <= 0){
-						this.shipCount--;
+		for (List<EnemyShip> column : this.enemyShips) {
+			for (int i = 0; i < column.size(); i++) {
+				EnemyShip ship = column.get(i);
+				if (ship != null && ship.equals(damagedEnemy)) {
+					ship.applyDamageToEnemy(damage, balance); // 적에게 데미지 적용
+
+					// 적이 파괴된 경우
+					if (damagedEnemy.getHealth() <= 0) {
+						column.set(i, null); // 배열에서 제거
+						this.shipCount--;   // 남은 적 함선 수 감소
 						this.logger.info("Destroyed ship in ("
 								+ this.enemyShips.indexOf(column) + "," + i + ")");
-						pointValue = damagedEnemy.getPointValue();
-						expValue = damagedEnemy.getExpValue(); //죽은 enemy에 대한 exp
-						distroyedship = 1;
-					}else{
+						pointValue = damagedEnemy.getPointValue(); // 점수 갱신
+						expValue = damagedEnemy.getExpValue();     // 경험치 갱신
+						distroyedship = 1;                        // 파괴된 적 함선 수 갱신
+
+						// shooters 리스트 갱신
+						if (this.shooters.contains(damagedEnemy)) {
+							int destroyedShipIndex = this.shooters.indexOf(damagedEnemy);
+							EnemyShip nextShooter = getNextShooter(column);
+							if (nextShooter != null) {
+								this.shooters.set(destroyedShipIndex, nextShooter); // 다음 슈터 설정
+							} else {
+								this.shooters.remove(destroyedShipIndex); // 열에 남은 슈터가 없으면 제거
+								this.logger.info("Shooters list reduced to " + this.shooters.size() + " members.");
+							}
+						}
+					} else {
 						pointValue = 0;
 						expValue = 0;
-						distroyedship = 0;
+						distroyedship = 0; // 적이 파괴되지 않음
 					}
+
+					return; // 데미지가 적용된 적에 대한 추가 연산 방지
 				}
-
-		// Updates the list of ships that can shoot the player.
-		if (this.shooters.contains(damagedEnemy)) {
-			int destroyedShipIndex = this.shooters.indexOf(damagedEnemy);
-			int destroyedShipColumnIndex = -1;
-
-			for (List<EnemyShip> column : this.enemyShips)
-				if (column.contains(damagedEnemy)) {
-					destroyedShipColumnIndex = this.enemyShips.indexOf(column);
-					break;
-				}
-
-			EnemyShip nextShooter = getNextShooter(this.enemyShips
-					.get(destroyedShipColumnIndex));
-
-			if (nextShooter != null)
-				this.shooters.set(destroyedShipIndex, nextShooter);
-			else {
-				this.shooters.remove(destroyedShipIndex);
-				this.logger.info("Shooters list reduced to "
-						+ this.shooters.size() + " members.");
 			}
 		}
 	}
+
 
 	/**
 	 * Gets the ship on a given column that will be in charge of shooting.
@@ -536,8 +536,16 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	 * 
 	 * @return True when all ships have been destroyed.
 	 */
-	public final boolean isEmpty() {
-		return this.shipCount <= 0;
+	public boolean isEmpty() {
+		// 모든 enemyShips가 파괴되었는지 확인
+		for (List<EnemyShip> column : this.enemyShips) {
+			for (EnemyShip ship : column) {
+				if (ship != null && !ship.isDestroyed()) {
+					return false; // 파괴되지 않은 적 함선이 있음
+				}
+			}
+		}
+		return true; // 모든 적 함선이 파괴됨
 	}
 
 
