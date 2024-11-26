@@ -191,7 +191,7 @@ public abstract class PlayerShip extends Entity {
 				default:
 					bullets.add(BulletPool.getBullet(positionX + this.width, positionY, this.getBulletSpeed()));
 					bullets.add(BulletPool.getBullet(positionX, positionY, this.getBulletSpeed()));
-					for (int i = 1; i <= this.getBulletCount() - 2; i++) bullets.add(BulletPool.getBullet(positionX + this.width * i / this.getBulletCount() - 1, positionY, this.getBulletSpeed()));
+					for (int i = 1; i <= this.getBulletCount() - 2; i++) bullets.add(BulletPool.getBullet(positionX + this.width * i / (this.getBulletCount() - 1), positionY, this.getBulletSpeed()));
 					soundManager.playSound(Sound.ITEM_3SHOT, balance);
 					break;
 			}
