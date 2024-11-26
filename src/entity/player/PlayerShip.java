@@ -329,7 +329,7 @@ public abstract class PlayerShip extends Entity {
 	 * @return Time between shots.
 	 */
 	public final int getShootingInterval() {
-		return Math.round(SHOOTING_INTERVAL * (int)(Math.pow(0.9 ,(double)playerCardStatus.getIntervalLevel())) * this.multipliers.shootingInterval());
+		return (int)Math.round(SHOOTING_INTERVAL * (Math.pow(0.9 ,(double)playerCardStatus.getIntervalLevel())) * this.multipliers.shootingInterval());
 	}
 
 	/**
