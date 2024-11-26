@@ -824,7 +824,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			processSpecialEnemyHit(bullet, recyclable);
 		}
 		//콤보 초기화
-		if (this.itemManager.getShotNum() == 1 && bullet.getPositionY() < topEnemyY) {
+		if (bullet.getPositionY() < topEnemyY) {
 			this.gameState.setCombo(0);
 			isExecuted = true;
 		}
