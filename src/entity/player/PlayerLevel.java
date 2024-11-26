@@ -1,10 +1,11 @@
 package entity.player;
 
 import engine.Core;
-import entity.Card;
+import entity.card.*;
 import screen.CardSelectScreen;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Logger;
 /**
  * manages exp, level, skill and stats
@@ -41,11 +42,20 @@ public class PlayerLevel {
     }
 
     public Card selectLevelUpCard () {
-        ArrayList<Card> cardList = new ArrayList<>();
+        ArrayList<Card> allCards = new ArrayList<>();
+        allCards.add(new DamageCard());
+        allCards.add(new MoveSpeedCard());
+        allCards.add(new BulletsCountCard());
+        allCards.add(new BulletsIntervalCard());
+        allCards.add(new BulletsSpeedCard());
+        allCards.add(new HpCard());
 
-        cardList.add(new Card("card1"));
-        cardList.add(new Card("card2"));
-        cardList.add(new Card("card3"));
+        Collections.shuffle(allCards);
+
+        ArrayList<Card> cardList = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            cardList.add(allCards.get(i));
+        }
 
         CardSelectScreen cardSelectScreen = new CardSelectScreen(Core.getWidth(), Core.getHeight(), Core.getFps(), cardList);
         cardSelectScreen.initialize();
