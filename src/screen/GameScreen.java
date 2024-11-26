@@ -218,7 +218,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		web = new ArrayList<>();
 		for(int i = 0; i < web_count; i++) {
 			double randomValue = Math.random();
-			this.web.add(new Web((int) Math.max(0, randomValue * width - 12 * 2), this.height - 130));
+			this.web.add(new Web((int) Math.max(0, randomValue * width - 12 * 2), this.height - 105));
 			this.logger.info("Spider web creation location : " + web.get(i).getPositionX());
 		}
 
