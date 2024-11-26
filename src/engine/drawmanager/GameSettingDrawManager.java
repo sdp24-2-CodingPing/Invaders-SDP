@@ -58,12 +58,8 @@ public class GameSettingDrawManager extends DrawManager {
      *            Screen to draw on.
      * @param selectedRow
      *            Selected row.
-     * @param isMultiPlayer
-     *            If the game is multiplayer.
-     * @param name1
-     *            Player 1 name.
-     * @param name2
-     *            Player 2 name.
+     * @param name
+     *            Player name.
      * @param difficultyLevel
      *            Difficulty level.
      *
@@ -71,26 +67,19 @@ public class GameSettingDrawManager extends DrawManager {
      *
      */
     public static void drawGameSettingElements(final Screen screen, final int selectedRow,
-                                               final boolean isMultiPlayer, final String name1, final String name2, final int difficultyLevel) {
+                                               final String name, final int difficultyLevel) {
         String spaceString = " ";
-        String player1String = "1 Player";
-        String player2String = "2 Player";
+        String playerString = "Player";
         String levelEasyString = "Easy";
         String levelNormalString = "Normal";
         String levelHardString = "Hard";
         String startString = "Start";
 
-        if (!isMultiPlayer) backBufferGraphics.setColor(Color.GREEN);
+        if (selectedRow==0) backBufferGraphics.setColor(Color.GREEN);
         else backBufferGraphics.setColor(Color.WHITE);
 
-        drawCenteredRegularString(screen, player1String + spaceString.repeat(40), screen.getHeight() / 100 * 43);
-        drawCenteredRegularString(screen, name1 + spaceString.repeat(40), screen.getHeight() / 100 * 58);
-
-        if (!isMultiPlayer) backBufferGraphics.setColor(Color.WHITE);
-        else backBufferGraphics.setColor(Color.GREEN);
-
-        drawCenteredRegularString(screen, spaceString.repeat(40) + player2String, screen.getHeight() / 100 * 43);
-        drawCenteredRegularString(screen, spaceString.repeat(40) + name2, screen.getHeight() / 100 * 58);
+        drawCenteredRegularString(screen, playerString, screen.getHeight() / 100 * 43);
+        drawCenteredRegularString(screen, name, screen.getHeight() / 100 * 58);
 
         if (difficultyLevel==0) backBufferGraphics.setColor(Color.GREEN);
         else backBufferGraphics.setColor(Color.WHITE);

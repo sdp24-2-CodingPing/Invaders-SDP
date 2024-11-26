@@ -348,10 +348,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 		cleanBullets();
 
-		if (playerNumber >= 0)
-			drawThread();
-		else
-			draw();
+		draw();
 
 		checkLevelCompletion();
 	}
@@ -732,100 +729,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 		// Remove from the blocker list that goes off screen
 		blockers.removeAll(toRemove);
-	}
-
-	/**
-	 * Draws the elements associated with the screen to thread buffer.
-	 */
-	private void drawThread() {
-		drawManager.initThreadDrawing(this, playerNumber);
-		GameDrawManager.drawGameTitle(this, playerNumber);
-
-		GameDrawManager.drawLaunchTrajectory( this,this.playerShip.getPositionX(), playerNumber);
-
-		GameDrawManager.drawEntity(this.playerShip, this.playerShip.getPositionX(),
-				this.playerShip.getPositionY(), playerNumber);
-
-		//draw Spider Web
-		for (int i = 0; i < web.size(); i++) {
-			GameDrawManager.drawEntity(this.web.get(i), this.web.get(i).getPositionX(),
-					this.web.get(i).getPositionY(), playerNumber);
-		}
-		//draw Blocks
-		for (Block block : block)
-			GameDrawManager.drawEntity(block, block.getPositionX(),
-					block.getPositionY(), playerNumber);
-
-		if (this.enemyShipSpecial != null)
-			GameDrawManager.drawEntity(this.enemyShipSpecial,
-					this.enemyShipSpecial.getPositionX(),
-					this.enemyShipSpecial.getPositionY(), playerNumber);
-
-		enemyShipFormation.draw(playerNumber);
-
-		for (ItemBox itemBox : this.itemBoxes)
-			GameDrawManager.drawEntity(itemBox, itemBox.getPositionX(), itemBox.getPositionY(), playerNumber);
-
-		for (Barrier barrier : this.barriers)
-			GameDrawManager.drawEntity(barrier, barrier.getPositionX(), barrier.getPositionY(), playerNumber);
-
-		for (Bullet bullet : this.bullets)
-			GameDrawManager.drawEntity(bullet, bullet.getPositionX(),
-					bullet.getPositionY(), playerNumber);
-
-		// Interface.
-		GameDrawManager.drawScore(this, this.gameState.getScore(), playerNumber);
-		GameDrawManager.drawElapsedTime(this, this.gameState.getElapsedTime(), playerNumber);
-		GameDrawManager.drawAlertMessage(this, this.alertMessage, playerNumber);
-		GameDrawManager.drawLevel(this, this.gameState.getGameLevel(), playerNumber);
-		GameDrawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1, playerNumber);
-		GameDrawManager.drawReloadTimer(this,this.playerShip, playerShip.getRemainingReloadTime(), playerNumber);
-		GameDrawManager.drawCombo(this,this.gameState.getCombo(), playerNumber);
-
-		// Show GameOver if one player ends first
-		if (this.levelFinished && this.screenFinishedCooldown.checkFinished() && this.playerShip.isDestroyed()) {
-			GameDrawManager.drawInGameOver(this, this.height, playerNumber);
-			GameDrawManager.drawHorizontalLine(this, this.height / 2 - this.height
-					/ 12, playerNumber);
-			GameDrawManager.drawHorizontalLine(this, this.height / 2 + this.height
-					/ 12, playerNumber);
-		}
-
-		// Countdown to game start.
-		if (!this.inputDelay.checkFinished()) {
-			int countdown = (int) ((INPUT_DELAY - (System.currentTimeMillis() - this.gameStartTime)) / 1000);
-			GameDrawManager.drawCountDown(this, this.gameState.getGameLevel(), countdown,
-					 playerNumber);
-			GameDrawManager.drawHorizontalLine(this, this.height / 2 - this.height
-					/ 12, playerNumber);
-			GameDrawManager.drawHorizontalLine(this, this.height / 2 + this.height
-					/ 12, playerNumber);
-
-			//Intermediate aggregation
-			if (this.gameState.getGameLevel() > 1){
-				if (countdown == 0) {
-					//Reset mac combo and edit temporary values
-					this.gameState.setPrevTime(this.gameState.getElapsedTime());
-					this.gameState.setPrevScore(this.gameState.getScore());
-					this.gameState.setMaxCombo(0);
-				} else {
-					// Don't show it just before the game starts, i.e. when the countdown is zero.
-					GameDrawManager.interAggre(this, this.gameState.getGameLevel() - 1, this.gameState.getMaxCombo(), this.gameState.getElapsedTime(), this.gameState.getPrevTime(), this.gameState.getScore(), this.gameState.getPrevScore(), playerNumber);
-				}
-			}
-		}
-
-		//add drawRecord method for drawing
-		GameDrawManager.drawRecord(highScores,this, playerNumber);
-
-		// Blocker drawing part
-		if (!blockers.isEmpty()) {
-			for (Blocker blocker : blockers) {
-				GameDrawManager.drawRotatedEntity(blocker, blocker.getPositionX(), blocker.getPositionY(), blocker.getAngle(), playerNumber);
-			}
-		}
-
-		GameDrawManager.flushBuffer(this, playerNumber);
 	}
 
 	/**
