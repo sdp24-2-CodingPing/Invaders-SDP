@@ -71,11 +71,12 @@ public class PlayerLevel {
      * @return int EXP required to current level for level up
      * */
     public int getRequiredExpForLevelUp(int level) {
-        if (level < EXP_REQUIRED.length) {
-            return EXP_REQUIRED[level];
-        } else {
-            return 100000000; // 경험치 요구치가 없거나 추가적인 레벨을 위한 설정이 필요할 때
-        }
+        return 100 * (int)(Math.pow(1.05, level - 1));
+//        if (level < EXP_REQUIRED.length) {
+//            return EXP_REQUIRED[level];
+//        } else {
+//            return 100000000; // 경험치 요구치가 없거나 추가적인 레벨을 위한 설정이 필요할 때
+//        }
     }
 
     public int getLevel() {
