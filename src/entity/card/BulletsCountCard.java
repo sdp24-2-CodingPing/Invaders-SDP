@@ -4,7 +4,7 @@ import entity.player.PlayerShip;
 
 public class BulletsCountCard extends Card {
     public BulletsCountCard() {
-        super("BulletsCount");
+        super("Count");
     }
 
     @Override

@@ -4,7 +4,7 @@ import entity.player.PlayerShip;
 
 public class BulletsIntervalCard extends Card {
     public BulletsIntervalCard() {
-        super("BulletsInterval");
+        super("Interval");
     }
 
     @Override

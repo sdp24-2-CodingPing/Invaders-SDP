@@ -4,7 +4,7 @@ import entity.player.PlayerShip;
 
 public class BulletsSpeedCard extends Card {
     public BulletsSpeedCard() {
-        super("BulletsSpeed");
+        super("Bullet Speed");
     }
 
     @Override
