@@ -95,9 +95,9 @@ public class EnemyShip extends Entity {
 	 * Assigns base health for each enemy types, considering level scaling.
 	 */
 	private void initializeHealth(GameState gameState, EnemyType enemyType) {
-		double baseHealth = 1;
-		if (enemyType.equals(EnemyType.ELITE))	baseHealth = 3;
-		else if (enemyType.equals(EnemyType.CHAMPION)) baseHealth = 7;
+		double baseHealth = 10;
+		if (enemyType.equals(EnemyType.ELITE))	baseHealth = 30;
+		else if (enemyType.equals(EnemyType.CHAMPION)) baseHealth = 70;
 
 		double levelMultiplier = Math.pow(1.05, gameState.getGameLevel() - 1);
 		this.health = baseHealth * levelMultiplier;
@@ -267,9 +267,15 @@ public class EnemyShip extends Entity {
         soundManager.playSound(Sound.ALIEN_HIT, balance);
 	}
 
-	//Todo: 데미지에 따라 적군의 체력이 깎이도록 수정 필요
+	/**
+	 * Applies damage to the enemy and determines if it is destroyed.
+	 *
+	 * @param damage  Amount of damage dealt to the enemy.
+	 * @param balance Sound balance (-1.0 for player1, 1.0 for player2).
+	 */
     public final void applyDamageToEnemy(int damage, final float balance) { //Determine whether to destroy the enemy ship based on its health
-		health --;
+		this.health -= damage;
+
 		if(this.health <= 0){
             this.isDestroyed = true;
             this.spriteType = SpriteType.Explosion;

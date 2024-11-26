@@ -910,7 +910,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	private void processEnemyHit(Bullet bullet, Set<Bullet> recyclable, EnemyShip enemyShip) {
 		// Decide whether to destroy according to physical strength
-		this.enemyShipFormation.applyDamageToEnemy(1, enemyShip, balance); //Todo: player 공격력에 따라 적군에게 입히는 데미지 변수로 넘겨주기
+		int playerAttackPower = this.gameState.getPlayerShip().getPlayerDamage();
+		this.enemyShipFormation.applyDamageToEnemy(playerAttackPower, enemyShip, balance);
 		// If the enemy doesn't die, the combo increases;
 		// if the enemy dies, both the combo and score increase.
 		this.gameState.setScore(this.gameState.getScore() + Score.comboScore(this.enemyShipFormation.getPointValue(), this.gameState.getCombo()));

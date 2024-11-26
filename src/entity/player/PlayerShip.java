@@ -23,6 +23,8 @@ public abstract class PlayerShip extends Entity {
 	private static int SHOOTING_INTERVAL = 750;
 	/** Speed of the bullets shot by the ship. */
 	private static int BULLET_SPEED = -6;
+	/** Player bullets default damage */
+	private static int DAMAGE = 10;
 	/** Movement of the ship for each unit of time. */
 	private static final int SPEED = 2;
 
@@ -310,6 +312,16 @@ public abstract class PlayerShip extends Entity {
 		long elapsedTime = currentTime - this.lastShootTime;
 		long remainingTime = this.getShootingInterval() - elapsedTime;
 		return remainingTime > 0 ? remainingTime : 0;
+	}
+
+	/**
+	 * Calculates and returns the player's attack power.
+	 * The attack power can depend on player's level, upgrades, or items.
+	 *
+	 * @return The calculated attack power.
+	 */
+	public final int getPlayerDamage() {
+		return (Math.round(DAMAGE * this.multipliers.damage()));
 	}
 
 
