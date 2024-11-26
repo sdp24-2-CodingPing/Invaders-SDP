@@ -89,7 +89,7 @@ public abstract class PlayerShip extends Entity {
 		this.logger = Core.getLogger();
 		this.playerMaxHP = 3;
 		this.playerHP = 3;
-		this.playerLevel = new PlayerLevel(0, 1);
+		this.playerLevel = new PlayerLevel(90, 1);
 		this.playerCardStatus = new PlayerCardStatus();
 
 		this.name = name;
@@ -265,7 +265,7 @@ public abstract class PlayerShip extends Entity {
 	public final void managePlayerLevelUp () {
 		while (playerLevel.isLevelUpPossible()) {
 			playerLevel.levelUp();
-			playerLevel.selectLevelUpCard();
+			playerLevel.selectLevelUpCard().applyCardStatus(this);
 		}
 	}
 
