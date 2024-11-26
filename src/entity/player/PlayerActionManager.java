@@ -102,7 +102,8 @@ public class PlayerActionManager {
         boolean player2Attacking = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
 
         // Both players are attacking
-        if (this.playerShip.shoot(bullets))
+        if (player1Attacking && this.playerShip.shoot(bullets)) {
             this.gameState.setBulletsShot(this.gameState.getBulletsShot() + this.playerShip.getBulletCount());
+        }
     }
 }
