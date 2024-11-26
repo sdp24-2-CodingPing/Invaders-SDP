@@ -235,23 +235,6 @@ public class DrawManager {
 	}
 
 	/**
-	 * First part of the drawing process in thread. Initializes buffers each thread, draws the
-	 * background and prepares the images.
-	 *
-	 * @param screen
-	 *            Screen to draw in.
-	 * @param threadNumber
-	 * 			  Thread number for two player mode
-	 */
-	public void initThreadDrawing(final Screen screen, final int threadNumber) {
-		BufferedImage threadBuffer = new BufferedImage(screen.getWidth(),screen.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics threadGraphic = threadBuffer.getGraphics();
-
-		threadBuffers[threadNumber] = threadBuffer;
-		threadBufferGraphics[threadNumber] = threadGraphic;
-	}
-
-	/**
 	 * Draws the completed drawing on screen.
 	 *
 	 * @param screen
