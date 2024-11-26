@@ -1,7 +1,6 @@
 package entity;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Random;
 
 import engine.Cooldown;
@@ -89,35 +88,7 @@ public class EnemyShip extends Entity {
 		this.isDestroyed = false;
 		initializeHealth(gameState, this.enemyType);
 		initializeExp(gameState, this.enemyType);
-
-		switch (this.spriteType) {
-		case EnemyShipA1:
-		case EnemyShipA2:
-			this.pointValue = (int) (A_TYPE_POINTS+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
-			break;
-		case EnemyShipB1:
-		case EnemyShipB2:
-			this.pointValue = (int) (B_TYPE_POINTS+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
-			break;
-		case EnemyShipC1:
-		case EnemyShipC2:
-			this.pointValue = (int) (C_TYPE_POINTS+(gameState.getGameLevel()*0.1)+Core.getLevelSetting());
-			break;
-		case EnemyShipD1:
-		case EnemyShipD2:
-			this.pointValue = D_TYPE_POINTS;
-			break;
-		case EnemyShipE1:
-		case EnemyShipE2:
-			this.pointValue = E_TYPE_POINTS;
-			break;
-		case EnemyShipF1:
-			this.pointValue = F_TYPE_POINTS;
-			break;
-		default:
-			this.pointValue = 0;
-			break;
-		}
+		initializePoint(gameState, this.enemyType);
 	}
 
 	/**
@@ -130,6 +101,27 @@ public class EnemyShip extends Entity {
 
 		double levelMultiplier = Math.pow(1.05, gameState.getGameLevel() - 1);
 		this.health = baseHealth * levelMultiplier;
+	}
+
+	/**
+	 * Assign base point for each enemy types, considering level scaling.
+	 * @param gameState gameState instance
+	 * @param enemyType enemy type
+	 * */
+	private void initializePoint(GameState gameState, EnemyType enemyType) {
+		// base exp for enemies.
+		// index 0: GRUNT, index 1: ELITE, index 2: CHAMPION
+		final int[] BASE_POINT = {10,20,30};
+
+		double levelMultiplier = Math.pow(1.05, gameState.getGameLevel() - 1);
+		switch (enemyType){
+			case GRUNT: this.pointValue = BASE_POINT[0] * (int)levelMultiplier;
+				break;
+			case ELITE: this.pointValue = BASE_POINT[1] * (int)levelMultiplier;
+				break;
+			case CHAMPION: this.pointValue = BASE_POINT[2] * (int)levelMultiplier;
+				break;
+		}
 	}
 
 	/**

@@ -914,6 +914,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		// If the enemy doesn't die, the combo increases;
 		// if the enemy dies, both the combo and score increase.
 		this.gameState.setScore(this.gameState.getScore() + Score.comboScore(this.enemyShipFormation.getPointValue(), this.gameState.getCombo()));
+		logger.info("your score: " + gameState.getScore());
 		this.gameState.getPlayerShip().increasePlayerExp(this.enemyShipFormation.getExpValue());
 		this.gameState.setShipsDestroyed(this.gameState.getShipsDestroyed() + this.enemyShipFormation.getDistroyedship());
 		this.gameState.setCombo(this.gameState.getCombo() + 1);
