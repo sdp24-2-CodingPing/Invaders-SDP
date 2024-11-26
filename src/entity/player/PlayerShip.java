@@ -169,8 +169,6 @@ public abstract class PlayerShip extends Entity {
 	 *          List of bullets on screen, to add the new bullet.
 	 * @param balance
 	 * 			1p -1.0, 2p 1.0, both 0.0
-	 * @param shotNum
-	 * 			Upgraded shot.
 	 *
 	 * @return Checks if the bullet was shot correctly.
 	 */
@@ -280,6 +278,14 @@ public abstract class PlayerShip extends Entity {
 		return this.playerLevel;
 	}
 
+	/**
+	 * Get player card status
+	 *
+	 * @return player card status
+	 */
+	public final PlayerCardStatus getPlayerCardStatus() {
+		return this.playerCardStatus;
+	}
 
 	/**
 	 * Get Player HP

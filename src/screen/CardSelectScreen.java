@@ -4,8 +4,7 @@ import engine.Cooldown;
 import engine.Core;
 import engine.Sound;
 import engine.SoundManager;
-import entity.Card;
-import entity.Wallet;
+import entity.card.Card;
 import engine.drawmanager.CardSelectDrawManager;
 
 import java.awt.event.KeyEvent;

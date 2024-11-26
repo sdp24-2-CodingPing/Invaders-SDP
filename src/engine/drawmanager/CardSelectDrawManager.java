@@ -1,7 +1,7 @@
 package engine.drawmanager;
 
 import engine.DrawManager;
-import entity.Card;
+import entity.card.Card;
 import screen.Screen;
 
 import java.awt.*;
