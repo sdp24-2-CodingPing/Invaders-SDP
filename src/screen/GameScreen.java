@@ -310,7 +310,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		manageGameStop();
 
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
-			managePlayerShooting(this.bullets, this.playerNumber);
+			managePlayerShooting(this.bullets);
 			/*Elapsed Time Update*/
 			manageElapsedTime();
 
@@ -488,10 +488,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/**
 	 * manage shooting of player ship
 	 * @param bullets set of bullet of player ship
-	 * @param playerNumber number of player. 0: 1-player, 1: 2-player
 	 * */
-	private void managePlayerShooting(Set<Bullet> bullets, int playerNumber) {
-		playerActionManager.manageShooting(bullets, playerNumber);
+	private void managePlayerShooting(Set<Bullet> bullets) {
+		playerActionManager.manageShooting(bullets);
 	}
 
 	private void manageGameStop() {

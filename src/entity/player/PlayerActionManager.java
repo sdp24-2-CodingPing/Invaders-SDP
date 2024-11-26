@@ -96,32 +96,13 @@ public class PlayerActionManager {
     /**
      * manage bullet shoot of player ship
      * @param bullets set of bullets of player ship
-     * @param playerNumber number of player ship. 0: 1-player, 1: 2-player
      * */
-    public void manageShooting(Set<Bullet> bullets, int playerNumber) {
+    public void manageShooting(Set<Bullet> bullets) {
         boolean player1Attacking = inputManager.isKeyDown(KeyEvent.VK_SPACE);
         boolean player2Attacking = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
 
-        if (player1Attacking && player2Attacking) {
-            // Both players are attacking
-            if (this.playerShip.shoot(bullets, this.itemManager.getShotNum()))
-                this.gameState.setBulletsShot(this.gameState.getBulletsShot() + this.itemManager.getShotNum());
-        } else {
-            switch (playerNumber) {
-                case 1:
-                    if (player2Attacking) {
-                        if (this.playerShip.shoot(bullets, this.itemManager.getShotNum(), 1.0f)) // Player 2 attack
-                            this.gameState.setBulletsShot(this.gameState.getBulletsShot() + this.itemManager.getShotNum());
-                    }
-                    break;
-                default:
-                    if (player1Attacking) {
-                        if (this.playerShip.shoot(bullets, this.itemManager.getShotNum(), -1.0f)) // Player 1 attack
-                            this.gameState.setBulletsShot(this.gameState.getBulletsShot() + this.itemManager.getShotNum());
-                    }
-                    break;
-            }
-        }
+        // Both players are attacking
+        if (this.playerShip.shoot(bullets))
+            this.gameState.setBulletsShot(this.gameState.getBulletsShot() + this.playerShip.getBulletCount());
     }
-
 }

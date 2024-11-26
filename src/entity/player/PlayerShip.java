@@ -26,7 +26,9 @@ public abstract class PlayerShip extends Entity {
 	/** Player bullets default damage */
 	private static int DAMAGE = 10;
 	/** Movement of the ship for each unit of time. */
-	private static final int SPEED = 2;
+	private static int SPEED = 2;
+	/** Player bullets default count */
+	private static int BULLET_COUNT = 1;
 
     /** Play the sound every 0.5 second */
 	private static final int SOUND_COOLDOWN_INTERVAL = 500;
@@ -47,10 +49,14 @@ public abstract class PlayerShip extends Entity {
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
 
+	/** Player Max HP */
+	private int playerMaxHP;
 	/** Player HP */
 	private int playerHP;
 	/** Player level and exp */
 	private PlayerLevel playerLevel;
+	/** Player Card Status */
+	private PlayerCardStatus playerCardStatus;
 
 	private long lastShootTime;
 	private boolean threadWeb = false;
@@ -81,8 +87,10 @@ public abstract class PlayerShip extends Entity {
 		super(positionX, positionY, 13 * 2, 8 * 2, Color.GREEN);
 
 		this.logger = Core.getLogger();
+		this.playerMaxHP = 3;
 		this.playerHP = 3;
 		this.playerLevel = new PlayerLevel(0, 1);
+		this.playerCardStatus = new PlayerCardStatus();
 
 		this.name = name;
 		this.multipliers = multipliers;
@@ -151,8 +159,8 @@ public abstract class PlayerShip extends Entity {
 	 *            List of bullets on screen, to add the new bullet.
 	 * @return Checks if the bullet was shot correctly.
 	 */
-	public final boolean shoot(final Set<Bullet> bullets, int shotNum) {
-		return shoot(bullets, shotNum, 0.0f);
+	public final boolean shoot(final Set<Bullet> bullets) {
+		return shoot(bullets, 0.0f);
 	}
 
 	/**
@@ -166,13 +174,13 @@ public abstract class PlayerShip extends Entity {
 	 *
 	 * @return Checks if the bullet was shot correctly.
 	 */
-	public final boolean shoot(final Set<Bullet> bullets, int shotNum, float balance) {
+	public final boolean shoot(final Set<Bullet> bullets, float balance) {
 		if (this.shootingCooldown.checkFinished()) {
 
 			this.shootingCooldown.reset();
 			this.lastShootTime = System.currentTimeMillis();
 
-			switch (shotNum) {
+			switch (this.getBulletCount()) {
 				case 1:
 					bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY, this.getBulletSpeed()));
 					soundManager.playSound(Sound.PLAYER_LASER, balance);
@@ -182,10 +190,10 @@ public abstract class PlayerShip extends Entity {
 					bullets.add(BulletPool.getBullet(positionX, positionY, this.getBulletSpeed()));
 					soundManager.playSound(Sound.ITEM_2SHOT, balance);
 					break;
-				case 3:
+				default:
 					bullets.add(BulletPool.getBullet(positionX + this.width, positionY, this.getBulletSpeed()));
 					bullets.add(BulletPool.getBullet(positionX, positionY, this.getBulletSpeed()));
-					bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY, this.getBulletSpeed()));
+					for (int i = 1; i <= this.getBulletCount() - 2; i++) bullets.add(BulletPool.getBullet(positionX + this.width * i / this.getBulletCount() - 1, positionY, this.getBulletSpeed()));
 					soundManager.playSound(Sound.ITEM_3SHOT, balance);
 					break;
 			}
@@ -207,15 +215,6 @@ public abstract class PlayerShip extends Entity {
 	}
 
 	/**
-	 * Get Player HP
-	 *
-	 * @return player HP
-	 */
-	public final int getPlayerHP() {
-		return this.playerHP;
-	}
-
-	/**
 	 * Player HP decrease by received damage
 	 * @param damage
 	 * 			received damage value
@@ -227,6 +226,16 @@ public abstract class PlayerShip extends Entity {
 		this.playerHP = Math.max(this.playerHP - damage, 0);
 		soundManager.playSound(Sound.PLAYER_HIT, balance);
 		this.logger.info("Hit on player ship, " + getPlayerHP() + " HP remaining.");
+	}
+
+	/**
+	 * Player HP increase by received heal
+	 * @param heal
+	 * 			received heal value
+	 */
+	public final void receiveHeal(int heal) {
+		this.playerHP = Math.min(this.playerHP + heal, getPlayerMaxHP());
+		this.logger.info("Heal on player ship, " + getPlayerHP() + " HP remaining.");
 	}
 
 	/**
@@ -263,15 +272,6 @@ public abstract class PlayerShip extends Entity {
 	}
 
 	/**
-	 * Checks if the ship is destroyed.
-	 * 
-	 * @return True if the ship is currently destroyed.
-	 */
-	public final boolean isDestroyed() {
-		return getPlayerHP() <= 0;
-	}
-
-	/**
 	 * Get player level
 	 *
 	 * @return player level
@@ -280,13 +280,32 @@ public abstract class PlayerShip extends Entity {
 		return this.playerLevel;
 	}
 
+
+	/**
+	 * Get Player HP
+	 *
+	 * @return player HP
+	 */
+	public final int getPlayerHP() {
+		return this.playerHP;
+	}
+
+	/**
+	 * Get Player Max HP
+	 *
+	 * @return player Max HP
+	 */
+	public final int getPlayerMaxHP() {
+		return (this.playerMaxHP + playerCardStatus.getHpLevel() * 2);
+	}
+
 	/**
 	 * Getter for the ship's speed.
 	 * 
 	 * @return Speed of the ship.
 	 */
 	public final int getSpeed() {
-		return Math.round(SPEED * this.multipliers.speed());
+		return Math.round((SPEED + playerCardStatus.getMoveSpeedLevel()) * this.multipliers.speed());
 	}
 
 	/**
@@ -295,7 +314,7 @@ public abstract class PlayerShip extends Entity {
 	 * @return Speed of the bullets.
 	 */
 	public final int getBulletSpeed() {
-		return Math.round(BULLET_SPEED * this.multipliers.bulletSpeed());
+		return Math.round((BULLET_SPEED - playerCardStatus.getBulletsSpeedLevel()) * this.multipliers.bulletSpeed());
 	}
 
 	/**
@@ -304,14 +323,7 @@ public abstract class PlayerShip extends Entity {
 	 * @return Time between shots.
 	 */
 	public final int getShootingInterval() {
-		return Math.round(SHOOTING_INTERVAL * this.multipliers.shootingInterval());
-	}
-
-	public long getRemainingReloadTime(){
-		long currentTime = System.currentTimeMillis();
-		long elapsedTime = currentTime - this.lastShootTime;
-		long remainingTime = this.getShootingInterval() - elapsedTime;
-		return remainingTime > 0 ? remainingTime : 0;
+		return Math.round(SHOOTING_INTERVAL * (int)(Math.pow(0.9 ,(double)playerCardStatus.getIntervalLevel())) * this.multipliers.shootingInterval());
 	}
 
 	/**
@@ -321,9 +333,38 @@ public abstract class PlayerShip extends Entity {
 	 * @return The calculated attack power.
 	 */
 	public final int getPlayerDamage() {
-		return (Math.round(DAMAGE * this.multipliers.damage()));
+		return (Math.round((DAMAGE + playerCardStatus.getDamageLevel() * 5) * this.multipliers.damage()));
 	}
 
+	/**
+	 * Getter for the ship's bullet count.
+	 *
+	 * @return Number of bullets shot by the ship.
+	 */
+	public final int getBulletCount() {
+		return BULLET_COUNT + playerCardStatus.getBulletsCountLevel();
+	}
+
+	/**
+	 * Getter for the ship's remaining reload time.
+	 *
+	 * @return Remaining time for the next shot.
+	 */
+	public long getRemainingReloadTime(){
+		long currentTime = System.currentTimeMillis();
+		long elapsedTime = currentTime - this.lastShootTime;
+		long remainingTime = this.getShootingInterval() - elapsedTime;
+		return remainingTime > 0 ? remainingTime : 0;
+	}
+
+	/**
+	 * Checks if the ship is destroyed.
+	 *
+	 * @return True if the ship is currently destroyed.
+	 */
+	public final boolean isDestroyed() {
+		return getPlayerHP() <= 0;
+	}
 
 	public void applyShopItem(Wallet wallet){
 		int bulletLv = wallet.getBullet_lv();
@@ -346,7 +387,9 @@ public abstract class PlayerShip extends Entity {
 
 		int intervalLv = wallet.getShot_lv();
 		switch (intervalLv){
-			case 1: //생성자에서 이미 초기화함
+			case 1:
+				SHOOTING_INTERVAL = 750;
+				shootingCooldown = Core.getCooldown(this.getShootingInterval());
 				break;
 			case 2:
 				SHOOTING_INTERVAL = 675;

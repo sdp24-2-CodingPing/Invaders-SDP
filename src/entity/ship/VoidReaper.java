@@ -11,7 +11,7 @@ import entity.ShipMultipliers;
 public class VoidReaper extends PlayerShip {
     public VoidReaper(final int positionX, final int positionY) {
         super(positionX, positionY,
-                "Void Reaper", new ShipMultipliers(1.4f, 1.2f, 0.4f, 2.5f),
+                "Void Reaper", new ShipMultipliers(1.4f, 1.2f, 0.4f, 0.5f),
                 DrawManager.SpriteType.Ship2);
     }
 }

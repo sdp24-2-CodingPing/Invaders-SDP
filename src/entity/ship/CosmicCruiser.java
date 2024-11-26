@@ -11,7 +11,7 @@ import entity.ShipMultipliers;
 public class CosmicCruiser extends PlayerShip {
     public CosmicCruiser(final int positionX, final int positionY) {
         super(positionX, positionY,
-                "Cosmic Cruiser", new ShipMultipliers(0.8f, 2f, 1.6f, 0.8f),
+                "Cosmic Cruiser", new ShipMultipliers(0.8f, 2f, 1.6f, 2f),
                 DrawManager.SpriteType.Ship4);
     }
 }
