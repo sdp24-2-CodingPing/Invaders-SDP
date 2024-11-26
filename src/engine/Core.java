@@ -140,7 +140,7 @@ public final class Core {
 						achievementManager.updatePlaying(gameState.getMaxCombo(), (int) (endTime - startTime) / 1000, MAX_LIVES, gameState.getPlayerShip().getPlayerHP(), gameState.getGameLevel() - 1);
 					} else {
 						// ScoreScreen으로 전환하여 게임오버 화면 표시
-						currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);
+						currentScreen = new ScoreScreen(GameSettingScreen.getName(), width, height, FPS, gameState, wallet, achievementManager, false);
 						returnCode = frame.setScreen(currentScreen);
 						LOGGER.info("Closing score screen.");
 						break;
@@ -161,7 +161,7 @@ public final class Core {
 						+ gameState.getPlayerShip().getPlayerHP() + " player hp, "
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
-				currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager, false);
+				currentScreen = new ScoreScreen(GameSettingScreen.getName(), width, height, FPS, gameState, wallet, achievementManager, false);
 
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing score screen.");
