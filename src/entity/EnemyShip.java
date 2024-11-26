@@ -124,9 +124,9 @@ public class EnemyShip extends Entity {
 	 * Assigns base health for each enemy types, considering level scaling.
 	 */
 	private void initializeHealth(GameState gameState, EnemyType enemyType) {
-		double baseHealth = 1;
-		if (enemyType.equals(EnemyType.ELITE))	baseHealth = 3;
-		else if (enemyType.equals(EnemyType.CHAMPION)) baseHealth = 7;
+		double baseHealth = 10;
+		if (enemyType.equals(EnemyType.ELITE))	baseHealth = 30;
+		else if (enemyType.equals(EnemyType.CHAMPION)) baseHealth = 70;
 
 		double levelMultiplier = Math.pow(1.05, gameState.getGameLevel() - 1);
 		this.health = baseHealth * levelMultiplier;
