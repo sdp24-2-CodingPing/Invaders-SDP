@@ -71,7 +71,7 @@ public class PlayerLevel {
      * @return int EXP required to current level for level up
      * */
     public int getRequiredExpForLevelUp(int level) {
-        return 100 * (int)(Math.pow(1.05, level - 1));
+        return 100 * (int)(Math.pow(1.2, level - 1));
 //        if (level < EXP_REQUIRED.length) {
 //            return EXP_REQUIRED[level];
 //        } else {
