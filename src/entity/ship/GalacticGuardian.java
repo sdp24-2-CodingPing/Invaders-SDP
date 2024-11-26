@@ -11,7 +11,7 @@ import entity.ShipMultipliers;
 public class GalacticGuardian extends PlayerShip {
     public GalacticGuardian(final int positionX, final int positionY) {
         super(positionX, positionY,
-                "Galactic Guardian", new ShipMultipliers(0.8f, 1.5f, 1.2f),
+                "Galactic Guardian", new ShipMultipliers(0.8f, 1.5f, 1.2f, 1f),
                 DrawManager.SpriteType.Ship3);
     }
 }

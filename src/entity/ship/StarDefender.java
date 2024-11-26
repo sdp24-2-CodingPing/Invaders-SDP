@@ -11,7 +11,7 @@ import entity.ShipMultipliers;
 public class StarDefender extends PlayerShip {
     public StarDefender(final int positionX, final int positionY) {
         super(positionX, positionY,
-                "Star Defender", new ShipMultipliers(1, 1, 1),
+                "Star Defender", new ShipMultipliers(1, 1, 1, 1),
                 DrawManager.SpriteType.Ship);
     }
 }
