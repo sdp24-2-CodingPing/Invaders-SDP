@@ -16,7 +16,6 @@ import java.util.TimerTask;
 
 import engine.*;
 import engine.drawmanager.GameDrawManager;
-import engine.drawmanager.GameSettingDrawManager;
 import entity.*;
 import entity.player.PlayerActionManager;
 import entity.player.PlayerShip;
@@ -310,7 +309,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		manageGameStop();
 
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
-			managePlayerShooting(this.bullets, this.playerNumber);
+			managePlayerShooting(this.bullets);
 			/*Elapsed Time Update*/
 			manageElapsedTime();
 
@@ -488,10 +487,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/**
 	 * manage shooting of player ship
 	 * @param bullets set of bullet of player ship
-	 * @param playerNumber number of player. 0: 1-player, 1: 2-player
 	 * */
-	private void managePlayerShooting(Set<Bullet> bullets, int playerNumber) {
-		playerActionManager.manageShooting(bullets, playerNumber);
+	private void managePlayerShooting(Set<Bullet> bullets) {
+		playerActionManager.manageShooting(bullets);
 	}
 
 	private void manageGameStop() {
@@ -910,7 +908,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	private void processEnemyHit(Bullet bullet, Set<Bullet> recyclable, EnemyShip enemyShip) {
 		// Decide whether to destroy according to physical strength
-		int playerAttackPower = this.gameState.getPlayerShip().getPlayerDamage();
+		int playerAttackPower = this.gameState.getPlayerShip().getPlayerAttackDamage();
 		this.enemyShipFormation.applyDamageToEnemy(playerAttackPower, enemyShip, balance);
 		// If the enemy doesn't die, the combo increases;
 		// if the enemy dies, both the combo and score increase.

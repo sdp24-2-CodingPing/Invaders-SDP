@@ -1,7 +1,7 @@
 package engine.drawmanager;
 
 import engine.DrawManager;
-import entity.Card;
+import entity.card.Card;
 import screen.Screen;
 
 import java.awt.*;
@@ -23,18 +23,27 @@ public class CardSelectDrawManager extends DrawManager {
     }
 
     public static void drawCard(final Screen screen, final Card card, final int width, final int height, final boolean isSelected) {
-        final int cardWidth = screen.getWidth() / 6;
-        final int cardHeight = screen.getHeight() / 6;
+        final int cardWidth = screen.getWidth() / 4;
+        final int cardHeight = screen.getHeight() / 4;
+
+        final int imageWidth = cardWidth / 2;
+        final int imageHeight = cardHeight / 3;
+
         final String cardString = card.getCardName();
 
         if (isSelected)	backBufferGraphics.setColor(Color.GREEN);
         else 			backBufferGraphics.setColor(Color.DARK_GRAY);
         backBufferGraphics.fillRect(width, height, cardWidth, cardHeight);
 
+        backBufferGraphics.setColor(Color.BLACK);
+        backBufferGraphics.fillRect(width + (int)(cardWidth * 0.05), height + (int)(cardHeight * 0.04), (int)(cardWidth * 0.9), (int)(cardHeight * 0.92));
+
+        backBufferGraphics.drawImage(card.getCardImage(), width + cardWidth / 2 - imageWidth / 2, height + cardHeight / 4 , imageWidth, imageHeight, null);
+
         backBufferGraphics.setColor(Color.GRAY);
-        backBufferGraphics.setFont(fontBig);
+        backBufferGraphics.setFont(fontRegular);
         backBufferGraphics.drawString(cardString, width + cardWidth / 2
-                - fontBigMetrics.stringWidth(cardString) / 2, height + cardHeight / 2);
+                - fontRegularMetrics.stringWidth(cardString) / 2, height + cardHeight * 3 / 4);
 
     }
 
@@ -42,7 +51,7 @@ public class CardSelectDrawManager extends DrawManager {
     public static void drawCardList(final Screen screen, final ArrayList<Card> cardList, final int selectedCardIndex) {
         final int cardListSize = cardList.size();
         for (int i=0; i < cardListSize; i++) {
-            drawCard(screen, cardList.get(i), screen.getWidth() / 3 * i + screen.getWidth() / 12, screen.getHeight() / 5 * 3, i==selectedCardIndex);
+            drawCard(screen, cardList.get(i), screen.getWidth() / 3 * i + screen.getWidth() / 24, screen.getHeight() / 5 * 3, i==selectedCardIndex);
         }
     }
 
