@@ -60,6 +60,7 @@ public class EnemyShip extends Entity {
 
 	private EnemyType enemyType;
 	private double health;
+	private int attackDamage;
 
 	public enum EnemyType {
 		GRUNT,
@@ -89,6 +90,7 @@ public class EnemyShip extends Entity {
 		initializeHealth(gameState, this.enemyType);
 		initializeExp(gameState, this.enemyType);
 		initializePoint(gameState, this.enemyType);
+		initializeAttackDamage(gameState, this.enemyType);
 	}
 
 	/**
@@ -101,6 +103,27 @@ public class EnemyShip extends Entity {
 
 		double levelMultiplier = Math.pow(1.05, gameState.getGameLevel() - 1);
 		this.health = baseHealth * levelMultiplier;
+	}
+
+	/**
+	 * Assign base attack damage for each enemy types, considering level scaling.
+	 * @param gameState gameState instance
+	 * @param enemyType enemy type
+	 * */
+	private void initializeAttackDamage(GameState gameState, EnemyType enemyType) {
+		// base exp for enemies.
+		// index 0: GRUNT, index 1: ELITE, index 2: CHAMPION
+		final int[] BASE_ATTACK_DAMAGE = {1,2,3};
+
+		double levelMultiplier = Math.pow(2.0, gameState.getGameLevel() - 1);
+		switch (enemyType){
+			case GRUNT: this.attackDamage = BASE_ATTACK_DAMAGE[0] * (int)levelMultiplier;
+				break;
+			case ELITE: this.attackDamage = BASE_ATTACK_DAMAGE[1] * (int)levelMultiplier;
+				break;
+			case CHAMPION: this.attackDamage = BASE_ATTACK_DAMAGE[2] * (int)levelMultiplier;
+				break;
+		}
 	}
 
 	/**
