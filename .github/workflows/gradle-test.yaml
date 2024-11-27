@@ -1,0 +1,71 @@
+name: Gradle CI
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Java 환경 설정
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      # 3. Gradle 캐시 활성화
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle
+
+      # 4. Gradle 테스트 실행
+      - name: Run tests
+        run: ./gradlew test
+        continue-on-error: true
+
+      # 5. 테스트 결과 파싱 및 요약 생성
+      - name: Generate test summary
+        if: always()
+        run: |
+          echo "Parsing test results..."
+          mkdir -p test-results-summary
+          python3 scripts/parse_test_results.py build/test-results/test/ > test-results-summary/summary.md
+
+      # 6. 테스트 리포트 아티팩트 업로드
+      - name: Upload Test Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: build/reports/tests/test  # 테스트 리포트 디렉터리 경로
+
+      # 7. PR에 코멘트 작성
+      - name: Comment on PR
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('test-results-summary/summary.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
