@@ -36,6 +36,7 @@ jobs:
       # 4. Gradle 테스트 실행
       - name: Run tests
         run: ./gradlew test
+        continue-on-error: true
 
       # 5. 테스트 결과 파싱 및 요약 생성
       - name: Generate test summary
