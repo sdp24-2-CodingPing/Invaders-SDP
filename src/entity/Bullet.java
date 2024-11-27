@@ -17,6 +17,11 @@ public class Bullet extends Entity {
 	 * positive is down.
 	 */
 	private int speed;
+	/**
+	 * Attack damage for the bullet, especially for enemies.
+	 * it varies depend on enemy type and game level.
+	 * */
+	private int attackDamage;
 
 	/**
 	 * Constructor, establishes the bullet's properties.
@@ -29,10 +34,11 @@ public class Bullet extends Entity {
 	 *            Speed of the bullet, positive or negative depending on
 	 *            direction - positive is down.
 	 */
-	public Bullet(final int positionX, final int positionY, final int speed) {
+	public Bullet(final int positionX, final int positionY, final int speed, int attackDamage) {
 		super(positionX, positionY, 3 * 2, 5 * 2, Color.WHITE);
 
 		this.speed = speed;
+		this.attackDamage = attackDamage;
 		setSprite();
 	}
 
@@ -70,5 +76,24 @@ public class Bullet extends Entity {
 	 */
 	public final int getSpeed() {
 		return this.speed;
+	}
+
+	/**
+	 * Setter of the attack damage for the bullet.
+	 *
+	 * @param attackDamage
+	 *            New attack damage for the bullet.
+	 */
+	public final void setAttackDamage(final int attackDamage) {
+		this.attackDamage = attackDamage;
+	}
+
+	/**
+	 * Getter for the attack damage for the bullet.
+	 *
+	 * @return attack damage for the bullet.
+	 */
+	public final int getAttackDamage(){
+		return this.attackDamage;
 	}
 }

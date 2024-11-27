@@ -367,12 +367,12 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 			for (EnemyShip shooter : selectedShooters) {
 				// One shot at the base
 				bullets.add(BulletPool.getBullet(shooter.getPositionX()
-						+ shooter.width / 2 + 10, shooter.getPositionY(), BULLET_SPEED));
+						+ shooter.width / 2 + 10, shooter.getPositionY(), BULLET_SPEED, shooter.getAttackDamage()));
 
 				// Additional launches based on levels (more launches based on each level)
 				for (int i = 1; i < numberOfBullets; i++) {
 					bullets.add(BulletPool.getBullet(shooter.getPositionX()
-							+ shooter.width / 2 + (10 * (i + 1)), shooter.getPositionY(), BULLET_SPEED));
+							+ shooter.width / 2 + (10 * (i + 1)), shooter.getPositionY(), BULLET_SPEED, shooter.getAttackDamage()));
 				}
 				soundManager.playSound(Sound.ALIEN_LASER, balance);
 			}

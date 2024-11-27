@@ -326,4 +326,6 @@ public class EnemyShip extends Entity {
 	public int getExpValue() {
 		return this.expValue;
 	}
+
+	public int getAttackDamage(){ return this.attackDamage;}
 }
