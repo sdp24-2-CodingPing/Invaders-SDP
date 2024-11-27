@@ -1,7 +1,7 @@
 package entity.player;
 
 public class PlayerCardStatus {
-    private static int damageLevel;
+    private static int attackDamage;
     private static int intervalLevel;
     private static int bulletsCountLevel;
     private static int bulletsSpeedLevel;
@@ -13,7 +13,7 @@ public class PlayerCardStatus {
     }
 
     public static void reset() {
-        damageLevel = 0;
+        attackDamage = 0;
         intervalLevel = 0;
         bulletsCountLevel = 0;
         bulletsSpeedLevel = 0;
@@ -21,11 +21,11 @@ public class PlayerCardStatus {
         moveSpeedLevel = 0;
     }
 
-    public int getDamageLevel() {
-        return damageLevel;
+    public int getAttackDamageLevel() {
+        return attackDamage;
     }
-    public void damageLevelUp() {
-        damageLevel++;
+    public void attackDamageLevelUp() {
+        attackDamage++;
     }
 
     public int getIntervalLevel() {

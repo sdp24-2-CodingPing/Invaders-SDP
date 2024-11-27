@@ -24,7 +24,7 @@ public abstract class PlayerShip extends Entity {
 	/** Speed of the bullets shot by the ship. */
 	private static int BULLET_SPEED = -6;
 	/** Player bullets default damage */
-	private static int DAMAGE = 10;
+	private static int ATTACK_DAMAGE = 10;
 	/** Movement of the ship for each unit of time. */
 	private static int SPEED = 2;
 	/** Player bullets default count */
@@ -338,8 +338,8 @@ public abstract class PlayerShip extends Entity {
 	 *
 	 * @return The calculated attack power.
 	 */
-	public final int getPlayerDamage() {
-		return (Math.round((DAMAGE + playerCardStatus.getDamageLevel() * 5) * this.multipliers.damage()));
+	public final int getPlayerAttackDamage() {
+		return (Math.round((ATTACK_DAMAGE + playerCardStatus.getAttackDamageLevel() * 5) * this.multipliers.damage()));
 	}
 
 	/**

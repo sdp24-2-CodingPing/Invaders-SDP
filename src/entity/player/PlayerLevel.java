@@ -43,7 +43,7 @@ public class PlayerLevel {
 
     public Card selectLevelUpCard () {
         ArrayList<Card> allCards = new ArrayList<>();
-        allCards.add(new DamageCard());
+        allCards.add(new AttackDamageCard());
         allCards.add(new MoveSpeedCard());
         allCards.add(new BulletsCountCard());
         allCards.add(new BulletsIntervalCard());
