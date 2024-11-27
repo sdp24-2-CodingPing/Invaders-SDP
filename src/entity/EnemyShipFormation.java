@@ -223,53 +223,31 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		if (movementInterval >= this.movementSpeed) {
 			movementInterval = 0;
 
-			boolean isAtBottom = positionY
-					+ this.height > screen.getHeight() - BOTTOM_MARGIN;
 			boolean isAtRightSide = positionX
 					+ this.width >= screen.getWidth() - SIDE_MARGIN;
 			boolean isAtLeftSide = positionX <= SIDE_MARGIN;
-			boolean isAtHorizontalAltitude = positionY % DESCENT_DISTANCE == 0;
 
-			if (currentDirection == Direction.DOWN) {
-				if (isAtHorizontalAltitude)
-					if (previousDirection == Direction.RIGHT) {
-						currentDirection = Direction.LEFT;
-						this.logger.info("Formation now moving left 1");
-					} else {
-						currentDirection = Direction.RIGHT;
-						this.logger.info("Formation now moving right 2");
-					}
-			} else if (currentDirection == Direction.LEFT) {
+			if (currentDirection == Direction.LEFT) {
 				if (isAtLeftSide)
-					if (!isAtBottom) {
-						previousDirection = currentDirection;
-						currentDirection = Direction.DOWN;
-						this.logger.info("Formation now moving down 3");
-					} else {
-						currentDirection = Direction.RIGHT;
-						this.logger.info("Formation now moving right 4");
-					}
+				{
+					currentDirection = Direction.RIGHT;
+					this.logger.info("Formation now moving right");
+				}
 			} else {
-				if (isAtRightSide)
-					if (!isAtBottom) {
-						previousDirection = currentDirection;
-						currentDirection = Direction.DOWN;
-						this.logger.info("Formation now moving down 5");
-					} else {
-						currentDirection = Direction.LEFT;
-						this.logger.info("Formation now moving left 6");
-					}
+				if (isAtRightSide){
+					currentDirection = Direction.LEFT;
+					this.logger.info("Formation now moving left");
+				}
 			}
 
-			if (currentDirection == Direction.RIGHT)
+			if (currentDirection == Direction.RIGHT) {
 				movementX = X_SPEED;
-			else if (currentDirection == Direction.LEFT)
+			}
+			else{
 				movementX = -X_SPEED;
-			else
-				movementY = Y_SPEED;
+			}
 
 			positionX += movementX;
-			positionY += movementY;
 
 			// Cleans explosions.
 			for (int i = 0; i < this.enemyShips.size(); i++) {
