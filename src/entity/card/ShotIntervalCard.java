@@ -2,9 +2,9 @@ package entity.card;
 
 import entity.player.PlayerShip;
 
-public class BulletsIntervalCard extends Card {
-    public BulletsIntervalCard() {
-        super("Interval");
+public class ShotIntervalCard extends Card {
+    public ShotIntervalCard() {
+        super("Shot Interval", "res/image/card/shot_interval.jpg");
     }
 
     @Override

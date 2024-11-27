@@ -4,7 +4,7 @@ import entity.player.PlayerShip;
 
 public class BulletsCountCard extends Card {
     public BulletsCountCard() {
-        super("Count");
+        super("Bullet Count", "res/image/card/bullets_count.png");
     }
 
     @Override

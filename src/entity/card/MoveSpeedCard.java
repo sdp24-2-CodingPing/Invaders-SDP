@@ -4,7 +4,7 @@ import entity.player.PlayerShip;
 
 public class MoveSpeedCard extends Card {
     public MoveSpeedCard() {
-        super("Move Speed");
+        super("Move Speed", "res/image/card/move_speed.png");
     }
 
     @Override

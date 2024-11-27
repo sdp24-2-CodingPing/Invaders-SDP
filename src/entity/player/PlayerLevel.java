@@ -46,7 +46,7 @@ public class PlayerLevel {
         allCards.add(new AttackDamageCard());
         allCards.add(new MoveSpeedCard());
         allCards.add(new BulletsCountCard());
-        allCards.add(new BulletsIntervalCard());
+        allCards.add(new ShotIntervalCard());
         allCards.add(new BulletsSpeedCard());
         allCards.add(new HpCard());
 

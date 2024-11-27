@@ -4,7 +4,7 @@ import entity.player.PlayerShip;
 
 public class AttackDamageCard extends Card {
     public AttackDamageCard() {
-        super("Attack Damage");
+        super("Attack Damage", "res/image/card/attack_damage.png");
     }
 
     @Override

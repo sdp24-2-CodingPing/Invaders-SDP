@@ -25,6 +25,10 @@ public class CardSelectDrawManager extends DrawManager {
     public static void drawCard(final Screen screen, final Card card, final int width, final int height, final boolean isSelected) {
         final int cardWidth = screen.getWidth() / 4;
         final int cardHeight = screen.getHeight() / 4;
+
+        final int imageWidth = cardWidth / 2;
+        final int imageHeight = cardHeight / 3;
+
         final String cardString = card.getCardName();
 
         if (isSelected)	backBufferGraphics.setColor(Color.GREEN);
@@ -34,10 +38,12 @@ public class CardSelectDrawManager extends DrawManager {
         backBufferGraphics.setColor(Color.BLACK);
         backBufferGraphics.fillRect(width + (int)(cardWidth * 0.05), height + (int)(cardHeight * 0.04), (int)(cardWidth * 0.9), (int)(cardHeight * 0.92));
 
+        backBufferGraphics.drawImage(card.getCardImage(), width + cardWidth / 2 - imageWidth / 2, height + cardHeight / 4 , imageWidth, imageHeight, null);
+
         backBufferGraphics.setColor(Color.GRAY);
         backBufferGraphics.setFont(fontRegular);
         backBufferGraphics.drawString(cardString, width + cardWidth / 2
-                - fontRegularMetrics.stringWidth(cardString) / 2, height + cardHeight / 2);
+                - fontRegularMetrics.stringWidth(cardString) / 2, height + cardHeight * 3 / 4);
 
     }
 

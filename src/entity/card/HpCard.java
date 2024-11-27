@@ -4,7 +4,7 @@ import entity.player.PlayerShip;
 
 public class HpCard extends Card {
     public HpCard() {
-        super("HP");
+        super("HP", "res/image/card/hp.jpg");
     }
 
     @Override
