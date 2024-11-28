@@ -290,9 +290,9 @@ public class GameDrawManager extends DrawManager {
 
   public static void drawStatIcon(Screen screen, int num, int x, int y) {
     BufferedImage[] statImages =
-            new BufferedImage[] {img_userspeed, img_shotinterval, img_userattackdamage};
+            new BufferedImage[] {img_movespeed, img_bulletspeed, img_attackdamage};
     backBufferGraphics.drawImage(
-            statImages[num], x, y , 20, 10, null);
+            statImages[num], x, y , 22, 14, null);
   }
 
 

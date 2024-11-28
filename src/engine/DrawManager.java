@@ -78,8 +78,8 @@ public class DrawManager {
   protected static BufferedImage img_coin;
   protected static BufferedImage img_coingain;
   protected static BufferedImage img_shotinterval;
-  protected static BufferedImage img_userspeed;
-  protected static BufferedImage img_userattackdamage;
+  protected static BufferedImage img_movespeed;
+  protected static BufferedImage img_attackdamage;
 
   /** Sprite types. */
   public static enum SpriteType {
@@ -195,8 +195,9 @@ public class DrawManager {
       img_coin = ImageIO.read(new File("res/image/coin.jpg"));
       img_coingain = ImageIO.read(new File("res/image/coin gain.jpg"));
       img_shotinterval = ImageIO.read(new File("res/image/shot interval.jpg"));
-      //img_userspeed = ImageIO.read(new File());
-      //img_userattackdamage = ImageIO.read(new File());
+      img_movespeed = ImageIO.read(new File("res/image/card/move_speed.png"));
+      img_attackdamage = ImageIO.read(new File("res/image/card/attack_damage.png"));
+
     } catch (IOException e) {
       logger.info("Image loading failed");
     }
