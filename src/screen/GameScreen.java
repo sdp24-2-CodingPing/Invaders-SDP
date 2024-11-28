@@ -648,19 +648,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
     int BOX_HEIGHT = 48; // Height of the item box
     int BOX_MARGIN = 10; // Margin between boxes
 
-//    // 배열로 스킬 객체 생성, 추후 다른 스킬 객체로 채워질 수 있음
-//    Skill[] skills = new Skill[3];
-//    for (int i = 0; i < skills.length; i++) {
-//      skills[i] = new LaserStrike(); // 초기화는 LaserStrike로, 다른 스킬로 대체 가능
-//    }
-//
-//    // 스킬 박스와 스킬 아이콘 그리기
-//    for (int i = 0; i < skills.length; i++) {
-//      int offsetX = 20 + i * (BOX_WIDTH + BOX_MARGIN); // X 좌표 계산
-//      GameDrawManager.drawThickBox(
-//          this, offsetX, HUD_Y + HUD_MARGIN_TOP, BOX_WIDTH, BOX_HEIGHT, 2); // 스킬 박스 그리기
-//      GameDrawManager.drawEntity(skills[i], offsetX + 2, HUD_Y + HUD_MARGIN_TOP + 2); // 스킬 아이콘 그리기
-//    }
 
     // 스탯 박스와 스탯 아이콘 그리기
     int[] statValues = {
