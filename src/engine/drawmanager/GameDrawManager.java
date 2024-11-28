@@ -10,11 +10,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import screen.Screen;
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GameDrawManager extends DrawManager {
 
@@ -291,6 +286,15 @@ public class GameDrawManager extends DrawManager {
 
     backBufferGraphics.drawString(statText, drawX, drawY);
   }
+
+
+  public static void drawStatIcon(Screen screen, int num, int x, int y) {
+    BufferedImage[] statImages =
+            new BufferedImage[] {img_userspeed, img_shotinterval, img_userattackdamage};
+    backBufferGraphics.drawImage(
+            statImages[num], x, y , 20, 10, null);
+  }
+
 
   /**
    * Countdown to game start.
