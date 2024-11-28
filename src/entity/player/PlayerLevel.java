@@ -13,8 +13,8 @@ import screen.CardSelectScreen;
  * @author raewookang
  */
 public class PlayerLevel {
-  int exp;
-  int level;
+  static int exp;
+  public static int level;
 
   /** Application logger. */
   private final Logger logger;

@@ -4,12 +4,17 @@ import engine.Core;
 import engine.DrawManager;
 import engine.Score;
 import entity.Entity;
-import entity.ShipFactory;
 import entity.player.PlayerShip;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import screen.Screen;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameDrawManager extends DrawManager {
 
@@ -34,20 +39,6 @@ public class GameDrawManager extends DrawManager {
     backBufferGraphics.setColor(Color.RED);
     backBufferGraphics.drawString(
         alertMessage, (screen.getWidth() - fontRegularMetrics.stringWidth(alertMessage)) / 2, 65);
-  }
-
-  /**
-   * Draws number of remaining lives on screen.
-   *
-   * @param screen Screen to draw on.
-   * @param lives Current lives.
-   */
-  public void drawLives(final Screen screen, final int lives, final PlayerShip.ShipType shipType) {
-    backBufferGraphics.setFont(fontRegular);
-    backBufferGraphics.setColor(Color.WHITE);
-    backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
-    PlayerShip dummyPlayerShip = ShipFactory.create(shipType, 0, 0);
-    for (int i = 0; i < lives; i++) drawEntity(dummyPlayerShip, 40 + 35 * i, 10);
   }
 
   /**
@@ -280,6 +271,25 @@ public class GameDrawManager extends DrawManager {
     backBufferGraphics.setColor(Color.BLACK);
     backBufferGraphics.fillRect(
         x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness); // Draw inner box
+  }
+
+  /**
+   * Draws a stat value as text inside a box on the screen.
+   */
+  public static void drawStat(final Screen screen, final int stat, int x, int y) {
+    int BOX_WIDTH = 48;
+    int BOX_HEIGHT = 48;
+    backBufferGraphics.setColor(Color.WHITE);
+    String statText = Integer.toString(stat);
+
+    FontMetrics metrics = backBufferGraphics.getFontMetrics(fontBig);
+    int textWidth = metrics.stringWidth(statText);
+    int textHeight = metrics.getHeight();
+
+    int drawX = x + (BOX_WIDTH - textWidth) / 2;
+    int drawY = y + (BOX_HEIGHT + textHeight) / 2;
+
+    backBufferGraphics.drawString(statText, drawX, drawY);
   }
 
   /**
