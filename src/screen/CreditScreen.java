@@ -1,70 +1,66 @@
 package screen;
 
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.List;
-
 import engine.Core;
 import engine.Sound;
 import engine.SoundManager;
 import engine.drawmanager.CreditDrawManager;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.List;
 
-public class CreditScreen extends Screen{
+public class CreditScreen extends Screen {
 
-    private int currentFrame;
-    private List<String> creditlist;
-    /** Singleton instance of SoundManager */
-    private final SoundManager soundManager = SoundManager.getInstance();
+  private int currentFrame;
+  private List<String> creditlist;
 
-    public CreditScreen(final int width, final int height, final int fps){
-        super(width, height, fps);
+  /** Singleton instance of SoundManager */
+  private final SoundManager soundManager = SoundManager.getInstance();
 
-        this.returnCode = 1;
-        this.currentFrame = 0;
+  public CreditScreen(final int width, final int height, final int fps) {
+    super(width, height, fps);
 
-        try{
-            this.creditlist = Core.getFileManager().loadCreditList();
-            logger.info(""+this.creditlist);
-        }  catch (NumberFormatException | IOException e) {
-            logger.warning("Couldn't load credit list!");
-        }
+    this.returnCode = 1;
+    this.currentFrame = 0;
 
-
-
+    try {
+      this.creditlist = Core.getFileManager().loadCreditList();
+      logger.info("" + this.creditlist);
+    } catch (NumberFormatException | IOException e) {
+      logger.warning("Couldn't load credit list!");
     }
-    public int run(){
-        super.run();
+  }
 
-        return this.returnCode;
-    }
+  public int run() {
+    super.run();
 
-//    private final ArrayList loadcredit(){
-//
-//
-//
-//    }
+    return this.returnCode;
+  }
 
-    protected final void update() {
-        super.update();
-        currentFrame++;
+  //    private final ArrayList loadcredit(){
+  //
+  //
+  //
+  //    }
 
-        if (currentFrame > 50 * 60) {//임시로 50초
-            this.isRunning = false;
-            this.returnCode = 1;
-        }
+  protected final void update() {
+    super.update();
+    currentFrame++;
 
-        draw();
-        if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)
-                && this.inputDelay.checkFinished()) {
-            this.isRunning = false;
-            soundManager.playSound(Sound.MENU_BACK);
-        }
+    if (currentFrame > 50 * 60) { // 임시로 50초
+      this.isRunning = false;
+      this.returnCode = 1;
     }
 
-    private void draw(){
-        drawManager.initDrawing(this);
-        CreditDrawManager.drawEndingCredit(this,this.creditlist, currentFrame);
-        drawManager.completeDrawing(this);
+    draw();
+    if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE) && this.inputDelay.checkFinished()) {
+      this.isRunning = false;
+      soundManager.playSound(Sound.MENU_BACK);
     }
+  }
 
+  private void draw() {
+    drawManager.initDrawing(this);
+    CreditDrawManager.drawEndingCredit(this, this.creditlist, currentFrame);
+    drawManager.completeDrawing(this);
+  }
 }
