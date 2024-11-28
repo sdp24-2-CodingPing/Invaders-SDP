@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 repositories {
@@ -31,5 +32,13 @@ test {
     useJUnitPlatform()
     maxHeapSize = "1g"
     jvmArgs '-XX:MaxMetaspaceSize=512m'
+}
+
+
+spotless {
+    java {
+        googleJavaFormat('1.25.0')
+        endWithNewline()
+    }
 }
 
