@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 repositories {
@@ -33,3 +34,10 @@ test {
     jvmArgs '-XX:MaxMetaspaceSize=512m'
 }
 
+
+spotless {
+    java {
+        googleJavaFormat('1.25.0')
+        endWithNewline()
+    }
+}
