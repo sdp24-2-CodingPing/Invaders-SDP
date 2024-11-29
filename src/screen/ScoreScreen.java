@@ -141,43 +141,60 @@ public class ScoreScreen extends Screen {
 	 * 중복 방지를 위한 로직 추가.
 	 */
 	private void saveScore() {
-		if (highScores.size() > MAX_HIGH_SCORE_NUM) {
-			int index = 0;
-			for (Score loadScore : highScores) {
-				if (name1.equals(loadScore.getName())) {
-					if (score > loadScore.getScore()) {
-						highScores.remove(index);
-						highScores.add(new Score(name1, score));
-						break;
-					}
-				}
-				index += 1;
+
+		boolean isDuplicate = false;
+		int duplicateIndex = -1;
+
+		for (int i = 0; i < highScores.size(); i++) {
+			if (highScores.get(i).getName().equals(name1)) {
+				isDuplicate = true;
+				duplicateIndex = i;
+				break;
+			}
+		}
+
+		if (isDuplicate) {
+			if (score > highScores.get(duplicateIndex).getScore()) {
+				highScores.set(duplicateIndex, new Score(name1, score));
 			}
 		} else {
-			boolean checkDuplicate = false;
-			int index = 0;
-			for (Score loadScore : highScores) {
-				if (name1.equals(loadScore.getName())) {
-					checkDuplicate = true;
-					if (score > loadScore.getScore()) {
-						highScores.remove(index);
-						highScores.add(new Score(name1, score));
-						break;
+			if (highScores.size() >= MAX_HIGH_SCORE_NUM) {
+				int lowestIndex = 0;
+				int lowestScore = highScores.getFirst().getScore();
+
+				for (int i = 1; i < highScores.size(); i++) {
+					if (highScores.get(i).getScore() < lowestScore) {
+						lowestIndex = i;
+						lowestScore = highScores.get(i).getScore();
 					}
 				}
-				index += 1;
-			}
-			if (!checkDuplicate) {
+
+				if (score > lowestScore) {
+					highScores.remove(lowestIndex);
+					highScores.add(new Score(name1, score));
+				}
+			} else {
 				highScores.add(new Score(name1, score));
 			}
 		}
-		Collections.sort(highScores);
+
+		for (int i = 0; i < highScores.size() - 1; i++) {
+			for (int j = i + 1; j < highScores.size(); j++) {
+				if (highScores.get(i).getScore() < highScores.get(j).getScore()) {
+					Score temp = highScores.get(i);
+					highScores.set(i, highScores.get(j));
+					highScores.set(j, temp);
+				}
+			}
+		}
+
 		try {
 			Core.getFileManager().saveHighScores(highScores);
 		} catch (IOException e) {
-			logger.warning("Couldn't load high scores!");
+			logger.warning("Couldn't save high scores!");
 		}
 	}
+
 
 	/**
 	 * Draws the elements associated with the screen.
