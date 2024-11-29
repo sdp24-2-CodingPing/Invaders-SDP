@@ -58,7 +58,7 @@ public class PlayerCardStatus {
   }
 
   public void hpLevelUp() {
-    hpLevel++;
+    hpLevel += 5;
   }
 
   public static int getMoveSpeedLevel() {

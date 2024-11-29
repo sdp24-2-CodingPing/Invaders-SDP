@@ -42,3 +42,10 @@ spotless {
     }
 }
 
+
+spotless {
+    java {
+        googleJavaFormat('1.25.0')
+        endWithNewline()
+    }
+}
