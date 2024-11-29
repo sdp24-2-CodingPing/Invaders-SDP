@@ -8,6 +8,7 @@ import entity.player.PlayerShip;
 import entity.skill.LaserStrike;
 import entity.skill.Skill;
 import entity.player.PlayerLevel;
+import entity.player.PlayerCardStatus;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -651,9 +652,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
     // 스탯 박스와 스탯 아이콘 그리기
     int[] statValues = {
-            gameState.getPlayerShip().getSpeed(),
-            gameState.getPlayerShip().getBulletSpeed(),
-            gameState.getPlayerShip().getPlayerAttackDamage()
+            PlayerCardStatus.getMoveSpeedLevel(),
+            PlayerCardStatus.getBulletsSpeedLevel(),
+            PlayerCardStatus.getAttackDamageLevel(),
     };
     int[] offsetX = {20, 20 + 1 * (BOX_WIDTH + BOX_MARGIN), 20 + 2 * (BOX_WIDTH + BOX_MARGIN)};
     for (int i = 0; i < 3; i++) {

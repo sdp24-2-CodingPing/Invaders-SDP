@@ -21,7 +21,7 @@ public class PlayerCardStatus {
     moveSpeedLevel = 0;
   }
 
-  public int getAttackDamageLevel() {
+  public static int getAttackDamageLevel() {
     return attackDamage;
   }
 
@@ -45,7 +45,7 @@ public class PlayerCardStatus {
     bulletsCountLevel++;
   }
 
-  public int getBulletsSpeedLevel() {
+  public static int getBulletsSpeedLevel() {
     return bulletsSpeedLevel;
   }
 
@@ -61,7 +61,7 @@ public class PlayerCardStatus {
     hpLevel++;
   }
 
-  public int getMoveSpeedLevel() {
+  public static int getMoveSpeedLevel() {
     return moveSpeedLevel;
   }
 
