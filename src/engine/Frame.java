@@ -1,82 +1,79 @@
 package engine;
 
 import java.awt.Insets;
-
 import javax.swing.JFrame;
-
 import screen.Screen;
 
 /**
  * Implements a frame to show screens on.
- * 
+ *
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
- * 
  */
 @SuppressWarnings("serial")
 public class Frame extends JFrame {
 
-	/** Frame width. */
-	private int width;
-	/** Frame height. */
-	private int height;
-	/** Screen currently shown. */
-	private Screen currentScreen;
+  /** Frame width. */
+  private int width;
 
-	/**
-	 * Initializes the new frame.
-	 * 
-	 * @param width
-	 *            Frame width.
-	 * @param height
-	 *            Frame height.
-	 */
-	public Frame(final int width, final int height) {
-		setSize(width, height);
-		setResizable(false);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+  /** Frame height. */
+  private int height;
 
-		setLocationRelativeTo(null);
-		setVisible(true);
+  /** Screen currently shown. */
+  private Screen currentScreen;
 
-		Insets insets = getInsets();
-		this.width = width - insets.left - insets.right;
-		this.height = height - insets.top + insets.bottom;
-		setTitle("Invaders");
+  /**
+   * Initializes the new frame.
+   *
+   * @param width Frame width.
+   * @param height Frame height.
+   */
+  public Frame(final int width, final int height) {
+    setSize(width, height);
+    setResizable(false);
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		addKeyListener(Core.getInputManager());
-	}
+    setLocationRelativeTo(null);
+    setVisible(true);
 
-	/**
-	 * Sets current screen.
-	 * 
-	 * @param screen
-	 *            Screen to show.
-	 * @return Return code of the finished screen.
-	 */
-	public final int setScreen(final Screen screen) {
-		currentScreen = screen;
-		currentScreen.initialize();
-		return currentScreen.run();
-	}
+    Insets insets = getInsets();
+    this.width = width - insets.left - insets.right;
+    this.height = height - insets.top + insets.bottom;
+    setTitle("Invaders");
 
-	/**
-	 * Getter for frame width.
-	 * 
-	 * @return Frame width.
-	 */
-	public final int getWidth() {
-		return this.width;
-	}
+    addKeyListener(Core.getInputManager());
+  }
 
-	/**
-	 * Getter for frame height.
-	 * 
-	 * @return Frame height.
-	 */
+  /**
+   * Sets current screen.
+   *
+   * @param screen Screen to show.
+   * @return Return code of the finished screen.
+   */
+  public final int setScreen(final Screen screen) {
+    currentScreen = screen;
+    currentScreen.initialize();
+    return currentScreen.run();
+  }
 
-	public final int getHeight() {
-		return this.height;
-	}
+  /**
+   * Getter for frame width.
+   *
+   * @return Frame width.
+   */
+  public final int getWidth() {
+    return this.width;
+  }
 
-	public void moveToMiddle() {setLocationRelativeTo(null);}
+  /**
+   * Getter for frame height.
+   *
+   * @return Frame height.
+   */
+  public final int getHeight() {
+    return this.height;
+  }
+
+  public void moveToMiddle() {
+    setLocationRelativeTo(null);
+  }
 }

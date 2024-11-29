@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'com.diffplug.spotless' version '6.25.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
+    testImplementation sourceSets.main.output
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']  // 기존 src 디렉토리 지정
+        }
+        resources {
+            srcDirs = ['res']  // 기존 resources 디렉토리 지정
+        }
+    }
+    test {
+        java {
+            srcDirs = ['test']  // 기존 test 디렉토리 지정
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+    maxHeapSize = "1g"
+    jvmArgs '-XX:MaxMetaspaceSize=512m'
+}
+
+
+spotless {
+    java {
+        googleJavaFormat('1.25.0')
+        endWithNewline()
+    }
+}
