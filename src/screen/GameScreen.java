@@ -4,14 +4,11 @@ import engine.*;
 import engine.drawmanager.GameDrawManager;
 import entity.*;
 import entity.player.PlayerActionManager;
-import entity.player.PlayerShip;
-import entity.skill.LaserStrike;
-import entity.skill.Skill;
-import entity.player.PlayerLevel;
 import entity.player.PlayerCardStatus;
+import entity.player.PlayerLevel;
+import entity.player.PlayerShip;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -652,17 +649,17 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
     // 스탯 박스와 스탯 아이콘 그리기
     int[] statValues = {
-            PlayerCardStatus.getMoveSpeedLevel(),
-            PlayerCardStatus.getBulletsSpeedLevel(),
-            PlayerCardStatus.getAttackDamageLevel(),
-            PlayerCardStatus.getIntervalLevel(),
-            PlayerCardStatus.getBulletsCountLevel(),
-            PlayerCardStatus.getHpLevel()
+      PlayerCardStatus.getMoveSpeedLevel(),
+      PlayerCardStatus.getBulletsSpeedLevel(),
+      PlayerCardStatus.getAttackDamageLevel(),
+      PlayerCardStatus.getIntervalLevel(),
+      PlayerCardStatus.getBulletsCountLevel(),
+      PlayerCardStatus.getHpLevel()
     };
     int[] offsetX = {95, 135, 175, 215, 255, 295};
     for (int i = 0; i < 6; i++) {
-      int currentOffsetX = offsetX[i];  // X 좌표
-      int offsetY = HUD_Y + HUD_MARGIN_TOP;  // Y 좌표
+      int currentOffsetX = offsetX[i]; // X 좌표
+      int offsetY = HUD_Y + HUD_MARGIN_TOP; // Y 좌표
       GameDrawManager.drawStat(this, statValues[i], currentOffsetX, offsetY);
       GameDrawManager.drawStatIcon(this, i, currentOffsetX + 10, offsetY + 2);
     }
@@ -670,11 +667,15 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
     // Draw HP & EXP
     int currentHP = gameState.getPlayerShip().getPlayerHP(); // Current HP of the player
-    int maxHP =gameState.getPlayerShip().getPlayerMaxHP(); // Maximum HP of the player
+    int maxHP = gameState.getPlayerShip().getPlayerMaxHP(); // Maximum HP of the player
     int currentEXP = PlayerLevel.getExp(); // Current EXP of the player
-    int maxEXP = PlayerLevel.getRequiredExpForLevelUp(PlayerLevel.level); // Maximum EXP required for level up
-    GameDrawManager.drawSegmentedBar(340, HUD_Y + HUD_MARGIN_TOP + 7, 240, 12, currentHP, maxHP, Color.GREEN);
-    GameDrawManager.drawSegmentedBar(340, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 240, 12, currentEXP, maxEXP, Color.YELLOW);
+    int maxEXP =
+        PlayerLevel.getRequiredExpForLevelUp(
+            PlayerLevel.level); // Maximum EXP required for level up
+    GameDrawManager.drawSegmentedBar(
+        340, HUD_Y + HUD_MARGIN_TOP + 7, 240, 12, currentHP, maxHP, Color.GREEN);
+    GameDrawManager.drawSegmentedBar(
+        340, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 240, 12, currentEXP, maxEXP, Color.YELLOW);
 
     // Countdown to game start.
     if (!this.inputDelay.checkFinished()) {

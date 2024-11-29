@@ -240,9 +240,7 @@ public class GameDrawManager extends DrawManager {
     }
   }
 
-  /**
-   * Draws a stat value as text inside a box on the screen.
-   */
+  /** Draws a stat value as text inside a box on the screen. */
   public static void drawStat(final Screen screen, final int stat, int x, int y) {
     int BOX_WIDTH = 48;
     int BOX_HEIGHT = 48;
@@ -261,9 +259,15 @@ public class GameDrawManager extends DrawManager {
 
   public static void drawStatIcon(Screen screen, int num, int x, int y) {
     BufferedImage[] statImages =
-            new BufferedImage[] {img_movespeed, img_bulletspeed, img_attackdamage, img_shotinterval, img_bulletscount, img_additionallife};
-    backBufferGraphics.drawImage(
-            statImages[num], x, y , 22, 14, null);
+        new BufferedImage[] {
+          img_movespeed,
+          img_bulletspeed,
+          img_attackdamage,
+          img_shotinterval,
+          img_bulletscount,
+          img_additionallife
+        };
+    backBufferGraphics.drawImage(statImages[num], x, y, 22, 14, null);
   }
 
   public static void drawPlayerLevel(final Screen screen, final PlayerLevel level, int x, int y) {
@@ -274,8 +278,7 @@ public class GameDrawManager extends DrawManager {
     if (levelValue < 10) {
       String scoreString = String.format("lv.0%d", levelValue);
       backBufferGraphics.drawString(scoreString, x, y);
-    }
-    else{
+    } else {
       String scoreString = String.format("lv.%d", levelValue);
       backBufferGraphics.drawString(scoreString, x, y);
     }
