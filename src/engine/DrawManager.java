@@ -80,6 +80,7 @@ public class DrawManager {
   protected static BufferedImage img_shotinterval;
   protected static BufferedImage img_movespeed;
   protected static BufferedImage img_attackdamage;
+  protected static BufferedImage img_bulletscount;
 
   /** Sprite types. */
   public static enum SpriteType {
@@ -197,6 +198,7 @@ public class DrawManager {
       img_shotinterval = ImageIO.read(new File("res/image/shot interval.jpg"));
       img_movespeed = ImageIO.read(new File("res/image/card/move_speed.png"));
       img_attackdamage = ImageIO.read(new File("res/image/card/attack_damage.png"));
+      img_bulletscount = ImageIO.read(new File("res/image/card/bullets_count.png"));
 
     } catch (IOException e) {
       logger.info("Image loading failed");

@@ -29,7 +29,7 @@ public class PlayerCardStatus {
     attackDamage++;
   }
 
-  public int getIntervalLevel() {
+  public static int getIntervalLevel() {
     return intervalLevel;
   }
 
@@ -37,7 +37,7 @@ public class PlayerCardStatus {
     intervalLevel++;
   }
 
-  public int getBulletsCountLevel() {
+  public static int getBulletsCountLevel() {
     return bulletsCountLevel;
   }
 
@@ -53,7 +53,7 @@ public class PlayerCardStatus {
     bulletsSpeedLevel++;
   }
 
-  public int getHpLevel() {
+  public static int getHpLevel() {
     return hpLevel;
   }
 
