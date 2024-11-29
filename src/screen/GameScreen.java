@@ -659,21 +659,22 @@ public class GameScreen extends Screen implements Callable<GameState> {
             PlayerCardStatus.getBulletsCountLevel(),
             PlayerCardStatus.getHpLevel()
     };
-    int[] offsetX = {20, 60, 100, 140, 180, 220};
+    int[] offsetX = {95, 135, 175, 215, 255, 295};
     for (int i = 0; i < 6; i++) {
       int currentOffsetX = offsetX[i];  // X 좌표
       int offsetY = HUD_Y + HUD_MARGIN_TOP;  // Y 좌표
       GameDrawManager.drawStat(this, statValues[i], currentOffsetX, offsetY);
       GameDrawManager.drawStatIcon(this, i, currentOffsetX + 10, offsetY + 2);
     }
+    GameDrawManager.drawPlayerLevel(this, gameState.getPlayerShip().getPlayerLevel(), 20, 690);
 
     // Draw HP & EXP
     int currentHP = gameState.getPlayerShip().getPlayerHP(); // Current HP of the player
     int maxHP =gameState.getPlayerShip().getPlayerMaxHP(); // Maximum HP of the player
     int currentEXP = PlayerLevel.getExp(); // Current EXP of the player
     int maxEXP = PlayerLevel.getRequiredExpForLevelUp(PlayerLevel.level); // Maximum EXP required for level up
-    GameDrawManager.drawSegmentedBar(290, HUD_Y + HUD_MARGIN_TOP + 7, 280, 12, currentHP, maxHP, Color.GREEN);
-    GameDrawManager.drawSegmentedBar(290, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 280, 12, currentEXP, maxEXP, Color.YELLOW);
+    GameDrawManager.drawSegmentedBar(340, HUD_Y + HUD_MARGIN_TOP + 7, 240, 12, currentHP, maxHP, Color.GREEN);
+    GameDrawManager.drawSegmentedBar(340, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 240, 12, currentEXP, maxEXP, Color.YELLOW);
 
     // Countdown to game start.
     if (!this.inputDelay.checkFinished()) {

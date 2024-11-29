@@ -4,6 +4,7 @@ import engine.Core;
 import engine.DrawManager;
 import engine.Score;
 import entity.Entity;
+import entity.player.PlayerLevel;
 import entity.player.PlayerShip;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -239,35 +240,6 @@ public class GameDrawManager extends DrawManager {
     }
   }
 
-//  /**
-//   * Draws a thicker box outline by drawing two overlapping boxes.
-//   *
-//   * @param screen Screen to draw on.
-//   * @param x X coordinate of the upper-left corner of the inner box.
-//   * @param y Y coordinate of the upper-left corner of the inner box.
-//   * @param w Width of the inner box.
-//   * @param h Height of the inner box.
-//   * @param thickness Thickness of the outer box.
-//   */
-//  public static void drawThickBox(
-//      final Screen screen,
-//      final int x,
-//      final int y,
-//      final int w,
-//      final int h,
-//      final int thickness) {
-//    // Ensure thickness is not greater than the width or height
-//    if (thickness * 2 > w || thickness * 2 > h) {
-//      throw new IllegalArgumentException("Thickness is too large for the given width or height");
-//    }
-//
-//    backBufferGraphics.setColor(Color.GREEN);
-//    backBufferGraphics.fillRect(x, y, w, h); // Outer box
-//    backBufferGraphics.setColor(Color.BLACK);
-//    backBufferGraphics.fillRect(
-//        x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness); // Draw inner box
-//  }
-
   /**
    * Draws a stat value as text inside a box on the screen.
    */
@@ -287,7 +259,6 @@ public class GameDrawManager extends DrawManager {
     backBufferGraphics.drawString(statText, drawX, drawY);
   }
 
-
   public static void drawStatIcon(Screen screen, int num, int x, int y) {
     BufferedImage[] statImages =
             new BufferedImage[] {img_movespeed, img_bulletspeed, img_attackdamage, img_shotinterval, img_bulletscount, img_additionallife};
@@ -295,6 +266,20 @@ public class GameDrawManager extends DrawManager {
             statImages[num], x, y , 22, 14, null);
   }
 
+  public static void drawPlayerLevel(final Screen screen, final PlayerLevel level, int x, int y) {
+    backBufferGraphics.setFont(fontBig);
+    backBufferGraphics.setColor(Color.WHITE);
+
+    int levelValue = level.getLevel();
+    if (levelValue < 10) {
+      String scoreString = String.format("lv.0%d", levelValue);
+      backBufferGraphics.drawString(scoreString, x, y);
+    }
+    else{
+      String scoreString = String.format("lv.%d", levelValue);
+      backBufferGraphics.drawString(scoreString, x, y);
+    }
+  }
 
   /**
    * Countdown to game start.
