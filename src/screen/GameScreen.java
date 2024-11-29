@@ -938,7 +938,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		//collision between enemy's bullet and player ship
 		if (checkCollision(bullet, this.playerShip) && !this.levelFinished && !itemManager.isGhostActive()) {
 			recyclable.add(bullet);
-			deductPlayerHp(1); //Todo: damage를 적군의 다양성에 따라 다르게 변수로 집어넣기
+			deductPlayerHp(bullet.getAttackDamage()); //Todo: damage를 적군의 다양성에 따라 다르게 변수로 집어넣기
 		}
 		//collision between enemy's bullet and barrier
 		manageBarrierDestroy(bullet, recyclable);

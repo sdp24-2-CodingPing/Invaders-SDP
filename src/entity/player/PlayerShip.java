@@ -87,8 +87,8 @@ public abstract class PlayerShip extends Entity {
 		super(positionX, positionY, 13 * 2, 8 * 2, Color.GREEN);
 
 		this.logger = Core.getLogger();
-		this.playerMaxHP = 3;
-		this.playerHP = 3;
+		this.playerMaxHP = 30;
+		this.playerHP = 30;
 		this.playerLevel = new PlayerLevel(0, 1);
 		this.playerCardStatus = new PlayerCardStatus();
 
@@ -180,18 +180,18 @@ public abstract class PlayerShip extends Entity {
 
 			switch (this.getBulletCount()) {
 				case 1:
-					bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY, this.getBulletSpeed()));
+					bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY, this.getBulletSpeed(), 1));
 					soundManager.playSound(Sound.PLAYER_LASER, balance);
 					break;
 				case 2:
-					bullets.add(BulletPool.getBullet(positionX + this.width, positionY, this.getBulletSpeed()));
-					bullets.add(BulletPool.getBullet(positionX, positionY, this.getBulletSpeed()));
+					bullets.add(BulletPool.getBullet(positionX + this.width, positionY, this.getBulletSpeed(), 1));
+					bullets.add(BulletPool.getBullet(positionX, positionY, this.getBulletSpeed(), 1));
 					soundManager.playSound(Sound.ITEM_2SHOT, balance);
 					break;
 				default:
-					bullets.add(BulletPool.getBullet(positionX + this.width, positionY, this.getBulletSpeed()));
-					bullets.add(BulletPool.getBullet(positionX, positionY, this.getBulletSpeed()));
-					for (int i = 1; i <= this.getBulletCount() - 2; i++) bullets.add(BulletPool.getBullet(positionX + this.width * i / (this.getBulletCount() - 1), positionY, this.getBulletSpeed()));
+					bullets.add(BulletPool.getBullet(positionX + this.width, positionY, this.getBulletSpeed(), 1));
+					bullets.add(BulletPool.getBullet(positionX, positionY, this.getBulletSpeed(), 1));
+					for (int i = 1; i <= this.getBulletCount() - 2; i++) bullets.add(BulletPool.getBullet(positionX + this.width * i / (this.getBulletCount() - 1), positionY, this.getBulletSpeed(), 1));
 					soundManager.playSound(Sound.ITEM_3SHOT, balance);
 					break;
 			}
@@ -362,12 +362,10 @@ public abstract class PlayerShip extends Entity {
 		long remainingTime = this.getShootingInterval() - elapsedTime;
 		return remainingTime > 0 ? remainingTime : 0;
 	}
-
 	/**
 	 * Checks if the ship is destroyed.
-	 *
 	 * @return True if the ship is currently destroyed.
-	 */
+	 * */
 	public final boolean isDestroyed() {
 		return getPlayerHP() <= 0;
 	}
