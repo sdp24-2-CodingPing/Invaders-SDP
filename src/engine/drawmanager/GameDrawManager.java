@@ -240,7 +240,7 @@ public class GameDrawManager extends DrawManager {
     }
   }
 
-  /** Draws a stat value as text inside a box on the screen. */
+  /** Draws a stat value */
   public static void drawStat(final Screen screen, final int stat, int x, int y) {
     int BOX_WIDTH = 48;
     int BOX_HEIGHT = 48;
@@ -257,6 +257,7 @@ public class GameDrawManager extends DrawManager {
     backBufferGraphics.drawString(statText, drawX, drawY);
   }
 
+  /** Draws a stat icon */
   public static void drawStatIcon(Screen screen, int num, int x, int y) {
     BufferedImage[] statImages =
         new BufferedImage[] {
@@ -270,6 +271,7 @@ public class GameDrawManager extends DrawManager {
     backBufferGraphics.drawImage(statImages[num], x, y, 22, 14, null);
   }
 
+  /** Draws a player level */
   public static void drawPlayerLevel(final Screen screen, final PlayerLevel level, int x, int y) {
     backBufferGraphics.setFont(fontBig);
     backBufferGraphics.setColor(Color.WHITE);

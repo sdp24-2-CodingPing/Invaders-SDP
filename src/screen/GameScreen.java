@@ -643,11 +643,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
     GameDrawManager.drawHorizontalLine(this, HUD_Y);
     GameDrawManager.drawHorizontalLine(this, HUD_Y);
     int HUD_MARGIN_TOP = 16; // Padding from the top of the item box
-    int BOX_WIDTH = 48; // Width of the item box
-    int BOX_HEIGHT = 48; // Height of the item box
-    int BOX_MARGIN = 10; // Margin between boxes
 
-    // 스탯 박스와 스탯 아이콘 그리기
+    // Draw Stat & Stat Icon
     int[] statValues = {
       PlayerCardStatus.getMoveSpeedLevel(),
       PlayerCardStatus.getBulletsSpeedLevel(),
@@ -663,6 +660,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
       GameDrawManager.drawStat(this, statValues[i], currentOffsetX, offsetY);
       GameDrawManager.drawStatIcon(this, i, currentOffsetX + 10, offsetY + 2);
     }
+
+    // Draw Player Level
     GameDrawManager.drawPlayerLevel(this, gameState.getPlayerShip().getPlayerLevel(), 20, 690);
 
     // Draw HP & EXP
