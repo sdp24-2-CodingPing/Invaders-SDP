@@ -658,7 +658,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
       int currentOffsetX = offsetX[i]; // X 좌표
       int offsetY = HUD_Y + HUD_MARGIN_TOP; // Y 좌표
       GameDrawManager.drawStat(this, statValues[i], currentOffsetX, offsetY);
-      GameDrawManager.drawStatIcon(this, i, currentOffsetX + 10, offsetY + 2);
+      GameDrawManager.drawStatIcon(this, i, currentOffsetX + 8 , offsetY + 2);
     }
 
     // Draw Player Level

@@ -217,19 +217,21 @@ public class GameDrawManager extends DrawManager {
    * @param color Color of the filled boxes.
    */
   public static void drawSegmentedBar(
-      int x, int y, int w, int h, int currentValue, int maximumValue, Color color) {
+          int x, int y, int w, int h, int currentValue, int maximumValue, Color color) {
     int basicWidth = w / maximumValue; // Basic width of each box
     int remainingWidth = w % maximumValue; // Remaining width to be distributed
 
-    // Draw filled and empty boxes
+    int filledBoxes = (int) ((double) currentValue / maximumValue * w);
+
     int startX = x; // Initial x coordinate for the first box
     for (int i = 0; i < maximumValue; i++) {
       int boxWidth = basicWidth;
+
       if (i < remainingWidth) {
         boxWidth += 1; // Distribute the remaining width to the first few boxes
       }
 
-      if (i < currentValue) {
+      if (startX < x + filledBoxes) {
         backBufferGraphics.setColor(color); // Color for filled boxes
       } else {
         backBufferGraphics.setColor(Color.GRAY); // Color for empty boxes
@@ -268,7 +270,7 @@ public class GameDrawManager extends DrawManager {
           img_bulletscount,
           img_additionallife
         };
-    backBufferGraphics.drawImage(statImages[num], x, y, 22, 14, null);
+    backBufferGraphics.drawImage(statImages[num], x, y, 25, 18, null);
   }
 
   /** Draws a player level */
