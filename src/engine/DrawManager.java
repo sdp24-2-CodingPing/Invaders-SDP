@@ -78,6 +78,9 @@ public class DrawManager {
   protected static BufferedImage img_coin;
   protected static BufferedImage img_coingain;
   protected static BufferedImage img_shotinterval;
+  protected static BufferedImage img_movespeed;
+  protected static BufferedImage img_attackdamage;
+  protected static BufferedImage img_bulletscount;
 
   /** Sprite types. */
   public static enum SpriteType {
@@ -186,15 +189,19 @@ public class DrawManager {
       logger.warning("Font formating failed.");
     }
 
-    /** Shop image load */
+    /** image load */
     try {
       img_additionallife = ImageIO.read(new File("res/image/additional life.jpg"));
       img_bulletspeed = ImageIO.read(new File("res/image/bullet speed.jpg"));
       img_coin = ImageIO.read(new File("res/image/coin.jpg"));
       img_coingain = ImageIO.read(new File("res/image/coin gain.jpg"));
       img_shotinterval = ImageIO.read(new File("res/image/shot interval.jpg"));
+      img_movespeed = ImageIO.read(new File("res/image/card/move_speed.png"));
+      img_attackdamage = ImageIO.read(new File("res/image/card/attack_damage.png"));
+      img_bulletscount = ImageIO.read(new File("res/image/card/bullets_count.png"));
+
     } catch (IOException e) {
-      logger.info("Shop image loading failed");
+      logger.info("Image loading failed");
     }
   }
 

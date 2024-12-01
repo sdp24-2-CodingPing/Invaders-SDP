@@ -41,3 +41,11 @@ spotless {
         endWithNewline()
     }
 }
+
+
+spotless {
+    java {
+        googleJavaFormat('1.25.0')
+        endWithNewline()
+    }
+}

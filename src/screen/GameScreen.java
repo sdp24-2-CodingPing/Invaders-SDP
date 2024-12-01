@@ -4,9 +4,9 @@ import engine.*;
 import engine.drawmanager.GameDrawManager;
 import entity.*;
 import entity.player.PlayerActionManager;
+import entity.player.PlayerCardStatus;
+import entity.player.PlayerLevel;
 import entity.player.PlayerShip;
-import entity.skill.LaserStrike;
-import entity.skill.Skill;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -643,28 +643,38 @@ public class GameScreen extends Screen implements Callable<GameState> {
     GameDrawManager.drawHorizontalLine(this, HUD_Y);
     GameDrawManager.drawHorizontalLine(this, HUD_Y);
     int HUD_MARGIN_TOP = 16; // Padding from the top of the item box
-    int BOX_WIDTH = 48; // Width of the item box
-    int BOX_HEIGHT = 48; // Height of the item box
-    int BOX_MARGIN = 10; // Margin between boxes
 
-    // 배열로 스킬 객체 생성, 추후 다른 스킬 객체로 채워질 수 있음
-    Skill[] skills = new Skill[3];
-    for (int i = 0; i < skills.length; i++) {
-      skills[i] = new LaserStrike(); // 초기화는 LaserStrike로, 다른 스킬로 대체 가능
+    // Draw Stat & Stat Icon
+    int[] statValues = {
+      PlayerCardStatus.getMoveSpeedLevel(),
+      PlayerCardStatus.getBulletsSpeedLevel(),
+      PlayerCardStatus.getAttackDamageLevel(),
+      PlayerCardStatus.getIntervalLevel(),
+      PlayerCardStatus.getBulletsCountLevel(),
+      PlayerCardStatus.getHpLevel()
+    };
+    int[] offsetX = {95, 135, 175, 215, 255, 295};
+    for (int i = 0; i < 6; i++) {
+      int currentOffsetX = offsetX[i]; // X 좌표
+      int offsetY = HUD_Y + HUD_MARGIN_TOP; // Y 좌표
+      GameDrawManager.drawStat(this, statValues[i], currentOffsetX, offsetY);
+      GameDrawManager.drawStatIcon(this, i, currentOffsetX + 8 , offsetY + 2);
     }
 
-    // 스킬 박스와 스킬 아이콘 그리기
-    for (int i = 0; i < skills.length; i++) {
-      int offsetX = 20 + i * (BOX_WIDTH + BOX_MARGIN); // X 좌표 계산
-      GameDrawManager.drawThickBox(
-          this, offsetX, HUD_Y + HUD_MARGIN_TOP, BOX_WIDTH, BOX_HEIGHT, 2); // 스킬 박스 그리기
-      GameDrawManager.drawEntity(skills[i], offsetX + 2, HUD_Y + HUD_MARGIN_TOP + 2); // 스킬 아이콘 그리기
-    }
+    // Draw Player Level
+    GameDrawManager.drawPlayerLevel(this, gameState.getPlayerShip().getPlayerLevel(), 20, 690);
 
     // Draw HP & EXP
-    GameDrawManager.drawSegmentedBar(220, HUD_Y + HUD_MARGIN_TOP + 7, 350, 12, 10, 15, Color.GREEN);
+    int currentHP = gameState.getPlayerShip().getPlayerHP(); // Current HP of the player
+    int maxHP = gameState.getPlayerShip().getPlayerMaxHP(); // Maximum HP of the player
+    int currentEXP = PlayerLevel.getExp(); // Current EXP of the player
+    int maxEXP =
+        PlayerLevel.getRequiredExpForLevelUp(
+            PlayerLevel.level); // Maximum EXP required for level up
     GameDrawManager.drawSegmentedBar(
-        220, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 350, 12, 12, 20, Color.YELLOW);
+        340, HUD_Y + HUD_MARGIN_TOP + 7, 240, 12, currentHP, maxHP, Color.GREEN);
+    GameDrawManager.drawSegmentedBar(
+        340, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 240, 12, currentEXP, maxEXP, Color.YELLOW);
 
     // Countdown to game start.
     if (!this.inputDelay.checkFinished()) {

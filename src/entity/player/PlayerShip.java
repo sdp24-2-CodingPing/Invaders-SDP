@@ -60,13 +60,13 @@ public abstract class PlayerShip extends Entity {
   private int playerMaxHP;
 
   /** Player HP */
-  private int playerHP;
+  private static int playerHP;
 
   /** Player level and exp */
   private PlayerLevel playerLevel;
 
   /** Player Card Status */
-  private PlayerCardStatus playerCardStatus;
+  private static PlayerCardStatus playerCardStatus;
 
   private long lastShootTime;
   private boolean threadWeb = false;
