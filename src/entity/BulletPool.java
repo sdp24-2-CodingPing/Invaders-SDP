@@ -63,3 +63,4 @@ public final class BulletPool {
   public static void clearPool() {
     pool.clear();
   }
+}

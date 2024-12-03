@@ -18,7 +18,7 @@ class BulletPoolTest {
   void testGetBulletFromEmptyPool() {
     int positionX = 100, positionY = 200, speed = 5; // 탄환의 초기 위치와 속도
 
-    Bullet bullet = BulletPool.getBullet(positionX, positionY, speed); // 풀에서 탄환 요청
+    Bullet bullet = BulletPool.getBullet(positionX, positionY, speed, 10); // 풀에서 탄환 요청
 
     assertNotNull(bullet, "Bullet should not be null"); // 반환된 탄환이 null이 아닌지 확인
     assertEquals(
@@ -30,12 +30,12 @@ class BulletPoolTest {
   @Test
   void testGetBulletFromNonEmptyPool() {
     // 탄환 생성
-    Bullet bullet = new Bullet(50, 60, 5);
+    Bullet bullet = new Bullet(50, 60, 5, 10);
     Set<Bullet> bullets = new HashSet<>();
     bullets.add(bullet);
     BulletPool.recycle(bullets);
 
-    Bullet recycledBullet = BulletPool.getBullet(100, 200, -10); // 풀에서 재활용된 탄환 요청
+    Bullet recycledBullet = BulletPool.getBullet(100, 200, -10, 10); // 풀에서 재활용된 탄환 요청
 
     assertNotNull(recycledBullet, "Recycled bullet should not be null"); // 반환된 탄환이 null이 아닌지 확인
     assertEquals(
@@ -51,8 +51,8 @@ class BulletPoolTest {
   @Test
   void testRecycleBullets() {
     // 탄환 생성
-    Bullet bullet1 = new Bullet(50, 60, 5);
-    Bullet bullet2 = new Bullet(70, 80, -5);
+    Bullet bullet1 = new Bullet(50, 60, 5, 10);
+    Bullet bullet2 = new Bullet(70, 80, -5, 10);
     Set<Bullet> bullets = new HashSet<>();
     bullets.add(bullet1);
     bullets.add(bullet2);
@@ -67,7 +67,7 @@ class BulletPoolTest {
   @Test
   void testClearPool() {
     // 탄환 생성
-    Bullet bullet = new Bullet(50, 60, 5);
+    Bullet bullet = new Bullet(50, 60, 5, 10);
     Set<Bullet> bullets = new HashSet<>();
     bullets.add(bullet);
     BulletPool.recycle(bullets);
