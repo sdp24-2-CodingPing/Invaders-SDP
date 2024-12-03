@@ -206,6 +206,21 @@ public class GameDrawManager extends DrawManager {
   }
 
   /**
+   * Draw a background box for HUD.
+   *
+   * @param screen Screen to draw on.
+   * @param x X coordinate of the box.
+   * @param y Y coordinate of the box.
+   * @param w Width of the box.
+   * @param h Height of the box.
+   */
+  public static void drawHudPanel(
+      final Screen screen, final int x, final int y, final int w, final int h) {
+    backBufferGraphics.setColor(Color.BLACK);
+    backBufferGraphics.fillRect(x, y, w, h);
+  }
+
+  /**
    * Draws a horizontal bar composed of multiple box segments.
    *
    * @param x X coordinate of the bar's starting point.
