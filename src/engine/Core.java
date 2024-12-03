@@ -89,14 +89,13 @@ public final class Core {
     AchievementManager achievementManager;
     Wallet wallet = Wallet.getWallet();
 
-    boolean isGotoMainMenu = false;
-
     int returnCode = 1;
     do {
       MAX_LIVES = wallet.getLives_lv() + 2;
       GameState gameState = new GameState(1, 0, 0, BASE_SHIP, 0, 0, 0, 0, 0, 0, 0, 0);
       GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
       achievementManager = new AchievementManager();
+      boolean isGotoMainMenu = false;
 
       switch (returnCode) {
         case 1:
@@ -127,17 +126,15 @@ public final class Core {
             frame.setScreen(currentScreen);
             LOGGER.info("Closing game screen.");
 
-            if (((GameScreen) currentScreen).getIsGotoMainMenu()) {
-              if (!gameState.getPlayerShip().isDestroyed()) {
-                isGotoMainMenu = true;
-                break;
-              }
+            isGotoMainMenu = ((GameScreen) currentScreen).getIsGotoMainMenu();
+            if (isGotoMainMenu) {
+              break;
             }
 
             gameState = ((GameScreen) currentScreen).getGameState();
 
             // 다음 레벨 진행
-            gameState = new GameState(gameState, gameState.getGameLevel() + 1);
+            gameState.setGameLevel(gameState.getGameLevel() + 1);
             endTime = System.currentTimeMillis();
             achievementManager.updatePlaying(
                 gameState.getMaxCombo(),
@@ -151,6 +148,7 @@ public final class Core {
             returnCode = 1;
             break;
           }
+
           achievementManager.updatePlayed(gameState.getAccuracy(), gameState.getScore());
           achievementManager.updateAllAchievements();
           LOGGER.info(
