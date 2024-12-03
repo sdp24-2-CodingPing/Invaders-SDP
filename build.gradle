@@ -41,4 +41,3 @@ spotless {
         endWithNewline()
     }
 }
-

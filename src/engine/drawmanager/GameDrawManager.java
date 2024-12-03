@@ -4,10 +4,11 @@ import engine.Core;
 import engine.DrawManager;
 import engine.Score;
 import entity.Entity;
-import entity.ShipFactory;
+import entity.player.PlayerLevel;
 import entity.player.PlayerShip;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import screen.Screen;
 
@@ -34,20 +35,6 @@ public class GameDrawManager extends DrawManager {
     backBufferGraphics.setColor(Color.RED);
     backBufferGraphics.drawString(
         alertMessage, (screen.getWidth() - fontRegularMetrics.stringWidth(alertMessage)) / 2, 65);
-  }
-
-  /**
-   * Draws number of remaining lives on screen.
-   *
-   * @param screen Screen to draw on.
-   * @param lives Current lives.
-   */
-  public void drawLives(final Screen screen, final int lives, final PlayerShip.ShipType shipType) {
-    backBufferGraphics.setFont(fontRegular);
-    backBufferGraphics.setColor(Color.WHITE);
-    backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
-    PlayerShip dummyPlayerShip = ShipFactory.create(shipType, 0, 0);
-    for (int i = 0; i < lives; i++) drawEntity(dummyPlayerShip, 40 + 35 * i, 10);
   }
 
   /**
@@ -234,15 +221,17 @@ public class GameDrawManager extends DrawManager {
     int basicWidth = w / maximumValue; // Basic width of each box
     int remainingWidth = w % maximumValue; // Remaining width to be distributed
 
-    // Draw filled and empty boxes
+    int filledBoxes = (int) ((double) currentValue / maximumValue * w);
+
     int startX = x; // Initial x coordinate for the first box
     for (int i = 0; i < maximumValue; i++) {
       int boxWidth = basicWidth;
+
       if (i < remainingWidth) {
         boxWidth += 1; // Distribute the remaining width to the first few boxes
       }
 
-      if (i < currentValue) {
+      if (startX < x + filledBoxes) {
         backBufferGraphics.setColor(color); // Color for filled boxes
       } else {
         backBufferGraphics.setColor(Color.GRAY); // Color for empty boxes
@@ -253,33 +242,50 @@ public class GameDrawManager extends DrawManager {
     }
   }
 
-  /**
-   * Draws a thicker box outline by drawing two overlapping boxes.
-   *
-   * @param screen Screen to draw on.
-   * @param x X coordinate of the upper-left corner of the inner box.
-   * @param y Y coordinate of the upper-left corner of the inner box.
-   * @param w Width of the inner box.
-   * @param h Height of the inner box.
-   * @param thickness Thickness of the outer box.
-   */
-  public static void drawThickBox(
-      final Screen screen,
-      final int x,
-      final int y,
-      final int w,
-      final int h,
-      final int thickness) {
-    // Ensure thickness is not greater than the width or height
-    if (thickness * 2 > w || thickness * 2 > h) {
-      throw new IllegalArgumentException("Thickness is too large for the given width or height");
-    }
+  /** Draws a stat value */
+  public static void drawStat(final Screen screen, final int stat, int x, int y) {
+    int BOX_WIDTH = 48;
+    int BOX_HEIGHT = 48;
+    backBufferGraphics.setColor(Color.WHITE);
+    String statText = Integer.toString(stat);
 
-    backBufferGraphics.setColor(Color.GREEN);
-    backBufferGraphics.fillRect(x, y, w, h); // Outer box
-    backBufferGraphics.setColor(Color.BLACK);
-    backBufferGraphics.fillRect(
-        x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness); // Draw inner box
+    FontMetrics metrics = backBufferGraphics.getFontMetrics(fontBig);
+    int textWidth = metrics.stringWidth(statText);
+    int textHeight = metrics.getHeight();
+
+    int drawX = x + (BOX_WIDTH - textWidth) / 2;
+    int drawY = y + (BOX_HEIGHT + textHeight) / 2;
+
+    backBufferGraphics.drawString(statText, drawX, drawY);
+  }
+
+  /** Draws a stat icon */
+  public static void drawStatIcon(Screen screen, int num, int x, int y) {
+    BufferedImage[] statImages =
+        new BufferedImage[] {
+          img_movespeed,
+          img_bulletspeed,
+          img_attackdamage,
+          img_shotinterval,
+          img_bulletscount,
+          img_additionallife
+        };
+    backBufferGraphics.drawImage(statImages[num], x, y, 25, 18, null);
+  }
+
+  /** Draws a player level */
+  public static void drawPlayerLevel(final Screen screen, final PlayerLevel level, int x, int y) {
+    backBufferGraphics.setFont(fontBig);
+    backBufferGraphics.setColor(Color.WHITE);
+
+    int levelValue = level.getLevel();
+    if (levelValue < 10) {
+      String scoreString = String.format("lv.0%d", levelValue);
+      backBufferGraphics.drawString(scoreString, x, y);
+    } else {
+      String scoreString = String.format("lv.%d", levelValue);
+      backBufferGraphics.drawString(scoreString, x, y);
+    }
   }
 
   /**
