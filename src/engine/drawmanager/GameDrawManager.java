@@ -217,7 +217,7 @@ public class GameDrawManager extends DrawManager {
    * @param color Color of the filled boxes.
    */
   public static void drawSegmentedBar(
-          int x, int y, int w, int h, int currentValue, int maximumValue, Color color) {
+      int x, int y, int w, int h, int currentValue, int maximumValue, Color color) {
     int basicWidth = w / maximumValue; // Basic width of each box
     int remainingWidth = w % maximumValue; // Remaining width to be distributed
 

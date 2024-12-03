@@ -51,4 +51,16 @@ public final class BulletPool {
   public static void recycle(final Set<Bullet> bullet) {
     pool.addAll(bullet);
   }
+
+  public static boolean isPoolEmpty() {
+    return pool.isEmpty();
+  }
+
+  public static int getPoolSize() {
+    return pool.size();
+  }
+
+  public static void clearPool() {
+    pool.clear();
+  }
 }
