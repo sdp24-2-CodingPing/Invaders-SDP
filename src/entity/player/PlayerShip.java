@@ -302,7 +302,7 @@ public abstract class PlayerShip extends Entity {
    * @return player Max HP
    */
   public final int getPlayerMaxHP() {
-    return (this.playerMaxHP + playerCardStatus.getHpLevel() * 2);
+    return (this.playerMaxHP + playerCardStatus.getHpLevel() * 10);
   }
 
   /**
