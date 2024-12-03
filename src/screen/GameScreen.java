@@ -638,44 +638,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
     GameDrawManager.drawReloadTimer(this, this.playerShip, playerShip.getRemainingReloadTime());
     GameDrawManager.drawCombo(this, this.gameState.getCombo());
 
-    // HUD with essential information. (Item, HP, EXP)
-    int HUD_Y = 640;
-    GameDrawManager.drawHorizontalLine(this, HUD_Y);
-    GameDrawManager.drawHorizontalLine(this, HUD_Y);
-    int HUD_MARGIN_TOP = 16; // Padding from the top of the item box
-
-    // Draw Stat & Stat Icon
-    int[] statValues = {
-      PlayerCardStatus.getMoveSpeedLevel(),
-      PlayerCardStatus.getBulletsSpeedLevel(),
-      PlayerCardStatus.getAttackDamageLevel(),
-      PlayerCardStatus.getIntervalLevel(),
-      PlayerCardStatus.getBulletsCountLevel(),
-      PlayerCardStatus.getHpLevel()
-    };
-    int[] offsetX = {95, 135, 175, 215, 255, 295};
-    for (int i = 0; i < 6; i++) {
-      int currentOffsetX = offsetX[i]; // X 좌표
-      int offsetY = HUD_Y + HUD_MARGIN_TOP; // Y 좌표
-      GameDrawManager.drawStat(this, statValues[i], currentOffsetX, offsetY);
-      GameDrawManager.drawStatIcon(this, i, currentOffsetX + 8, offsetY + 2);
-    }
-
-    // Draw Player Level
-    GameDrawManager.drawPlayerLevel(this, gameState.getPlayerShip().getPlayerLevel(), 20, 690);
-
-    // Draw HP & EXP
-    int currentHP = gameState.getPlayerShip().getPlayerHP(); // Current HP of the player
-    int maxHP = gameState.getPlayerShip().getPlayerMaxHP(); // Maximum HP of the player
-    int currentEXP = PlayerLevel.getExp(); // Current EXP of the player
-    int maxEXP =
-        PlayerLevel.getRequiredExpForLevelUp(
-            PlayerLevel.level); // Maximum EXP required for level up
-    GameDrawManager.drawSegmentedBar(
-        340, HUD_Y + HUD_MARGIN_TOP + 7, 240, 12, currentHP, maxHP, Color.GREEN);
-    GameDrawManager.drawSegmentedBar(
-        340, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 240, 12, currentEXP, maxEXP, Color.YELLOW);
-
     // Countdown to game start.
     if (!this.inputDelay.checkFinished()) {
       int countdown =
@@ -715,6 +677,45 @@ public class GameScreen extends Screen implements Callable<GameState> {
             blocker, blocker.getPositionX(), blocker.getPositionY(), blocker.getAngle());
       }
     }
+
+    // HUD with essential information. (Item, HP, EXP)
+    int HUD_Y = 640;
+    GameDrawManager.drawHudPanel(this, 0, HUD_Y, this.width, this.height - HUD_Y);
+    GameDrawManager.drawHorizontalLine(this, HUD_Y);
+    GameDrawManager.drawHorizontalLine(this, HUD_Y);
+    int HUD_MARGIN_TOP = 16; // Padding from the top of the item box
+
+    // Draw Stat & Stat Icon
+    int[] statValues = {
+      PlayerCardStatus.getMoveSpeedLevel(),
+      PlayerCardStatus.getBulletsSpeedLevel(),
+      PlayerCardStatus.getAttackDamageLevel(),
+      PlayerCardStatus.getIntervalLevel(),
+      PlayerCardStatus.getBulletsCountLevel(),
+      PlayerCardStatus.getHpLevel()
+    };
+    int[] offsetX = {95, 135, 175, 215, 255, 295};
+    for (int i = 0; i < 6; i++) {
+      int currentOffsetX = offsetX[i]; // X 좌표
+      int offsetY = HUD_Y + HUD_MARGIN_TOP; // Y 좌표
+      GameDrawManager.drawStat(this, statValues[i], currentOffsetX, offsetY);
+      GameDrawManager.drawStatIcon(this, i, currentOffsetX + 8, offsetY + 2);
+    }
+
+    // Draw Player Level
+    GameDrawManager.drawPlayerLevel(this, gameState.getPlayerShip().getPlayerLevel(), 20, 690);
+
+    // Draw HP & EXP
+    int currentHP = gameState.getPlayerShip().getPlayerHP(); // Current HP of the player
+    int maxHP = gameState.getPlayerShip().getPlayerMaxHP(); // Maximum HP of the player
+    int currentEXP = PlayerLevel.getExp(); // Current EXP of the player
+    int maxEXP =
+        PlayerLevel.getRequiredExpForLevelUp(
+            PlayerLevel.level); // Maximum EXP required for level up
+    GameDrawManager.drawSegmentedBar(
+        340, HUD_Y + HUD_MARGIN_TOP + 7, 240, 12, currentHP, maxHP, Color.GREEN);
+    GameDrawManager.drawSegmentedBar(
+        340, HUD_Y + HUD_MARGIN_TOP + 17 + 10, 240, 12, currentEXP, maxEXP, Color.YELLOW);
 
     drawManager.completeDrawing(this);
   }
