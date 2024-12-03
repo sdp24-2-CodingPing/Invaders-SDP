@@ -187,15 +187,13 @@ public class SoundManager {
     }
     // Apply to soundClips (including background music)
     for (Clip clip : soundClips.values()) {
-        try {
-          FloatControl volumeControl =
-                  (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-          volumeControl.setValue(newVolume);
-        } catch (IllegalArgumentException e) {
-          logger.warning("Failed to set volume: " + e.getMessage());
-        }
+      try {
+        FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        volumeControl.setValue(newVolume);
+      } catch (IllegalArgumentException e) {
+        logger.warning("Failed to set volume: " + e.getMessage());
+      }
     }
-
   }
 
   /**
