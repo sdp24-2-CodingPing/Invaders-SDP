@@ -96,7 +96,7 @@ public abstract class PlayerShip extends Entity {
 
     this.logger = Core.getLogger();
     this.playerMaxHP = 30;
-    this.playerHP = 30;
+    this.playerHP=30;
     this.playerLevel = new PlayerLevel(0, 1);
     this.playerCardStatus = new PlayerCardStatus();
 
